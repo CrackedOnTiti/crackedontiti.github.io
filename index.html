@@ -6,7 +6,7 @@
   <title>CrackedOnTiti</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Inter:wght@300;400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Bebas+Neue&family=Inter:wght@300;400&display=swap" rel="stylesheet" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -49,7 +49,8 @@
       font-size: clamp(60px, 10vw, 100px);
       color: #ffffff;
       line-height: 1;
-      letter-spacing: 0.01em;
+      font-weight: 700;
+      -webkit-text-stroke: 0.5px #ffffff;
     }
 
     #content-zone {
@@ -83,12 +84,12 @@
     }
 
     .hero-desc {
-      font-size: 14px;
+      font-size: 13px;
       color: #555;
       line-height: 1.9;
-      max-width: 380px;
+      max-width: 420px;
       font-weight: 300;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.02em;
       text-align: center;
     }
 
@@ -103,11 +104,13 @@
       background: rgba(20, 20, 20, 0.85);
       border: 0.5px solid #222;
       border-radius: 10px;
-      padding: 1.25rem 1.5rem;
+      padding: 1rem 1.25rem;
       transition: border-color 0.25s, background 0.25s;
       cursor: default;
       text-decoration: none;
-      display: block;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
     }
 
     .project-card:hover {
@@ -115,79 +118,113 @@
       background: rgba(24, 24, 24, 0.95);
     }
 
-    .project-card .project-link {
-      display: none;
-    }
-
-    .project-card:hover .project-link {
-      display: block;
-    }
-
-    .project-icon {
-      font-size: 11px;
-      color: #cc2200;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
+    /* ROW 1: status left, date right */
+    .project-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       margin-bottom: 0.6rem;
     }
 
+    .project-status {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: #444;
+      text-transform: uppercase;
+    }
+
+    .project-upd {
+      font-size: 10px;
+      color: #333;
+      letter-spacing: 0.03em;
+    }
+
+    /* ROW 2: preview image */
     .project-img {
       width: 100%;
-      height: 80px;
+      height: 65px;
       object-fit: cover;
-      border-radius: 6px;
-      margin-bottom: 0.75rem;
-      opacity: 0.7;
+      border-radius: 5px;
+      margin-bottom: 0.65rem;
+      opacity: 0.6;
       display: block;
     }
 
     .project-img-placeholder {
       width: 100%;
-      height: 80px;
-      border-radius: 6px;
-      margin-bottom: 0.75rem;
-      background: #1a1a1a;
-      border: 0.5px dashed #2a2a2a;
+      height: 65px;
+      border-radius: 5px;
+      margin-bottom: 0.65rem;
+      background: #111;
+      border: 0.5px dashed #1e1e1e;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 10px;
-      color: #333;
+      color: #222;
       letter-spacing: 0.1em;
     }
 
+    /* ROW 3: project name */
     .project-name {
-      font-size: 14px;
-      font-weight: 400;
-      color: #e8e8e8;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 17px;
+      color: #d0d0d0;
+      letter-spacing: 0.08em;
+      line-height: 1;
       margin-bottom: 0.35rem;
     }
 
+    /* ROW 4: description */
     .project-desc {
       font-size: 11px;
-      color: #555;
+      color: #404040;
       line-height: 1.6;
       font-weight: 300;
-      margin-bottom: 0.75rem;
+      flex: 1;
+      margin-bottom: 0.7rem;
     }
 
-    .project-meta {
-      font-size: 11px;
-      color: #333;
-      letter-spacing: 0.04em;
+    /* ROW 5: language icons */
+    .project-langs {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding-top: 0.55rem;
+      border-top: 0.5px solid #1c1c1c;
+      min-height: 26px;
     }
 
-    .project-meta span { color: #444; }
+    .project-langs img {
+      width: 15px;
+      height: 15px;
+      opacity: 0.4;
+      transition: opacity 0.2s;
+    }
+
+    .project-card:hover .project-langs img {
+      opacity: 0.75;
+    }
+
+    .aws-icon {
+      width: 15px;
+      height: 15px;
+      opacity: 0.4;
+      transition: opacity 0.2s;
+    }
+
+    .project-card:hover .aws-icon {
+      opacity: 0.75;
+    }
 
     .empty-card {
       background: transparent;
-      border: 0.5px dashed #1e1e1e;
+      border: 0.5px dashed #1a1a1a;
       border-radius: 10px;
-      padding: 1.25rem 1.5rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #2a2a2a;
+      color: #222;
       font-size: 11px;
       letter-spacing: 0.1em;
     }
@@ -248,47 +285,73 @@
 
   <div id="content-zone">
     <div class="content-slide active" id="slide-0">
-      <div class="hero-desc">I'm a 4th year computer science student. Im passionnate about cybersecurity and improving my day to day life with random apps, most of my work is opensource, and what im most proud of presented here:</div>
+      <div class="hero-desc">I'm a 4th year computer science student, passionate about cybersecurity and building tools that improve my daily life. Most of my work is open source. Here are some of my proudest projects, all built outside of my curriculum:</div>
     </div>
 
     <div class="content-slide" id="slide-1">
       <div class="projects-grid">
         <a class="project-card" href="https://github.com/CrackedOnTiti/BlaBlaCase" target="_blank">
-          <div class="project-icon">BBC</div>
-          <img class="project-img" src="assets/images/blablacase.png" alt="BlaBlaCase" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="project-top">
+            <div class="project-status">Ongoing</div>
+            <div class="project-upd" id="upd-blablacase">Upd - —</div>
+          </div>
+          <img class="project-img" src="assets/images/blablacase.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
           <div class="project-img-placeholder" style="display:none;">no preview</div>
           <div class="project-name">BlaBlaCase</div>
           <div class="project-desc">Andorra customs quota calculator for French cross-border shoppers. Native Android app.</div>
-          <div class="project-meta">Updated <span id="date-blablacase">—</span></div>
+          <div class="project-langs">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" alt="Flutter" title="Flutter" />
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" title="Python" />
+          </div>
         </a>
         <a class="project-card" href="https://github.com/CrackedOnTiti/VigilanSee" target="_blank">
-          <div class="project-icon">VS</div>
-          <img class="project-img" src="assets/images/vigilansee.png" alt="VigilanSee" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="project-top">
+            <div class="project-status">Ongoing</div>
+            <div class="project-upd" id="upd-vigilansee">Upd - —</div>
+          </div>
+          <img class="project-img" src="assets/images/vigilansee.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
           <div class="project-img-placeholder" style="display:none;">no preview</div>
           <div class="project-name">VigilanSee</div>
           <div class="project-desc">CS2 demo analysis platform. EIP graduation project built in Rust.</div>
-          <div class="project-meta">Updated <span id="date-vigilansee">—</span></div>
+          <div class="project-langs">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg" alt="Rust" title="Rust" />
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" title="Python" />
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL" title="PostgreSQL" />
+          </div>
         </a>
       </div>
     </div>
 
     <div class="content-slide" id="slide-2">
       <div class="projects-grid">
-        <a class="project-card" href="https://github.com/CrackedOnTiti/RiftRewind" target="_blank">
-          <div class="project-icon">RR</div>
-          <img class="project-img" src="assets/images/riftrewind.png" alt="RiftRewind" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+        <a class="project-card" href="https://github.com/CrackedOnTiti/rift-rewind" target="_blank">
+          <div class="project-top">
+            <div class="project-status">Finished</div>
+            <div class="project-upd" id="upd-riftrewind">Upd - —</div>
+          </div>
+          <img class="project-img" src="assets/images/riftrewind.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
           <div class="project-img-placeholder" style="display:none;">no preview</div>
           <div class="project-name">RiftRewind</div>
           <div class="project-desc">LoL match coaching platform. AWS × Riot Games hackathon winner.</div>
-          <div class="project-meta">Updated <span id="date-riftrewind">—</span></div>
+          <div class="project-langs">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" title="Python" />
+            <svg class="aws-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" title="AWS">
+              <path d="M6.763 10.036c0 .296.032.535.088.71.064.176.144.368.256.576.04.072.056.144.056.208 0 .096-.056.192-.176.288l-.583.392a.441.441 0 01-.24.08c-.096 0-.192-.048-.288-.136a2.976 2.976 0 01-.344-.448 7.365 7.365 0 01-.296-.56c-.744.88-1.68 1.32-2.808 1.32-.8 0-1.44-.224-1.904-.672C.327 12.37.1 11.77.1 11.026c0-.792.28-1.432.848-1.912.568-.48 1.32-.72 2.272-.72.312 0 .64.024.984.072.344.048.704.12 1.08.208v-.68c0-.712-.152-1.208-.448-1.496-.304-.288-.816-.424-1.544-.424-.336 0-.68.04-1.032.128a7.62 7.62 0 00-1.032.336 2.72 2.72 0 01-.336.128.6.6 0 01-.144.024c-.128 0-.192-.096-.192-.296v-.464c0-.152.024-.272.072-.336a.76.76 0 01.272-.2c.336-.168.736-.312 1.2-.424A5.9 5.9 0 013.5 5.41c1.04 0 1.8.232 2.288.696.48.464.728 1.168.728 2.112v2.816l.248.002zm-3.88 1.44c.304 0 .616-.056.944-.168.328-.112.624-.312.872-.592.144-.176.256-.368.312-.584.056-.216.088-.472.088-.776V9.78a7.86 7.86 0 00-.856-.16 6.95 6.95 0 00-.872-.056c-.624 0-1.08.12-1.384.368-.304.248-.448.6-.448 1.064 0 .432.112.752.344.976.224.232.544.344.968.344l.032-.84zm7.448 1.008c-.176 0-.296-.032-.376-.096-.08-.056-.152-.184-.216-.36L7.58 6.244a1.65 1.65 0 01-.088-.376c0-.144.072-.224.216-.224h.88c.184 0 .312.032.384.096.08.056.144.184.208.36l1.56 6.152 1.448-6.152c.056-.184.12-.304.2-.36.08-.056.216-.096.392-.096h.72c.184 0 .312.032.4.096.08.056.152.184.2.36l1.464 6.224 1.608-6.224c.064-.184.136-.304.208-.36.08-.056.208-.096.384-.096h.832c.144 0 .224.072.224.224 0 .048-.008.096-.016.152a1.4 1.4 0 01-.072.232l-2.192 5.784c-.064.184-.136.304-.216.36-.08.056-.208.096-.376.096h-.776c-.184 0-.312-.032-.4-.096-.08-.064-.152-.184-.2-.368l-1.44-5.984-1.432 5.976c-.056.184-.12.304-.2.368-.08.064-.224.096-.4.096h-.784zm11.688.24c-.472 0-.944-.056-1.4-.168-.456-.112-.816-.232-1.056-.368-.144-.08-.24-.168-.272-.248a.628.628 0 01-.048-.24v-.48c0-.2.072-.296.216-.296a.53.53 0 01.168.032c.056.024.136.056.224.096.304.136.64.24 1 .312.368.072.728.112 1.096.112.584 0 1.04-.104 1.36-.312.32-.208.488-.504.488-.88 0-.256-.08-.472-.24-.648-.16-.176-.464-.336-.904-.48l-1.296-.4c-.656-.208-1.144-.512-1.448-.912-.304-.392-.456-.832-.456-1.304 0-.376.08-.712.24-1 .16-.288.376-.536.648-.736.272-.2.576-.352.936-.456.36-.104.736-.152 1.128-.152.2 0 .408.016.608.04.208.024.392.064.576.104.176.048.344.096.504.152.16.056.288.112.384.168.128.08.224.16.28.248a.572.572 0 01.08.304v.448c0 .2-.072.304-.208.304-.072 0-.184-.04-.336-.112a4.12 4.12 0 00-1.744-.36c-.528 0-.944.088-1.232.272-.288.184-.44.464-.44.848 0 .256.088.472.264.648.176.176.504.352.976.504l1.272.4c.648.208 1.12.496 1.408.872.288.376.432.808.432 1.288 0 .384-.08.736-.232 1.04-.16.304-.376.568-.664.784-.288.224-.624.384-1.016.496a4.35 4.35 0 01-1.28.184z" fill="#FF9900"/>
+            </svg>
+          </div>
         </a>
-        <a class="project-card" href="https://github.com/CrackedOnTiti/Sentinel" target="_blank">
-          <div class="project-icon">STL</div>
-          <img class="project-img" src="assets/images/sentinel.png" alt="Sentinel" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+        <a class="project-card" href="https://github.com/PernotYlan/Sentinel-IA" target="_blank">
+          <div class="project-top">
+            <div class="project-status">Ongoing</div>
+            <div class="project-upd" id="upd-sentinel">Upd - —</div>
+          </div>
+          <img class="project-img" src="assets/images/sentinel.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
           <div class="project-img-placeholder" style="display:none;">no preview</div>
           <div class="project-name">Sentinel</div>
           <div class="project-desc">Network security monitoring pipeline. Zeek + Redis Streams + ML anomaly detection.</div>
-          <div class="project-meta">Updated <span id="date-sentinel">—</span></div>
+          <div class="project-langs">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" title="Python" />
+          </div>
         </a>
       </div>
     </div>
@@ -296,12 +359,15 @@
     <div class="content-slide" id="slide-3">
       <div class="projects-grid">
         <a class="project-card" href="https://github.com/CrackedOnTiti/MacroTracker" target="_blank">
-          <div class="project-icon">MCR</div>
-          <img class="project-img" src="assets/images/macrotracker.png" alt="MacroTracker" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="project-top">
+            <div class="project-status">Ongoing</div>
+            <div class="project-upd" id="upd-macro">Upd - —</div>
+          </div>
+          <img class="project-img" src="assets/images/macrotracker.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
           <div class="project-img-placeholder" style="display:none;">no preview</div>
           <div class="project-name">MacroTracker</div>
           <div class="project-desc">Open source calorie tracker for France. Flutter + Open Food Facts.</div>
-          <div class="project-meta">Updated <span id="date-macro">—</span></div>
+          <div class="project-langs"></div>
         </a>
         <div class="empty-card">// more coming</div>
       </div>
@@ -330,7 +396,6 @@
   window.addEventListener('resize', resize);
 
   const ZONE = 0.22;
-
   function randInZone() {
     return Math.random() < 0.5
       ? Math.random() * canvas.width * ZONE
@@ -414,18 +479,23 @@
   });
 
   const repos = [
-    { el: 'date-blablacase', repo: 'BlaBlaCase' },
-    { el: 'date-vigilansee', repo: 'VigilanSee' },
-    { el: 'date-riotrewind', repo: 'RiotRewind' },
-    { el: 'date-sentinel', repo: 'Sentinel' },
-    { el: 'date-macro', repo: 'MacroTracker' },
+    { el: 'upd-blablacase', repo: 'BlaBlaCase' },
+    { el: 'upd-vigilansee', repo: 'VigilanSee' },
+    { el: 'upd-riftrewind', repo: 'RiftRewind' },
+    { el: 'upd-sentinel', repo: 'Sentinel' },
+    { el: 'upd-macro', repo: 'MacroTracker' },
   ];
   repos.forEach(({ el, repo }) => {
     fetch(`https://api.github.com/repos/CrackedOnTiti/${repo}`)
       .then(r => r.json())
       .then(data => {
-        if (data.pushed_at)
-          document.getElementById(el).textContent = new Date(data.pushed_at).toLocaleDateString('fr-FR');
+        if (data.pushed_at) {
+          const d = new Date(data.pushed_at);
+          const dd = String(d.getDate()).padStart(2, '0');
+          const mm = String(d.getMonth() + 1).padStart(2, '0');
+          const yyyy = d.getFullYear();
+          document.getElementById(el).textContent = `Upd - ${dd}/${mm}/${yyyy}`;
+        }
       }).catch(() => {});
   });
 </script>
