@@ -127,7 +127,7 @@
 
     .project-card {
       background: rgba(20, 20, 20, 0.85);
-      border: 0.5px solid #222;
+      border: 0.5px solid #444;
       border-radius: 10px;
       padding: 1rem 1.25rem;
       transition: border-color 0.25s, background 0.25s;
@@ -138,7 +138,7 @@
     }
 
     .project-card:hover {
-      border-color: #555;
+      border-color: #ffffff;
       background: rgba(24, 24, 24, 0.95);
     }
 
@@ -457,6 +457,25 @@
         </a>
       </div>
     </div>
+
+    <div class="content-slide" id="slide-5">
+      <div style="display: flex; gap: 4rem; align-items: center; justify-content: center;">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 0.75rem;">
+          <img src="assets/github_qr.png" alt="GitHub QR" style="width: 140px; height: 140px; border-radius: 8px; opacity: 0.85;" />
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" style="width: 15px; height: 15px; opacity: 0.5; filter: invert(1);" />
+            <span style="font-size: 11px; color: #444; letter-spacing: 0.12em; text-transform: uppercase;">GitHub</span>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 0.75rem;">
+          <img src="assets/linkedin_qr.png" alt="LinkedIn QR" style="width: 140px; height: 140px; border-radius: 8px; opacity: 0.85;" />
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" alt="LinkedIn" style="width: 15px; height: 15px; opacity: 0.5;" />
+            <span style="font-size: 11px; color: #444; letter-spacing: 0.12em; text-transform: uppercase;">LinkedIn</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div id="scroll-hint">scroll</div>
@@ -466,6 +485,7 @@
     <div class="dot" onclick="goTo(2)"></div>
     <div class="dot" onclick="goTo(3)"></div>
     <div class="dot" onclick="goTo(4)"></div>
+    <div class="dot" onclick="goTo(5)"></div>
   </div>
 </div>
 
@@ -564,7 +584,7 @@
   draw();
 
   let current = 0;
-  const total = 5;
+  const total = 6;
   const slides = document.querySelectorAll('.content-slide');
   const dots = document.querySelectorAll('.dot');
   const hint = document.getElementById('scroll-hint');
