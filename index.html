@@ -41,6 +41,7 @@
       width: 100%;
       text-align: center;
       z-index: 10;
+      transition: all 0.8s cubic-bezier(0.22,1,0.36,1);
     }
 
     #fixed-title a {
@@ -58,6 +59,7 @@
       opacity: 0;
       animation: fadeIn 1s ease forwards;
       animation-delay: 0.3s;
+      transition: font-size 0.8s cubic-bezier(0.22,1,0.36,1);
     }
 
     #fixed-title a:hover h1 {
@@ -476,6 +478,96 @@
         </div>
       </div>
     </div>
+
+    <div class="content-slide" id="slide-6" style="position: absolute; width: 100%; height: 100%; max-width: 100%; padding: 0; overflow: hidden;">
+
+      <!-- Logo: slides in from left -->
+      <div id="exp-logo" style="
+        position: absolute;
+        left: -50%;
+        top: 0;
+        height: 100%;
+        opacity: 0;
+        transition: left 0.9s cubic-bezier(0.22,1,0.36,1), opacity 0.6s ease;
+        z-index: 1;
+        pointer-events: none;
+        display: flex;
+        align-items: center;
+      ">
+        <img src="assets/vigilanSee_logo.png" style="height: 100%; width: auto; opacity: 0.18; filter: grayscale(40%);" />
+      </div>
+
+      <!-- Title: fades in over logo -->
+      <div id="exp-title" style="
+        position: absolute;
+        left: 8%;
+        top: 50%;
+        transform: translateY(-50%) translateY(12px);
+        opacity: 0;
+        transition: opacity 0.7s ease, transform 0.7s ease;
+        z-index: 3;
+      ">
+        <span style="font-family: 'Bebas Neue', sans-serif; font-size: 52px; font-weight: 700; color: #ffffff; letter-spacing: 0.1em; text-transform: uppercase; line-height: 1;">VIGILANSEE</span>
+      </div>
+
+      <!-- Description box -->
+      <div id="exp-desc" style="
+        position: absolute;
+        left: 8%;
+        top: 58%;
+        width: 52%;
+        opacity: 0;
+        transform: translateY(12px);
+        transition: opacity 0.7s ease, transform 0.7s ease;
+        z-index: 3;
+      ">
+        <div style="background: rgba(18,18,18,0.75); border: 0.5px solid #333; border-radius: 10px; padding: 1.1rem 1.4rem;">
+          <p style="font-size: 13px; color: #555; line-height: 1.75; font-weight: 300;">CS2 demo analysis platform built in Rust. EIP graduation project — parses game demos, extracts behavioural signals, and scores players using a multi-layer ML pipeline.</p>
+        </div>
+      </div>
+
+      <!-- Status + date -->
+      <div id="exp-status" style="
+        position: absolute;
+        left: 8%;
+        top: 78%;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 0.7s ease, transform 0.7s ease;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+      ">
+        <span style="font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 0.18em; color: #3a6faa; text-transform: uppercase;">Ongoing</span>
+        <span style="font-size: 11px; color: #333; letter-spacing: 0.05em;" id="exp-date">Upd - —</span>
+      </div>
+
+      <!-- Stack box slides in from right -->
+      <div id="exp-stack" style="
+        position: absolute;
+        right: -20%;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0;
+        transition: right 0.9s cubic-bezier(0.22,1,0.36,1), opacity 0.6s ease;
+        z-index: 3;
+        background: rgba(16,16,16,0.85);
+        border: 0.5px solid #333;
+        border-radius: 12px;
+        padding: 1.25rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        width: 110px;
+      ">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg" style="width: 28px; height: 28px; opacity: 0.55;" title="Rust" />
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" style="width: 28px; height: 28px; opacity: 0.55;" title="Python" />
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" style="width: 28px; height: 28px; opacity: 0.55;" title="PostgreSQL" />
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" style="width: 28px; height: 28px; opacity: 0.55;" title="Docker" />
+      </div>
+
+    </div>
   </div>
 
   <div id="scroll-hint">scroll</div>
@@ -486,6 +578,7 @@
     <div class="dot" onclick="goTo(3)"></div>
     <div class="dot" onclick="goTo(4)"></div>
     <div class="dot" onclick="goTo(5)"></div>
+    <div class="dot" onclick="goTo(6)"></div>
   </div>
 </div>
 
@@ -584,7 +677,7 @@
   draw();
 
   let current = 0;
-  const total = 6;
+  const total = 7;
   const slides = document.querySelectorAll('.content-slide');
   const dots = document.querySelectorAll('.dot');
   const hint = document.getElementById('scroll-hint');
@@ -592,10 +685,84 @@
   function goTo(index) {
     slides[current].classList.remove('active');
     dots[current].classList.remove('active');
+
+    // reset main title if leaving exp slide
+    if (current === 6) resetMainTitle();
+
     current = Math.max(0, Math.min(total - 1, index));
     slides[current].classList.add('active');
     dots[current].classList.add('active');
     hint.style.opacity = current === total - 1 ? '0' : '1';
+    if (current === 6) runExpSlide();
+  }
+
+  function resetMainTitle() {
+    const ft = document.getElementById('fixed-title');
+    const h1 = ft.querySelector('h1');
+    ft.style.top = 'calc(2.5rem + 10px)';
+    ft.style.left = '0';
+    ft.style.right = 'auto';
+    ft.style.width = '100%';
+    ft.style.textAlign = 'center';
+    h1.style.fontSize = '';
+    h1.style.opacity = '1';
+  }
+
+  function runExpSlide() {
+    const ft = document.getElementById('fixed-title');
+    const h1 = ft.querySelector('h1');
+    const logo = document.getElementById('exp-logo');
+    const title = document.getElementById('exp-title');
+    const desc = document.getElementById('exp-desc');
+    const status = document.getElementById('exp-status');
+    const stack = document.getElementById('exp-stack');
+
+    // reset elements
+    logo.style.left = '-50%'; logo.style.opacity = '0';
+    title.style.opacity = '0'; title.style.transform = 'translateY(-50%) translateY(12px)';
+    desc.style.opacity = '0'; desc.style.transform = 'translateY(12px)';
+    status.style.opacity = '0'; status.style.transform = 'translateY(10px)';
+    stack.style.right = '-20%'; stack.style.opacity = '0';
+
+    // step 1: logo slides in
+    setTimeout(() => {
+      logo.style.left = '-8%';
+      logo.style.opacity = '1';
+    }, 200);
+
+    // step 2: main title shrinks to top-right
+    setTimeout(() => {
+      ft.style.top = '1.2rem';
+      ft.style.left = 'auto';
+      ft.style.right = '2rem';
+      ft.style.width = 'auto';
+      ft.style.textAlign = 'right';
+      h1.style.fontSize = '28px';
+    }, 600);
+
+    // step 3: VIGILANSEE fades in over logo
+    setTimeout(() => {
+      title.style.opacity = '1';
+      title.style.transform = 'translateY(-50%)';
+    }, 1100);
+
+    // step 4: description
+    setTimeout(() => {
+      desc.style.opacity = '1';
+      desc.style.transform = 'translateY(0)';
+    }, 1600);
+
+    // step 5: status
+    setTimeout(() => {
+      status.style.opacity = '1';
+      status.style.transform = 'translateY(0)';
+    }, 2100);
+
+    // step 6: stack
+    setTimeout(() => {
+      stack.style.right = '4%';
+      stack.style.opacity = '1';
+    }, 2400);
   }
 
   let lastWheel = 0;
@@ -637,6 +804,19 @@
         }
       }).catch(() => {});
   });
+
+  // exp slide date
+  fetch('https://api.github.com/repos/CrackedOnTiti/VigilanSee')
+    .then(r => r.json())
+    .then(data => {
+      if (data.pushed_at) {
+        const d = new Date(data.pushed_at);
+        const dd = String(d.getDate()).padStart(2, '0');
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const yyyy = d.getFullYear();
+        document.getElementById('exp-date').textContent = `Upd - ${dd}/${mm}/${yyyy}`;
+      }
+    }).catch(() => {});
 </script>
 </body>
 </html>
