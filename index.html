@@ -687,6 +687,10 @@
     dots[current].classList.remove('active');
     const prev = current;
     current = Math.max(0, Math.min(total - 1, index));
+
+    // reset target slide elements BEFORE making it visible
+    if (current >= 1 && current <= 7) resetExpSlide(current);
+
     slides[current].classList.add('active');
     dots[current].classList.add('active');
     hint.style.opacity = current === total - 1 ? '0' : '1';
@@ -694,9 +698,7 @@
     if (current === 0) {
       titleBig();
     } else if (current === 1) {
-      // only shrink title if it's not already small
       runExpSlide(1, !titleIsSmall);
-      if (!titleIsSmall) ; // shrink handled inside runExpSlide
     } else {
       if (!titleIsSmall) titleSmall();
       if (current >= 2 && current <= 7) runExpSlide(current, false);
@@ -717,8 +719,6 @@
   }
 
   function runExpSlide(n, shrinkTitle) {
-    resetExpSlide(n);
-
     const logo = document.getElementById(`logo-${n}`);
     const title = document.getElementById(`title-${n}`);
     const desc = document.getElementById(`desc-${n}`);
