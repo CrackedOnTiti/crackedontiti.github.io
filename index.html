@@ -177,15 +177,17 @@
 
     .exp-status {
       position: absolute;
-      left: 8%;
-      top: 78%;
+      right: 4%;
+      top: auto;
+      bottom: 8%;
       opacity: 0;
       transform: translateY(10px);
       transition: opacity 0.7s ease, transform 0.7s ease;
       z-index: 3;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 1.5rem;
+      gap: 0.4rem;
     }
 
     .exp-status-label {
@@ -662,7 +664,10 @@
   const ft = document.getElementById('fixed-title');
   const h1 = ft.querySelector('h1');
 
+  let titleIsSmall = false;
+
   function titleSmall() {
+    titleIsSmall = true;
     ft.style.top = '1.2rem';
     ft.style.left = 'auto';
     ft.style.right = '2rem';
@@ -672,6 +677,7 @@
   }
 
   function titleBig() {
+    titleIsSmall = false;
     ft.style.top = 'calc(2.5rem + 10px)';
     ft.style.left = '0';
     ft.style.right = 'auto';
@@ -693,11 +699,12 @@
     if (current === 0) {
       titleBig();
     } else if (current === 1) {
-      runExpSlide(1, true); // trigger title shrink
+      // only shrink title if it's not already small
+      runExpSlide(1, !titleIsSmall);
+      if (!titleIsSmall) ; // shrink handled inside runExpSlide
     } else {
-      // for slides 2-8, title stays small, just animate content
-      if (prev === 0) titleSmall(); // instant small if coming from hero
-      if (current >= 1 && current <= 7) runExpSlide(current, false);
+      if (!titleIsSmall) titleSmall();
+      if (current >= 2 && current <= 7) runExpSlide(current, false);
     }
   }
 
@@ -723,40 +730,14 @@
     const status = document.getElementById(`status-${n}`);
     const stack = document.getElementById(`stack-${n}`);
 
-    // step 1: logo
-    setTimeout(() => {
-      logo.style.left = '-8%';
-      logo.style.opacity = '1';
-    }, 200);
+    const base = 150; // small base delay to let reset settle
 
-    // step 2: shrink title (only slide 1) or keep small
-    if (shrinkTitle) {
-      setTimeout(() => titleSmall(), 600);
-    }
-
-    // step 3: project title
-    setTimeout(() => {
-      title.style.opacity = '1';
-      title.style.transform = 'translateY(-50%)';
-    }, shrinkTitle ? 1100 : 400);
-
-    // step 4: description
-    setTimeout(() => {
-      desc.style.opacity = '1';
-      desc.style.transform = 'translateY(0)';
-    }, shrinkTitle ? 1600 : 800);
-
-    // step 5: status
-    setTimeout(() => {
-      status.style.opacity = '1';
-      status.style.transform = 'translateY(0)';
-    }, shrinkTitle ? 2100 : 1100);
-
-    // step 6: stack
-    setTimeout(() => {
-      stack.style.right = '4%';
-      stack.style.opacity = '1';
-    }, shrinkTitle ? 2400 : 1300);
+    setTimeout(() => { logo.style.left = '-8%'; logo.style.opacity = '1'; }, base);
+    if (shrinkTitle) setTimeout(() => titleSmall(), base + 400);
+    setTimeout(() => { title.style.opacity = '1'; title.style.transform = 'translateY(-50%)'; }, shrinkTitle ? base + 900 : base + 250);
+    setTimeout(() => { desc.style.opacity = '1'; desc.style.transform = 'translateY(0)'; }, shrinkTitle ? base + 1400 : base + 550);
+    setTimeout(() => { status.style.opacity = '1'; status.style.transform = 'translateY(0)'; }, shrinkTitle ? base + 1900 : base + 800);
+    setTimeout(() => { stack.style.right = '4%'; stack.style.opacity = '1'; }, shrinkTitle ? base + 2200 : base + 1000);
   }
 
   let lastWheel = 0;
