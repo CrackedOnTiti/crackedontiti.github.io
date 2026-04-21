@@ -221,13 +221,41 @@
       letter-spacing: 0.05em;
     }
 
-    .exp-stack {
+    .exp-commits {
       position: absolute;
-      right: -20%;
-      top: 50%;
-      transform: translateY(-50%);
+      right: 4%;
+      top: 12%;
       opacity: 0;
-      transition: right 0.9s cubic-bezier(0.22,1,0.36,1), opacity 0.6s ease;
+      transition: opacity 0.7s ease;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.2rem;
+    }
+
+    .exp-commits-total {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      color: #e8e8e8;
+      letter-spacing: 0.08em;
+      line-height: 1;
+    }
+
+    .exp-commits-mine {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14px;
+      color: #555;
+      letter-spacing: 0.12em;
+    }
+
+    .exp-commits-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 11px;
+      color: #333;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
       z-index: 3;
       display: flex;
       flex-direction: column;
@@ -388,6 +416,11 @@
         <span class="exp-status-label ongoing">Ongoing</span>
         <span class="exp-status-date" id="upd-1">Upd - —</span>
       </div>
+      <div class="exp-commits" id="commits-1">
+        <div class="exp-commits-total" id="commits-total-1">—</div>
+        <div class="exp-commits-mine" id="commits-mine-1">— yours</div>
+        <div class="exp-commits-label">Commits</div>
+      </div>
       <div class="exp-stack" id="stack-1">
         <div class="exp-stack-grid">
           <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg" style="filter:invert(1);" title="Rust" />
@@ -415,6 +448,11 @@
       <div class="exp-status" id="status-2">
         <span class="exp-status-label ongoing">Ongoing</span>
         <span class="exp-status-date" id="upd-2">Upd - —</span>
+      </div>
+      <div class="exp-commits" id="commits-2">
+        <div class="exp-commits-total" id="commits-total-2">—</div>
+        <div class="exp-commits-mine" id="commits-mine-2">— yours</div>
+        <div class="exp-commits-label">Commits</div>
       </div>
       <div class="exp-stack" id="stack-2">
         <div class="exp-stack-grid">
@@ -444,6 +482,11 @@
         <span class="exp-status-label finished">Finished</span>
         <span class="exp-status-date" id="upd-3">Upd - —</span>
       </div>
+      <div class="exp-commits" id="commits-3">
+        <div class="exp-commits-total" id="commits-total-3">—</div>
+        <div class="exp-commits-mine" id="commits-mine-3">— yours</div>
+        <div class="exp-commits-label">Commits</div>
+      </div>
       <div class="exp-stack" id="stack-3">
         <div class="exp-stack-grid">
           <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg" style="filter:invert(0.6);" title="Flask" />
@@ -471,6 +514,11 @@
       <div class="exp-status" id="status-4">
         <span class="exp-status-label finished">Finished</span>
         <span class="exp-status-date" id="upd-4">Upd - —</span>
+      </div>
+      <div class="exp-commits" id="commits-4">
+        <div class="exp-commits-total" id="commits-total-4">—</div>
+        <div class="exp-commits-mine" id="commits-mine-4">— yours</div>
+        <div class="exp-commits-label">Commits</div>
       </div>
       <div class="exp-stack" id="stack-4">
         <div class="exp-stack-grid">
@@ -500,6 +548,11 @@
         <span class="exp-status-label finished">Finished</span>
         <span class="exp-status-date" id="upd-5">Upd - —</span>
       </div>
+      <div class="exp-commits" id="commits-5">
+        <div class="exp-commits-total" id="commits-total-5">—</div>
+        <div class="exp-commits-mine" id="commits-mine-5">— yours</div>
+        <div class="exp-commits-label">Commits</div>
+      </div>
       <div class="exp-stack" id="stack-5">
         <div class="exp-stack-grid">
           <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/haskell/haskell-original.svg" title="Haskell" />
@@ -526,6 +579,11 @@
       <div class="exp-status" id="status-6">
         <span class="exp-status-label ongoing">Ongoing</span>
         <span class="exp-status-date" id="upd-6">Upd - —</span>
+      </div>
+      <div class="exp-commits" id="commits-6">
+        <div class="exp-commits-total" id="commits-total-6">—</div>
+        <div class="exp-commits-mine" id="commits-mine-6">— yours</div>
+        <div class="exp-commits-label">Commits</div>
       </div>
       <div class="exp-stack" id="stack-6">
         <div class="exp-stack-grid">
@@ -554,6 +612,11 @@
       <div class="exp-status" id="status-7">
         <span class="exp-status-label ongoing">Ongoing</span>
         <span class="exp-status-date" id="upd-7">Upd - —</span>
+      </div>
+      <div class="exp-commits" id="commits-7">
+        <div class="exp-commits-total" id="commits-total-7">—</div>
+        <div class="exp-commits-mine" id="commits-mine-7">— yours</div>
+        <div class="exp-commits-label">Commits</div>
       </div>
       <div class="exp-stack" id="stack-7">
         <div class="exp-stack-grid">
@@ -587,6 +650,10 @@
             <div style="display:flex; flex-direction:column; gap:0.2rem; align-items:center;">
               <div style="font-family:'Bebas Neue',sans-serif; font-size:52px; color:#e8e8e8; letter-spacing:0.05em; line-height:1;" id="stat-stars">—</div>
               <div style="font-family:'Bebas Neue',sans-serif; font-size:14px; color:#444; letter-spacing:0.18em;">GitHub Stars</div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:0.2rem; align-items:center;">
+              <div style="font-family:'Bebas Neue',sans-serif; font-size:52px; color:#e8e8e8; letter-spacing:0.05em; line-height:1;" id="stat-commits">—</div>
+              <div style="font-family:'Bebas Neue',sans-serif; font-size:14px; color:#444; letter-spacing:0.18em;">Commits</div>
             </div>
           </div>
         </div>
@@ -764,6 +831,7 @@
     document.getElementById(`desc-${n}`).style.transform = 'translateY(12px)';
     document.getElementById(`status-${n}`).style.opacity = '0';
     document.getElementById(`status-${n}`).style.transform = 'translateY(10px)';
+    document.getElementById(`commits-${n}`).style.opacity = '0';
     document.getElementById(`stack-${n}`).style.right = '-20%';
     document.getElementById(`stack-${n}`).style.opacity = '0';
   }
@@ -784,6 +852,7 @@
     setTimeout(() => { sub.style.opacity = '1'; sub.style.transform = 'translateY(0)'; }, shrinkTitle ? base + 1100 : base + 400);
     setTimeout(() => { desc.style.opacity = '1'; desc.style.transform = 'translateY(0)'; }, shrinkTitle ? base + 1400 : base + 600);
     setTimeout(() => { status.style.opacity = '1'; status.style.transform = 'translateY(0)'; }, shrinkTitle ? base + 1900 : base + 850);
+    setTimeout(() => { document.getElementById(`commits-${n}`).style.opacity = '1'; }, shrinkTitle ? base + 1900 : base + 850);
     setTimeout(() => { stack.style.right = '4%'; stack.style.opacity = '1'; }, shrinkTitle ? base + 2200 : base + 1050);
   }
 
@@ -836,6 +905,40 @@
         document.getElementById('stat-stars').textContent = stars;
       }
     }).catch(() => {});
+
+  // Per-repo commit counts
+  const commitRepos = [
+    { n: 1, repo: 'VigilanSee', owner: 'CrackedOnTiti' },
+    { n: 2, repo: 'BlaBlaCase', owner: 'CrackedOnTiti' },
+    { n: 3, repo: 'rift-rewind', owner: 'CrackedOnTiti' },
+    { n: 4, repo: 'AREA', owner: 'CrackedOnTiti' },
+    { n: 5, repo: 'glados_ss', owner: 'CrackedOnTiti' },
+    { n: 6, repo: 'Dnd_TIH', owner: 'CrackedOnTiti' },
+    { n: 7, repo: 'Sentinel-IA', owner: 'PernotYlan' },
+  ];
+
+  let globalTotalCommits = 0;
+  let globalMineCommits = 0;
+  let commitsFetched = 0;
+
+  commitRepos.forEach(({ n, repo, owner }) => {
+    fetch(`https://api.github.com/repos/${owner}/${repo}/contributors`)
+      .then(r => r.json())
+      .then(data => {
+        if (!Array.isArray(data)) return;
+        const total = data.reduce((sum, c) => sum + c.contributions, 0);
+        const mine = (data.find(c => c.login === 'CrackedOnTiti') || {}).contributions || 0;
+        document.getElementById(`commits-total-${n}`).textContent = total;
+        document.getElementById(`commits-mine-${n}`).textContent = `${mine} yours`;
+        globalTotalCommits += total;
+        globalMineCommits += mine;
+        commitsFetched++;
+        if (commitsFetched === commitRepos.length) {
+          const el = document.getElementById('stat-commits');
+          if (el) el.textContent = globalTotalCommits;
+        }
+      }).catch(() => {});
+  });
 
   // GoatCounter total views
   fetch('https://crackedontiti.goatcounter.com/api/v0/stats/total', {
