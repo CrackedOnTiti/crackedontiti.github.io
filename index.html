@@ -150,10 +150,25 @@
       line-height: 1;
     }
 
+    .exp-subtitle {
+      position: absolute;
+      left: 8%;
+      top: 57%;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+      z-index: 3;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 0.12em;
+      color: #666;
+      text-transform: uppercase;
+    }
+
     .exp-desc {
       position: absolute;
       left: 8%;
-      top: 58%;
+      top: 63%;
       width: 52%;
       opacity: 0;
       transform: translateY(12px);
@@ -363,6 +378,7 @@
     <div class="content-slide" id="slide-1">
       <div class="exp-logo" id="logo-1"><img src="assets/vigilanSee_logo.png" alt="" /></div>
       <div class="exp-project-title" id="title-1">VigilanSee</div>
+      <div class="exp-subtitle" id="sub-1">Human Behavioral Analysis — ServerSide AntiCheat</div>
       <div class="exp-desc" id="desc-1">
         <div class="exp-desc-inner">
           <p>A human behavioural analysis system designed to challenge the current direction of anti-cheat software. Entirely server-side and locally hosted, no client data, no bloatware, 99% uptime since we are independent. Rather than detecting cheats, we analyse human patterns behind cheating, the methods used to evade detection, and as a side effect identifying trolling and griefing in real time. We aim to have our players and clients first, as it should always have been...</p>
@@ -390,6 +406,7 @@
     <div class="content-slide" id="slide-2">
       <div class="exp-logo" id="logo-2"><img src="assets/blaBlaCase-logo.png" alt="" /></div>
       <div class="exp-project-title" id="title-2">BlaBlaCase</div>
+      <div class="exp-subtitle" id="sub-2">French Customs Quota Calculator — Pas de la Casa</div>
       <div class="exp-desc" id="desc-2">
         <div class="exp-desc-inner">
           <p>Andorra customs quota calculator for French cross-border shoppers. A Flutter native Android app with a Python backend to keep quota data up to date. Simple tool that saves a trip to the wrong checkout lane.</p>
@@ -417,6 +434,7 @@
     <div class="content-slide" id="slide-3">
       <div class="exp-logo" id="logo-3"><img src="assets/riftRewinf_logo.png" alt="" /></div>
       <div class="exp-project-title" id="title-3">RiftRewind</div>
+      <div class="exp-subtitle" id="sub-3">AWS × Riot Games Hackathon Winner — Personalised AI League Coach</div>
       <div class="exp-desc" id="desc-3">
         <div class="exp-desc-inner">
           <p>LoL match coaching platform built for the AWS × Riot Games hackathon — and won. Leverages AWS Bedrock for AI-powered match analysis, DynamoDB for player data, and ElasticBeanstalk for deployment. Turns raw match history into actionable coaching insights.</p>
@@ -444,6 +462,7 @@
     <div class="content-slide" id="slide-4">
       <div class="exp-logo" id="logo-4"><img src="assets/area_logo.png" alt="" /></div>
       <div class="exp-project-title" id="title-4">AREA</div>
+      <div class="exp-subtitle" id="sub-4">Workflow Automation — Zapier / IFTTT Clone</div>
       <div class="exp-desc" id="desc-4">
         <div class="exp-desc-inner">
           <p>Epitech project: a Zapier/IFTTT clone. Full task automation scheduler with a Flutter Android app and a Flask web interface. Users create automation pipelines between services with triggers and reactions. Built solo from scratch over a semester.</p>
@@ -471,6 +490,7 @@
     <div class="content-slide" id="slide-5">
       <div class="exp-logo" id="logo-5"><img src="assets/glados_logo.png" alt="" /></div>
       <div class="exp-project-title" id="title-5">GLaDOS</div>
+      <div class="exp-subtitle" id="sub-5">Compiler & Language Built From Scratch</div>
       <div class="exp-desc" id="desc-5">
         <div class="exp-desc-inner">
           <p>Epitech project: a compiler built from scratch inspired by HolyC. Low level programming language with a simple syntax, higher security model, and precise error messages. Includes a full 113-test suite. Written entirely in Haskell.</p>
@@ -497,6 +517,7 @@
     <div class="content-slide" id="slide-6">
       <div class="exp-logo" id="logo-6"><img src="assets/dndTIH_logo.png" alt="" /></div>
       <div class="exp-project-title" id="title-6">DnDTIH</div>
+      <div class="exp-subtitle" id="sub-6">Multiplayer Socket-Based Local D&D Manager</div>
       <div class="exp-desc" id="desc-6">
         <div class="exp-desc-inner">
           <p>Custom D&D board built for me and my friends. Features a real-time socket-based messaging system, dice rolls, ability creation panel, and dynamic HP/stamina bars — everything needed for immersive remote gameplay without a third-party platform.</p>
@@ -524,6 +545,7 @@
     <div class="content-slide" id="slide-7">
       <div class="exp-logo" id="logo-7"><img src="assets/sentinel_logo.png" alt="" /></div>
       <div class="exp-project-title" id="title-7">Sentinel</div>
+      <div class="exp-subtitle" id="sub-7">Automated Server Security ML Pipeline — Used in Production</div>
       <div class="exp-desc" id="desc-7">
         <div class="exp-desc-inner">
           <p>Network security monitoring pipeline built during my internship. Zeek captures traffic per client, Redis Streams routes events, and a tiered ML system (Isolation Forest → XGBoost → Autoencoder) flags anomalies with escalating precision. Entirely containerised.</p>
@@ -710,6 +732,8 @@
     document.getElementById(`logo-${n}`).style.opacity = '0';
     document.getElementById(`title-${n}`).style.opacity = '0';
     document.getElementById(`title-${n}`).style.transform = 'translateY(-50%) translateY(12px)';
+    document.getElementById(`sub-${n}`).style.opacity = '0';
+    document.getElementById(`sub-${n}`).style.transform = 'translateY(8px)';
     document.getElementById(`desc-${n}`).style.opacity = '0';
     document.getElementById(`desc-${n}`).style.transform = 'translateY(12px)';
     document.getElementById(`status-${n}`).style.opacity = '0';
@@ -721,18 +745,20 @@
   function runExpSlide(n, shrinkTitle) {
     const logo = document.getElementById(`logo-${n}`);
     const title = document.getElementById(`title-${n}`);
+    const sub = document.getElementById(`sub-${n}`);
     const desc = document.getElementById(`desc-${n}`);
     const status = document.getElementById(`status-${n}`);
     const stack = document.getElementById(`stack-${n}`);
 
-    const base = 150; // small base delay to let reset settle
+    const base = 150;
 
     setTimeout(() => { logo.style.left = '-8%'; logo.style.opacity = '1'; }, base);
     if (shrinkTitle) setTimeout(() => titleSmall(), base);
     setTimeout(() => { title.style.opacity = '1'; title.style.transform = 'translateY(-50%)'; }, shrinkTitle ? base + 900 : base + 250);
-    setTimeout(() => { desc.style.opacity = '1'; desc.style.transform = 'translateY(0)'; }, shrinkTitle ? base + 1400 : base + 550);
-    setTimeout(() => { status.style.opacity = '1'; status.style.transform = 'translateY(0)'; }, shrinkTitle ? base + 1900 : base + 800);
-    setTimeout(() => { stack.style.right = '4%'; stack.style.opacity = '1'; }, shrinkTitle ? base + 2200 : base + 1000);
+    setTimeout(() => { sub.style.opacity = '1'; sub.style.transform = 'translateY(0)'; }, shrinkTitle ? base + 1100 : base + 400);
+    setTimeout(() => { desc.style.opacity = '1'; desc.style.transform = 'translateY(0)'; }, shrinkTitle ? base + 1400 : base + 600);
+    setTimeout(() => { status.style.opacity = '1'; status.style.transform = 'translateY(0)'; }, shrinkTitle ? base + 1900 : base + 850);
+    setTimeout(() => { stack.style.right = '4%'; stack.style.opacity = '1'; }, shrinkTitle ? base + 2200 : base + 1050);
   }
 
   let lastWheel = 0;
