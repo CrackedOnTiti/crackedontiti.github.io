@@ -728,7 +728,7 @@
     const base = 150; // small base delay to let reset settle
 
     setTimeout(() => { logo.style.left = '-8%'; logo.style.opacity = '1'; }, base);
-    if (shrinkTitle) setTimeout(() => titleSmall(), base + 400);
+    if (shrinkTitle) setTimeout(() => titleSmall(), base);
     setTimeout(() => { title.style.opacity = '1'; title.style.transform = 'translateY(-50%)'; }, shrinkTitle ? base + 900 : base + 250);
     setTimeout(() => { desc.style.opacity = '1'; desc.style.transform = 'translateY(0)'; }, shrinkTitle ? base + 1400 : base + 550);
     setTimeout(() => { status.style.opacity = '1'; status.style.transform = 'translateY(0)'; }, shrinkTitle ? base + 1900 : base + 800);
