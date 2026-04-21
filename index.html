@@ -437,7 +437,7 @@
       <div class="exp-subtitle" id="sub-3">AWS × Riot Games Hackathon Winner — Personalised AI League Coach</div>
       <div class="exp-desc" id="desc-3">
         <div class="exp-desc-inner">
-          <p>LoL match coaching platform built for the AWS × Riot Games hackathon — and won. Leverages AWS Bedrock for AI-powered match analysis, DynamoDB for player data, and ElasticBeanstalk for deployment. Turns raw match history into actionable coaching insights.</p>
+          <p>LoL match coaching platform built for the AWS × Riot Games hackathon, and won 1000USD and 2000 AWS credits. Leverages AWS Bedrock for AI-powered match analysis, DynamoDB for player data, and ElasticBeanstalk for deployment. The thing that makes ours special is the personalised coach feature — it doesn't just give random info, it's actively watching your stats and pulling latest metas and updates for the most accurate help.</p>
         </div>
       </div>
       <div class="exp-status" id="status-3">
@@ -520,7 +520,7 @@
       <div class="exp-subtitle" id="sub-6">Multiplayer Socket-Based Local D&D Manager</div>
       <div class="exp-desc" id="desc-6">
         <div class="exp-desc-inner">
-          <p>Custom D&D board built for me and my friends. Features a real-time socket-based messaging system, dice rolls, ability creation panel, and dynamic HP/stamina bars — everything needed for immersive remote gameplay without a third-party platform.</p>
+          <p>Custom D&D board built for me and my friends. Features a real-time socket-based messaging system, dice rolls, ability creation panel, and dynamic HP/stamina bars... Basically tailor made for my D&D campaign.</p>
         </div>
       </div>
       <div class="exp-status" id="status-6">
@@ -569,24 +569,81 @@
       </div>
     </div>
 
-    <!-- SLIDE 8: QR codes -->
+    <!-- SLIDE 8: QR codes with reveal -->
     <div class="content-slide" id="slide-8">
-      <div class="qr-slide">
-        <div class="qr-item">
-          <img class="qr-code" src="assets/git_qr.png" alt="GitHub QR" />
-          <div class="qr-label">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" style="filter:invert(1);" alt="GitHub" />
-            <span>GitHub</span>
+
+      <!-- Left side: text content -->
+      <div id="qr-left" style="position:absolute; left:50%; top:50%; transform:translate(-130%, -50%); z-index:3; display:flex; flex-direction:column; gap:2rem;">
+
+        <div id="qr-contact" style="opacity:0; transform:translateY(10px); transition:opacity 0.7s ease, transform 0.7s ease; display:flex; flex-direction:column; gap:0.5rem;">
+          <div style="font-family:'Bebas Neue',sans-serif; font-size:36px; color:#e8e8e8; letter-spacing:0.1em;">Thank you for your time</div>
+          <div style="font-family:'Bebas Neue',sans-serif; font-size:36px; color:#e8e8e8; letter-spacing:0.1em;">You can reach me here</div>
+        </div>
+
+        <div id="qr-stats" style="opacity:0; transform:translateY(10px); transition:opacity 0.7s ease, transform 0.7s ease; display:flex; flex-direction:row; gap:3rem; align-items:flex-end;">
+          <div style="display:flex; flex-direction:column; gap:0.2rem;">
+            <div style="font-family:'Bebas Neue',sans-serif; font-size:52px; color:#e8e8e8; letter-spacing:0.05em; line-height:1;" id="stat-views">—</div>
+            <div style="font-family:'Bebas Neue',sans-serif; font-size:14px; color:#444; letter-spacing:0.18em;">Visitors</div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:0.2rem;">
+            <div style="font-family:'Bebas Neue',sans-serif; font-size:52px; color:#e8e8e8; letter-spacing:0.05em; line-height:1;" id="stat-stars">—</div>
+            <div style="font-family:'Bebas Neue',sans-serif; font-size:14px; color:#444; letter-spacing:0.18em;">GitHub Stars</div>
           </div>
         </div>
-        <div class="qr-item">
-          <img class="qr-code" src="assets/linkedin_qr.png" alt="LinkedIn QR" />
-          <div class="qr-label">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" alt="LinkedIn" />
-            <span>LinkedIn</span>
-          </div>
+
+      </div>
+
+      <!-- Right side: QR cards -->
+      <div id="qr-card-top" style="
+        position:absolute;
+        left:-40%;
+        top:50%;
+        transform:translateY(-115%);
+        opacity:0;
+        transition: left 1s cubic-bezier(0.22,1,0.36,1), opacity 0.6s ease;
+        z-index:3;
+        background:rgba(14,14,14,0.95);
+        border:0.5px solid #444;
+        border-radius:12px;
+        padding:1.25rem;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        gap:0.75rem;
+        width:180px;
+      ">
+        <img src="assets/git_qr.png" style="width:130px;height:130px;border-radius:6px;opacity:0.85;" />
+        <div style="display:flex;align-items:center;gap:6px;">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" style="width:14px;height:14px;filter:invert(1);opacity:0.5;" />
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:12px;color:#444;letter-spacing:0.12em;">GitHub</span>
         </div>
       </div>
+
+      <div id="qr-card-bottom" style="
+        position:absolute;
+        left:-40%;
+        top:50%;
+        transform:translateY(15%);
+        opacity:0;
+        transition: left 1.2s cubic-bezier(0.22,1,0.36,1), opacity 0.6s ease;
+        z-index:3;
+        background:rgba(14,14,14,0.95);
+        border:0.5px solid #444;
+        border-radius:12px;
+        padding:1.25rem;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        gap:0.75rem;
+        width:180px;
+      ">
+        <img src="assets/linkedin_qr.png" style="width:130px;height:130px;border-radius:6px;opacity:0.85;" />
+        <div style="display:flex;align-items:center;gap:6px;">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" style="width:14px;height:14px;opacity:0.5;" />
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:12px;color:#444;letter-spacing:0.12em;">LinkedIn</span>
+        </div>
+      </div>
+
     </div>
 
   </div>
@@ -721,6 +778,9 @@
       titleBig();
     } else if (current === 1) {
       runExpSlide(1, !titleIsSmall);
+    } else if (current === 8) {
+      if (!titleIsSmall) titleSmall();
+      runQRSlide();
     } else {
       if (!titleIsSmall) titleSmall();
       if (current >= 2 && current <= 7) runExpSlide(current, false);
@@ -800,6 +860,61 @@
         }
       }).catch(() => {});
   });
+
+  // GitHub total stars
+  fetch('https://api.github.com/users/CrackedOnTiti/repos?per_page=100')
+    .then(r => r.json())
+    .then(data => {
+      if (Array.isArray(data)) {
+        const stars = data.reduce((sum, r) => sum + r.stargazers_count, 0);
+        document.getElementById('stat-stars').textContent = stars;
+      }
+    }).catch(() => {});
+
+  // GoatCounter total views
+  fetch('https://crackedontiti.goatcounter.com/api/v0/stats/total')
+    .then(r => r.json())
+    .then(data => {
+      if (data.total !== undefined) document.getElementById('stat-views').textContent = data.total;
+    }).catch(() => {});
+
+  function runQRSlide() {
+    const cardTop = document.getElementById('qr-card-top');
+    const cardBottom = document.getElementById('qr-card-bottom');
+    const contact = document.getElementById('qr-contact');
+    const stats = document.getElementById('qr-stats');
+
+    // reset
+    cardTop.style.left = '-40%'; cardTop.style.opacity = '0';
+    cardBottom.style.left = '-40%'; cardBottom.style.opacity = '0';
+    contact.style.opacity = '0'; contact.style.transform = 'translateY(10px)';
+    stats.style.opacity = '0'; stats.style.transform = 'translateY(10px)';
+
+    // contact text fades in first
+    setTimeout(() => {
+      contact.style.opacity = '1';
+      contact.style.transform = 'translateY(0)';
+    }, 300);
+
+    // upper QR slides in, parks right of center
+    setTimeout(() => {
+      cardTop.style.left = 'calc(50% + 20px)';
+      cardTop.style.opacity = '1';
+    }, 600);
+
+    // lower QR slides in slightly after
+    setTimeout(() => {
+      cardBottom.style.left = 'calc(50% + 20px)';
+      cardBottom.style.opacity = '1';
+    }, 900);
+
+    // stats fade in
+    setTimeout(() => {
+      stats.style.opacity = '1';
+      stats.style.transform = 'translateY(0)';
+    }, 1400);
+  }
 </script>
+<script data-goatcounter="https://crackedontiti.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
