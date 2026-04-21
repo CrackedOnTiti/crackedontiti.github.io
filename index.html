@@ -62,15 +62,7 @@
       transition: font-size 0.8s cubic-bezier(0.22,1,0.36,1);
     }
 
-    #fixed-title a:hover h1 {
-      opacity: 0.7;
-    }
-
-    .hero-desc {
-      opacity: 0;
-      animation: fadeIn 1s ease forwards;
-      animation-delay: 1.6s;
-    }
+    #fixed-title a:hover h1 { opacity: 0.7; }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(6px); }
@@ -79,10 +71,8 @@
 
     #content-zone {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -92,14 +82,15 @@
 
     .content-slide {
       position: absolute;
-      width: calc(100% - 5rem);
-      max-width: 900px;
+      width: 100%;
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
       opacity: 0;
       transition: opacity 1.1s ease;
       pointer-events: none;
+      overflow: hidden;
     }
 
     .content-slide.active {
@@ -107,6 +98,7 @@
       pointer-events: auto;
     }
 
+    /* Hero slide */
     .hero-desc {
       font-size: 20px;
       color: #555;
@@ -120,134 +112,190 @@
       animation-delay: 1.6s;
     }
 
-    .projects-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      width: 100%;
-    }
-
-    .project-card {
-      background: rgba(20, 20, 20, 0.85);
-      border: 0.5px solid #444;
-      border-radius: 10px;
-      padding: 1rem 1.25rem;
-      transition: border-color 0.25s, background 0.25s;
-      cursor: pointer;
-      text-decoration: none;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .project-card:hover {
-      border-color: #ffffff;
-      background: rgba(24, 24, 24, 0.95);
-    }
-
-    .project-top {
+    /* Exp slide shared styles */
+    .exp-logo {
+      position: absolute;
+      left: -50%;
+      top: 0;
+      height: 100%;
+      opacity: 0;
+      transition: left 0.9s cubic-bezier(0.22,1,0.36,1), opacity 0.6s ease;
+      z-index: 1;
+      pointer-events: none;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0.6rem;
     }
 
-    .project-status {
-      font-size: 10px;
-      letter-spacing: 0.14em;
-      color: #444;
+    .exp-logo img {
+      height: 100%;
+      width: auto;
+      opacity: 0.58;
+      filter: grayscale(5%);
+    }
+
+    .exp-project-title {
+      position: absolute;
+      left: 8%;
+      top: 50%;
+      transform: translateY(-50%) translateY(12px);
+      opacity: 0;
+      transition: opacity 0.7s ease, transform 0.7s ease;
+      z-index: 3;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 52px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .exp-desc {
+      position: absolute;
+      left: 8%;
+      top: 58%;
+      width: 52%;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+      z-index: 3;
+    }
+
+    .exp-desc-inner {
+      background: rgba(18,18,18,0.75);
+      border: 0.5px solid #333;
+      border-radius: 10px;
+      padding: 1.1rem 1.4rem;
+    }
+
+    .exp-desc-inner p {
+      font-size: 13px;
+      color: #bbb;
+      line-height: 1.75;
+      font-weight: 300;
+    }
+
+    .exp-status {
+      position: absolute;
+      left: 8%;
+      top: 78%;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .exp-status-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
     }
 
-    .project-upd {
-      font-size: 10px;
-      color: #333;
-      letter-spacing: 0.03em;
-    }
+    .exp-status-label.ongoing { color: #7aaee8; }
+    .exp-status-label.finished { color: #888; }
 
-    .project-img {
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
-      border-radius: 5px;
-      margin-bottom: 0.75rem;
-      opacity: 0.6;
-      display: block;
-    }
-
-    .project-img-placeholder {
-      width: 100px;
-      height: 100px;
-      border-radius: 5px;
-      margin-bottom: 0.75rem;
-      background: #111;
-      border: 0.5px dashed #1e1e1e;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-      color: #222;
-      letter-spacing: 0.1em;
-    }
-
-    .project-name {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 22px;
-      color: #d0d0d0;
-      letter-spacing: 0.08em;
-      line-height: 1;
-      margin-bottom: 0.4rem;
-    }
-
-    .project-desc {
+    .exp-status-date {
       font-size: 13px;
-      color: #404040;
-      line-height: 1.6;
-      font-weight: 300;
-      flex: 1;
-      margin-bottom: 0.8rem;
+      color: #777;
+      letter-spacing: 0.05em;
     }
 
-    .project-langs {
+    .exp-stack {
+      position: absolute;
+      right: -20%;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0;
+      transition: right 0.9s cubic-bezier(0.22,1,0.36,1), opacity 0.6s ease;
+      z-index: 3;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 10px;
-      padding-top: 0.65rem;
-      border-top: 0.5px solid #1c1c1c;
-      min-height: 32px;
+      gap: 1rem;
     }
 
-    .project-langs img {
-      width: 20px;
-      height: 20px;
-      opacity: 0.4;
-      transition: opacity 0.2s;
+    .exp-stack-grid {
+      background: rgba(16,16,16,0.85);
+      border: 0.5px solid #333;
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      width: 110px;
     }
 
-    .project-card:hover .project-langs img {
-      opacity: 0.75;
+    .exp-stack-grid img {
+      width: 28px;
+      height: 28px;
+      opacity: 1;
     }
 
-    .aws-icon {
-      width: 20px;
-      height: 20px;
-      opacity: 0.4;
-      transition: opacity 0.2s;
-    }
-
-    .project-card:hover .aws-icon {
-      opacity: 0.75;
-    }
-
-    .empty-card {
-      background: transparent;
-      border: 0.5px dashed #1a1a1a;
-      border-radius: 10px;
+    .exp-repo {
       display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      text-decoration: none;
+    }
+
+    .exp-repo img {
+      width: 18px;
+      height: 18px;
+      opacity: 1;
+      filter: invert(1);
+    }
+
+    .exp-repo span {
+      font-size: 10px;
+      color: #888;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    /* QR slide */
+    .qr-slide {
+      display: flex;
+      gap: 5rem;
       align-items: center;
       justify-content: center;
-      color: #222;
-      font-size: 11px;
-      letter-spacing: 0.1em;
+    }
+
+    .qr-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .qr-item img.qr-code {
+      width: 200px;
+      height: 200px;
+      border-radius: 10px;
+      opacity: 0.85;
+    }
+
+    .qr-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .qr-label img {
+      width: 18px;
+      height: 18px;
+      opacity: 1;
+    }
+
+    .qr-label span {
+      font-size: 12px;
+      color: #444;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
 
     #scroll-hint {
@@ -290,12 +338,6 @@
       0%, 100% { opacity: 0.3; }
       50% { opacity: 1; }
     }
-
-    @media (max-width: 600px) {
-      .projects-grid { grid-template-columns: 1fr; }
-      #content-zone { padding: 0 1.25rem 2rem; }
-      .content-slide { width: calc(100% - 2.5rem); }
-    }
   </style>
 </head>
 <body>
@@ -309,282 +351,220 @@
   </div>
 
   <div id="content-zone">
+
+    <!-- SLIDE 0: Hero -->
     <div class="content-slide active" id="slide-0">
       <div class="hero-desc">I'm a 4th year computer science student, passionate about cybersecurity and building tools that improve my daily life. Most of my work is open source. Here are some of my proudest projects, all built outside of my curriculum:</div>
     </div>
 
+    <!-- SLIDE 1: VigilanSee -->
     <div class="content-slide" id="slide-1">
-      <div class="projects-grid">
-        <a class="project-card" href="https://github.com/CrackedOnTiti/BlaBlaCase" target="_blank">
-          <div class="project-top">
-            <div class="project-status">Ongoing</div>
-            <div class="project-upd" id="upd-blablacase">Upd - —</div>
-          </div>
-          <img class="project-img" src="assets/blaBlaCase-logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-          <div class="project-img-placeholder" style="display:none;">no preview</div>
-          <div class="project-name">BlaBlaCase</div>
-          <div class="project-desc">Andorra customs quota calculator for French cross-border shoppers. Native Android app.</div>
-          <div class="project-langs">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" alt="Flutter" title="Flutter" />
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" title="Python" />
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" alt="SQLite" title="SQLite" />
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker" title="Docker" />
-          </div>
-        </a>
-        <a class="project-card" href="https://github.com/CrackedOnTiti/VigilanSee" target="_blank">
-          <div class="project-top">
-            <div class="project-status">Ongoing</div>
-            <div class="project-upd" id="upd-vigilansee">Upd - —</div>
-          </div>
-          <img class="project-img" src="assets/vigilanSee_logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-          <div class="project-img-placeholder" style="display:none;">no preview</div>
-          <div class="project-name">VigilanSee</div>
-          <div class="project-desc">CS2 demo analysis platform. EIP graduation project built in Rust.</div>
-          <div class="project-langs">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg" alt="Rust" title="Rust" />
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" title="Python" />
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker" title="Docker" />
-          </div>
+      <div class="exp-logo" id="logo-1"><img src="assets/vigilanSee_logo.png" alt="" /></div>
+      <div class="exp-project-title" id="title-1">VigilanSee</div>
+      <div class="exp-desc" id="desc-1">
+        <div class="exp-desc-inner">
+          <p>A human behavioural analysis system designed to challenge the current direction of anti-cheat software. Entirely server-side and locally hosted, no client data, no bloatware, 99% uptime since we are independent. Rather than detecting cheats, we analyse human patterns behind cheating, the methods used to evade detection, and as a side effect identifying trolling and griefing in real time. We aim to have our players and clients first, as it should always have been...</p>
+        </div>
+      </div>
+      <div class="exp-status" id="status-1">
+        <span class="exp-status-label ongoing">Ongoing</span>
+        <span class="exp-status-date" id="upd-1">Upd - —</span>
+      </div>
+      <div class="exp-stack" id="stack-1">
+        <div class="exp-stack-grid">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg" style="filter:invert(1);" title="Rust" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" title="Python" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" title="PostgreSQL" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" title="Docker" />
+        </div>
+        <a class="exp-repo" href="https://github.com/CrackedOnTiti/VigilanSee" target="_blank">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" />
+          <span>repo</span>
         </a>
       </div>
     </div>
 
+    <!-- SLIDE 2: BlaBlaCase -->
     <div class="content-slide" id="slide-2">
-      <div class="projects-grid">
-        <a class="project-card" href="https://github.com/CrackedOnTiti/rift-rewind" target="_blank">
-          <div class="project-top">
-            <div class="project-status">Finished</div>
-            <div class="project-upd" id="upd-riftrewind">Upd - —</div>
-          </div>
-          <img class="project-img" src="assets/riftRewinf_logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-          <div class="project-img-placeholder" style="display:none;">no preview</div>
-          <div class="project-name">RiftRewind</div>
-          <div class="project-desc">LoL match coaching platform. AWS × Riot Games hackathon winner.</div>
-          <div class="project-langs">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg" alt="Flask" title="Flask" style="filter: invert(0.6);" />
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML" title="HTML" />
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" title="Python" />
-            <svg class="aws-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" title="AWS (Bedrock/DynamoDB/EB)">
-              <path d="M6.763 10.036c0 .296.032.535.088.71.064.176.144.368.256.576.04.072.056.144.056.208 0 .096-.056.192-.176.288l-.583.392a.441.441 0 01-.24.08c-.096 0-.192-.048-.288-.136a2.976 2.976 0 01-.344-.448 7.365 7.365 0 01-.296-.56c-.744.88-1.68 1.32-2.808 1.32-.8 0-1.44-.224-1.904-.672C.327 12.37.1 11.77.1 11.026c0-.792.28-1.432.848-1.912.568-.48 1.32-.72 2.272-.72.312 0 .64.024.984.072.344.048.704.12 1.08.208v-.68c0-.712-.152-1.208-.448-1.496-.304-.288-.816-.424-1.544-.424-.336 0-.68.04-1.032.128a7.62 7.62 0 00-1.032.336 2.72 2.72 0 01-.336.128.6.6 0 01-.144.024c-.128 0-.192-.096-.192-.296v-.464c0-.152.024-.272.072-.336a.76.76 0 01.272-.2c.336-.168.736-.312 1.2-.424A5.9 5.9 0 013.5 5.41c1.04 0 1.8.232 2.288.696.48.464.728 1.168.728 2.112v2.816l.248.002zm-3.88 1.44c.304 0 .616-.056.944-.168.328-.112.624-.312.872-.592.144-.176.256-.368.312-.584.056-.216.088-.472.088-.776V9.78a7.86 7.86 0 00-.856-.16 6.95 6.95 0 00-.872-.056c-.624 0-1.08.12-1.384.368-.304.248-.448.6-.448 1.064 0 .432.112.752.344.976.224.232.544.344.968.344l.032-.84zm7.448 1.008c-.176 0-.296-.032-.376-.096-.08-.056-.152-.184-.216-.36L7.58 6.244a1.65 1.65 0 01-.088-.376c0-.144.072-.224.216-.224h.88c.184 0 .312.032.384.096.08.056.144.184.208.36l1.56 6.152 1.448-6.152c.056-.184.12-.304.2-.36.08-.056.216-.096.392-.096h.72c.184 0 .312.032.4.096.08.056.152.184.2.36l1.464 6.224 1.608-6.224c.064-.184.136-.304.208-.36.08-.056.208-.096.384-.096h.832c.144 0 .224.072.224.224 0 .048-.008.096-.016.152a1.4 1.4 0 01-.072.232l-2.192 5.784c-.064.184-.136.304-.216.36-.08.056-.208.096-.376.096h-.776c-.184 0-.312-.032-.4-.096-.08-.064-.152-.184-.2-.368l-1.44-5.984-1.432 5.976c-.056.184-.12.304-.2.368-.08.064-.224.096-.4.096h-.784zm11.688.24c-.472 0-.944-.056-1.4-.168-.456-.112-.816-.232-1.056-.368-.144-.08-.24-.168-.272-.248a.628.628 0 01-.048-.24v-.48c0-.2.072-.296.216-.296a.53.53 0 01.168.032c.056.024.136.056.224.096.304.136.64.24 1 .312.368.072.728.112 1.096.112.584 0 1.04-.104 1.36-.312.32-.208.488-.504.488-.88 0-.256-.08-.472-.24-.648-.16-.176-.464-.336-.904-.48l-1.296-.4c-.656-.208-1.144-.512-1.448-.912-.304-.392-.456-.832-.456-1.304 0-.376.08-.712.24-1 .16-.288.376-.536.648-.736.272-.2.576-.352.936-.456.36-.104.736-.152 1.128-.152.2 0 .408.016.608.04.208.024.392.064.576.104.176.048.344.096.504.152.16.056.288.112.384.168.128.08.224.16.28.248a.572.572 0 01.08.304v.448c0 .2-.072.304-.208.304-.072 0-.184-.04-.336-.112a4.12 4.12 0 00-1.744-.36c-.528 0-.944.088-1.232.272-.288.184-.44.464-.44.848 0 .256.088.472.264.648.176.176.504.352.976.504l1.272.4c.648.208 1.12.496 1.408.872.288.376.432.808.432 1.288 0 .384-.08.736-.232 1.04-.16.304-.376.568-.664.784-.288.224-.624.384-1.016.496a4.35 4.35 0 01-1.28.184z" fill="#aaaaaa"/>
-            </svg>
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker" title="Docker" />
-          </div>
-        </a>
-        <a class="project-card" href="https://github.com/PernotYlan/Sentinel-IA" target="_blank">
-          <div class="project-top">
-            <div class="project-status">Ongoing</div>
-            <div class="project-upd" id="upd-sentinel">Upd - —</div>
-          </div>
-          <img class="project-img" src="assets/sentinel_logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-          <div class="project-img-placeholder" style="display:none;">no preview</div>
-          <div class="project-name">Sentinel</div>
-          <div class="project-desc">Network security monitoring pipeline. Zeek + Redis Streams + ML anomaly detection.</div>
-          <div class="project-langs">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" title="Python" />
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" alt="SQLite" title="SQLite" />
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg" alt="TensorFlow" title="TensorFlow" />
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker" title="Docker" />
-          </div>
+      <div class="exp-logo" id="logo-2"><img src="assets/blaBlaCase-logo.png" alt="" /></div>
+      <div class="exp-project-title" id="title-2">BlaBlaCase</div>
+      <div class="exp-desc" id="desc-2">
+        <div class="exp-desc-inner">
+          <p>Andorra customs quota calculator for French cross-border shoppers. A Flutter native Android app with a Python backend to keep quota data up to date. Simple tool that saves a trip to the wrong checkout lane.</p>
+        </div>
+      </div>
+      <div class="exp-status" id="status-2">
+        <span class="exp-status-label ongoing">Ongoing</span>
+        <span class="exp-status-date" id="upd-2">Upd - —</span>
+      </div>
+      <div class="exp-stack" id="stack-2">
+        <div class="exp-stack-grid">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" title="Flutter" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" title="Python" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" title="SQLite" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" title="Docker" />
+        </div>
+        <a class="exp-repo" href="https://github.com/CrackedOnTiti/BlaBlaCase" target="_blank">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" />
+          <span>repo</span>
         </a>
       </div>
     </div>
 
+    <!-- SLIDE 3: RiftRewind -->
     <div class="content-slide" id="slide-3">
-      <div class="projects-grid">
-        <a class="project-card" href="https://github.com/CrackedOnTiti/AREA" target="_blank">
-          <div class="project-top">
-            <div class="project-status">Finished</div>
-            <div class="project-upd" id="upd-area">Upd - —</div>
-          </div>
-          <img class="project-img" src="assets/area_logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-          <div class="project-img-placeholder" style="display:none;">no preview</div>
-          <div class="project-name">AREA</div>
-          <div class="project-desc">Epitech project: Zapier/IFTTT clone, website and APK task automation scheduler.</div>
-          <div class="project-langs">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg" alt="Flask" title="Flask" style="filter: invert(0.6);" />
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" alt="Flutter" title="Flutter" />
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" title="Python" />
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL" title="PostgreSQL" />
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker" title="Docker" />
-          </div>
-        </a>
-        <a class="project-card" href="https://github.com/CrackedOnTiti/glados_ss" target="_blank">
-          <div class="project-top">
-            <div class="project-status">Finished</div>
-            <div class="project-upd" id="upd-glados">Upd - —</div>
-          </div>
-          <img class="project-img" src="assets/glados_logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-          <div class="project-img-placeholder" style="display:none;">no preview</div>
-          <div class="project-name">GLaDOS</div>
-          <div class="project-desc">Epitech project: compiler made from scratch, inspired by HolyC — low level, simple syntax, precise error messages.</div>
-          <div class="project-langs">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/haskell/haskell-original.svg" alt="Haskell" title="Haskell" />
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="C" title="C" />
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-original.svg" alt="Shell" title="Shell" />
-          </div>
+      <div class="exp-logo" id="logo-3"><img src="assets/riftRewinf_logo.png" alt="" /></div>
+      <div class="exp-project-title" id="title-3">RiftRewind</div>
+      <div class="exp-desc" id="desc-3">
+        <div class="exp-desc-inner">
+          <p>LoL match coaching platform built for the AWS × Riot Games hackathon — and won. Leverages AWS Bedrock for AI-powered match analysis, DynamoDB for player data, and ElasticBeanstalk for deployment. Turns raw match history into actionable coaching insights.</p>
+        </div>
+      </div>
+      <div class="exp-status" id="status-3">
+        <span class="exp-status-label finished">Finished</span>
+        <span class="exp-status-date" id="upd-3">Upd - —</span>
+      </div>
+      <div class="exp-stack" id="stack-3">
+        <div class="exp-stack-grid">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg" style="filter:invert(0.6);" title="Flask" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" title="HTML" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" title="Python" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" title="Docker" />
+        </div>
+        <a class="exp-repo" href="https://github.com/CrackedOnTiti/rift-rewind" target="_blank">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" />
+          <span>repo</span>
         </a>
       </div>
     </div>
 
+    <!-- SLIDE 4: AREA -->
     <div class="content-slide" id="slide-4">
-      <div class="projects-grid">
-        <a class="project-card" href="https://github.com/CrackedOnTiti/Dnd_TIH" target="_blank">
-          <div class="project-top">
-            <div class="project-status">Ongoing</div>
-            <div class="project-upd" id="upd-dnd">Upd - —</div>
-          </div>
-          <img class="project-img" src="assets/dndTIH_logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-          <div class="project-img-placeholder" style="display:none;">no preview</div>
-          <div class="project-name">DndTIH</div>
-          <div class="project-desc">Custom D&D board for dynamic gameplay — dice rolls, messaging system, ability panel, live HP/stamina bars.</div>
-          <div class="project-langs">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg" alt="Flask" title="Flask" style="filter: invert(0.6);" />
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" alt="Flutter" title="Flutter" />
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" title="Python" />
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker" title="Docker" />
-          </div>
-        </a>
-        <a class="project-card" href="https://github.com/CrackedOnTiti/MacroTracker" target="_blank">
-          <div class="project-top">
-            <div class="project-status">Ongoing</div>
-            <div class="project-upd" id="upd-macro">Upd - —</div>
-          </div>
-          <img class="project-img" src="assets/macrotracker_logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-          <div class="project-img-placeholder" style="display:none;">no preview</div>
-          <div class="project-name">MacroTracker</div>
-          <div class="project-desc">Open source calorie tracker for France. Flutter + Open Food Facts.</div>
-          <div class="project-langs">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" alt="Flutter" title="Flutter" />
-          </div>
+      <div class="exp-logo" id="logo-4"><img src="assets/area_logo.png" alt="" /></div>
+      <div class="exp-project-title" id="title-4">AREA</div>
+      <div class="exp-desc" id="desc-4">
+        <div class="exp-desc-inner">
+          <p>Epitech project: a Zapier/IFTTT clone. Full task automation scheduler with a Flutter Android app and a Flask web interface. Users create automation pipelines between services with triggers and reactions. Built solo from scratch over a semester.</p>
+        </div>
+      </div>
+      <div class="exp-status" id="status-4">
+        <span class="exp-status-label finished">Finished</span>
+        <span class="exp-status-date" id="upd-4">Upd - —</span>
+      </div>
+      <div class="exp-stack" id="stack-4">
+        <div class="exp-stack-grid">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg" style="filter:invert(0.6);" title="Flask" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" title="Flutter" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" title="PostgreSQL" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" title="Docker" />
+        </div>
+        <a class="exp-repo" href="https://github.com/CrackedOnTiti/AREA" target="_blank">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" />
+          <span>repo</span>
         </a>
       </div>
     </div>
 
+    <!-- SLIDE 5: GLaDOS -->
     <div class="content-slide" id="slide-5">
-      <div style="display: flex; gap: 5rem; align-items: center; justify-content: center;">
-        <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
-          <img src="assets/git_qr.png" alt="GitHub QR" style="width: 200px; height: 200px; border-radius: 10px; opacity: 0.85;" />
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" style="width: 18px; height: 18px; opacity: 0.5; filter: invert(1);" />
-            <span style="font-size: 12px; color: #444; letter-spacing: 0.12em; text-transform: uppercase;">GitHub</span>
-          </div>
-        </div>
-        <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
-          <img src="assets/linkedin_qr.png" alt="LinkedIn QR" style="width: 200px; height: 200px; border-radius: 10px; opacity: 0.85;" />
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" alt="LinkedIn" style="width: 18px; height: 18px; opacity: 0.5;" />
-            <span style="font-size: 12px; color: #444; letter-spacing: 0.12em; text-transform: uppercase;">LinkedIn</span>
-          </div>
+      <div class="exp-logo" id="logo-5"><img src="assets/glados_logo.png" alt="" /></div>
+      <div class="exp-project-title" id="title-5">GLaDOS</div>
+      <div class="exp-desc" id="desc-5">
+        <div class="exp-desc-inner">
+          <p>Epitech project: a compiler built from scratch inspired by HolyC. Low level programming language with a simple syntax, higher security model, and precise error messages. Includes a full 113-test suite. Written entirely in Haskell.</p>
         </div>
       </div>
-    </div>
-
-    <div class="content-slide" id="slide-6" style="position: absolute; width: 100%; height: 100%; max-width: 100%; padding: 0; overflow: hidden;">
-
-      <!-- Logo: slides in from left -->
-      <div id="exp-logo" style="
-        position: absolute;
-        left: -50%;
-        top: 0;
-        height: 100%;
-        opacity: 0;
-        transition: left 0.9s cubic-bezier(0.22,1,0.36,1), opacity 0.6s ease;
-        z-index: 1;
-        pointer-events: none;
-        display: flex;
-        align-items: center;
-      ">
-        <img src="assets/vigilanSee_logo.png" style="height: 100%; width: auto; opacity: 0.58; filter: grayscale(5%);" />
+      <div class="exp-status" id="status-5">
+        <span class="exp-status-label finished">Finished</span>
+        <span class="exp-status-date" id="upd-5">Upd - —</span>
       </div>
-
-      <!-- Title: fades in over logo -->
-      <div id="exp-title" style="
-        position: absolute;
-        left: 8%;
-        top: 50%;
-        transform: translateY(-50%) translateY(12px);
-        opacity: 0;
-        transition: opacity 0.7s ease, transform 0.7s ease;
-        z-index: 3;
-      ">
-        <span style="font-family: 'Bebas Neue', sans-serif; font-size: 52px; font-weight: 700; color: #ffffff; letter-spacing: 0.1em; text-transform: uppercase; line-height: 1;">VIGILANSEE</span>
-      </div>
-
-      <!-- Description box -->
-      <div id="exp-desc" style="
-        position: absolute;
-        left: 8%;
-        top: 58%;
-        width: 52%;
-        opacity: 0;
-        transform: translateY(12px);
-        transition: opacity 0.7s ease, transform 0.7s ease;
-        z-index: 3;
-      ">
-        <div style="background: rgba(18,18,18,0.75); border: 0.5px solid #333; border-radius: 10px; padding: 1.1rem 1.4rem;">
-          <p style="font-size: 13px; color: #bbb; line-height: 1.75; font-weight: 300;">CS2 demo analysis platform built in Rust. EIP graduation project — parses game demos, extracts behavioural signals, and scores players using a multi-layer ML pipeline.</p>
+      <div class="exp-stack" id="stack-5">
+        <div class="exp-stack-grid">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/haskell/haskell-original.svg" title="Haskell" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" title="C" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-original.svg" title="Shell" />
         </div>
-      </div>
-
-      <!-- Status + date -->
-      <div id="exp-status" style="
-        position: absolute;
-        left: 8%;
-        top: 78%;
-        opacity: 0;
-        transform: translateY(10px);
-        transition: opacity 0.7s ease, transform 0.7s ease;
-        z-index: 3;
-        display: flex;
-        align-items: center;
-        gap: 1.5rem;
-      ">
-        <span style="font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 0.18em; color: #7aaee8; text-transform: uppercase;">Ongoing</span>
-        <span style="font-size: 13px; color: #777; letter-spacing: 0.05em;" id="exp-date">Upd - —</span>
-      </div>
-
-      <!-- Stack box + repo link slides in from right -->
-      <div id="exp-stack" style="
-        position: absolute;
-        right: -20%;
-        top: 50%;
-        transform: translateY(-50%);
-        opacity: 0;
-        transition: right 0.9s cubic-bezier(0.22,1,0.36,1), opacity 0.6s ease;
-        z-index: 3;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-      ">
-        <div style="
-          background: rgba(16,16,16,0.85);
-          border: 0.5px solid #333;
-          border-radius: 12px;
-          padding: 1.25rem;
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 14px;
-          width: 110px;
-        ">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg" style="width: 28px; height: 28px; opacity: 1; filter: invert(1);" title="Rust" />
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" style="width: 28px; height: 28px; opacity: 1;" title="Python" />
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" style="width: 28px; height: 28px; opacity: 1;" title="PostgreSQL" />
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" style="width: 28px; height: 28px; opacity: 1;" title="Docker" />
-        </div>
-        <a href="https://github.com/CrackedOnTiti/VigilanSee" target="_blank" style="
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 5px;
-          text-decoration: none;
-        ">
-          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" style="width: 18px; height: 18px; opacity: 1; filter: invert(1);" />
-          <span style="font-size: 10px; color: #888; letter-spacing: 0.12em; text-transform: uppercase;">repo</span>
+        <a class="exp-repo" href="https://github.com/CrackedOnTiti/glados_ss" target="_blank">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" />
+          <span>repo</span>
         </a>
       </div>
-
     </div>
+
+    <!-- SLIDE 6: DnDTIH -->
+    <div class="content-slide" id="slide-6">
+      <div class="exp-logo" id="logo-6"><img src="assets/dndTIH_logo.png" alt="" /></div>
+      <div class="exp-project-title" id="title-6">DnDTIH</div>
+      <div class="exp-desc" id="desc-6">
+        <div class="exp-desc-inner">
+          <p>Custom D&D board built for me and my friends. Features a real-time socket-based messaging system, dice rolls, ability creation panel, and dynamic HP/stamina bars — everything needed for immersive remote gameplay without a third-party platform.</p>
+        </div>
+      </div>
+      <div class="exp-status" id="status-6">
+        <span class="exp-status-label ongoing">Ongoing</span>
+        <span class="exp-status-date" id="upd-6">Upd - —</span>
+      </div>
+      <div class="exp-stack" id="stack-6">
+        <div class="exp-stack-grid">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg" style="filter:invert(0.6);" title="Flask" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" title="Flutter" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" title="Python" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" title="Docker" />
+        </div>
+        <a class="exp-repo" href="https://github.com/CrackedOnTiti/Dnd_TIH" target="_blank">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" />
+          <span>repo</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: Sentinel -->
+    <div class="content-slide" id="slide-7">
+      <div class="exp-logo" id="logo-7"><img src="assets/sentinel_logo.png" alt="" /></div>
+      <div class="exp-project-title" id="title-7">Sentinel</div>
+      <div class="exp-desc" id="desc-7">
+        <div class="exp-desc-inner">
+          <p>Network security monitoring pipeline built during my internship. Zeek captures traffic per client, Redis Streams routes events, and a tiered ML system (Isolation Forest → XGBoost → Autoencoder) flags anomalies with escalating precision. Entirely containerised.</p>
+        </div>
+      </div>
+      <div class="exp-status" id="status-7">
+        <span class="exp-status-label ongoing">Ongoing</span>
+        <span class="exp-status-date" id="upd-7">Upd - —</span>
+      </div>
+      <div class="exp-stack" id="stack-7">
+        <div class="exp-stack-grid">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" title="Python" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" title="SQLite" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg" title="TensorFlow" />
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" title="Docker" />
+        </div>
+        <a class="exp-repo" href="https://github.com/PernotYlan/Sentinel-IA" target="_blank">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" />
+          <span>repo</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: QR codes -->
+    <div class="content-slide" id="slide-8">
+      <div class="qr-slide">
+        <div class="qr-item">
+          <img class="qr-code" src="assets/git_qr.png" alt="GitHub QR" />
+          <div class="qr-label">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" style="filter:invert(1);" alt="GitHub" />
+            <span>GitHub</span>
+          </div>
+        </div>
+        <div class="qr-item">
+          <img class="qr-code" src="assets/linkedin_qr.png" alt="LinkedIn QR" />
+          <div class="qr-label">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" alt="LinkedIn" />
+            <span>LinkedIn</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <div id="scroll-hint">scroll</div>
@@ -596,10 +576,13 @@
     <div class="dot" onclick="goTo(4)"></div>
     <div class="dot" onclick="goTo(5)"></div>
     <div class="dot" onclick="goTo(6)"></div>
+    <div class="dot" onclick="goTo(7)"></div>
+    <div class="dot" onclick="goTo(8)"></div>
   </div>
 </div>
 
 <script>
+  // Particles
   const canvas = document.getElementById('particles');
   const ctx = canvas.getContext('2d');
   const portfolio = document.getElementById('portfolio');
@@ -619,103 +602,76 @@
   }
 
   const particles = Array.from({ length: 55 }, () => ({
-    x: randInZone(),
-    y: Math.random() * canvas.height,
+    x: randInZone(), y: Math.random() * canvas.height,
     r: Math.random() * 1.4 + 0.3,
-    vx: (Math.random() - 0.5) * 0.18,
-    vy: (Math.random() - 0.5) * 0.18,
+    vx: (Math.random() - 0.5) * 0.18, vy: (Math.random() - 0.5) * 0.18,
     alpha: Math.random() * 0.18 + 0.04,
-    pulse: Math.random() * Math.PI * 2,
-    pulseSpeed: Math.random() * 0.012 + 0.004,
+    pulse: Math.random() * Math.PI * 2, pulseSpeed: Math.random() * 0.012 + 0.004,
   }));
 
   const intense = Array.from({ length: 10 }, () => ({
-    x: randInZone(),
-    y: Math.random() * canvas.height,
+    x: randInZone(), y: Math.random() * canvas.height,
     r: Math.random() * 2.5 + 1.5,
-    vx: (Math.random() - 0.5) * 0.07,
-    vy: (Math.random() - 0.5) * 0.07,
+    vx: (Math.random() - 0.5) * 0.07, vy: (Math.random() - 0.5) * 0.07,
     alpha: Math.random() * 0.35 + 0.25,
-    pulse: Math.random() * Math.PI * 2,
-    pulseSpeed: Math.random() * 0.007 + 0.003,
+    pulse: Math.random() * Math.PI * 2, pulseSpeed: Math.random() * 0.007 + 0.003,
   }));
 
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     particles.forEach(p => {
-      p.pulse += p.pulseSpeed;
-      p.x += p.vx;
-      p.y += p.vy;
+      p.pulse += p.pulseSpeed; p.x += p.vx; p.y += p.vy;
       if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
       if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
       const a = p.alpha * (0.7 + 0.3 * Math.sin(p.pulse));
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(200,200,200,${a})`;
-      ctx.fill();
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(200,200,200,${a})`; ctx.fill();
     });
-
     particles.forEach((p, i) => {
       for (let j = i + 1; j < particles.length; j++) {
         const q = particles[j];
         const dx = p.x - q.x, dy = p.y - q.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+        const dist = Math.sqrt(dx*dx + dy*dy);
         if (dist < 60) {
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(q.x, q.y);
-          ctx.strokeStyle = `rgba(180,180,180,${(1 - dist / 60) * 0.045})`;
-          ctx.lineWidth = 0.4;
-          ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y);
+          ctx.strokeStyle = `rgba(180,180,180,${(1-dist/60)*0.045})`;
+          ctx.lineWidth = 0.4; ctx.stroke();
         }
       }
     });
-
     intense.forEach(p => {
-      p.pulse += p.pulseSpeed;
-      p.x += p.vx;
-      p.y += p.vy;
+      p.pulse += p.pulseSpeed; p.x += p.vx; p.y += p.vy;
       if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
       if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
       const a = p.alpha * (0.6 + 0.4 * Math.sin(p.pulse));
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255,255,255,${a})`;
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r * 2.5, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255,255,255,${a * 0.08})`;
-      ctx.fill();
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${a})`; ctx.fill();
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${a * 0.08})`; ctx.fill();
     });
-
     requestAnimationFrame(draw);
   }
   draw();
 
+  // Navigation
   let current = 0;
-  const total = 7;
+  const total = 9;
   const slides = document.querySelectorAll('.content-slide');
   const dots = document.querySelectorAll('.dot');
   const hint = document.getElementById('scroll-hint');
+  const ft = document.getElementById('fixed-title');
+  const h1 = ft.querySelector('h1');
 
-  function goTo(index) {
-    slides[current].classList.remove('active');
-    dots[current].classList.remove('active');
-
-    // reset main title if leaving exp slide
-    if (current === 6) resetMainTitle();
-
-    current = Math.max(0, Math.min(total - 1, index));
-    slides[current].classList.add('active');
-    dots[current].classList.add('active');
-    hint.style.opacity = current === total - 1 ? '0' : '1';
-    if (current === 6) runExpSlide();
+  function titleSmall() {
+    ft.style.top = '1.2rem';
+    ft.style.left = 'auto';
+    ft.style.right = '2rem';
+    ft.style.width = 'auto';
+    ft.style.textAlign = 'right';
+    h1.style.fontSize = '28px';
   }
 
-  function resetMainTitle() {
-    const ft = document.getElementById('fixed-title');
-    const h1 = ft.querySelector('h1');
+  function titleBig() {
     ft.style.top = 'calc(2.5rem + 10px)';
     ft.style.left = '0';
     ft.style.right = 'auto';
@@ -725,61 +681,82 @@
     h1.style.opacity = '1';
   }
 
-  function runExpSlide() {
-    const ft = document.getElementById('fixed-title');
-    const h1 = ft.querySelector('h1');
-    const logo = document.getElementById('exp-logo');
-    const title = document.getElementById('exp-title');
-    const desc = document.getElementById('exp-desc');
-    const status = document.getElementById('exp-status');
-    const stack = document.getElementById('exp-stack');
+  function goTo(index) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    const prev = current;
+    current = Math.max(0, Math.min(total - 1, index));
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+    hint.style.opacity = current === total - 1 ? '0' : '1';
 
-    // reset elements
-    logo.style.left = '-50%'; logo.style.opacity = '0';
-    title.style.opacity = '0'; title.style.transform = 'translateY(-50%) translateY(12px)';
-    desc.style.opacity = '0'; desc.style.transform = 'translateY(12px)';
-    status.style.opacity = '0'; status.style.transform = 'translateY(10px)';
-    stack.style.right = '-20%'; stack.style.opacity = '0';
+    if (current === 0) {
+      titleBig();
+    } else if (current === 1) {
+      runExpSlide(1, true); // trigger title shrink
+    } else {
+      // for slides 2-8, title stays small, just animate content
+      if (prev === 0) titleSmall(); // instant small if coming from hero
+      if (current >= 1 && current <= 7) runExpSlide(current, false);
+    }
+  }
 
-    // step 1: logo slides in
+  function resetExpSlide(n) {
+    document.getElementById(`logo-${n}`).style.left = '-50%';
+    document.getElementById(`logo-${n}`).style.opacity = '0';
+    document.getElementById(`title-${n}`).style.opacity = '0';
+    document.getElementById(`title-${n}`).style.transform = 'translateY(-50%) translateY(12px)';
+    document.getElementById(`desc-${n}`).style.opacity = '0';
+    document.getElementById(`desc-${n}`).style.transform = 'translateY(12px)';
+    document.getElementById(`status-${n}`).style.opacity = '0';
+    document.getElementById(`status-${n}`).style.transform = 'translateY(10px)';
+    document.getElementById(`stack-${n}`).style.right = '-20%';
+    document.getElementById(`stack-${n}`).style.opacity = '0';
+  }
+
+  function runExpSlide(n, shrinkTitle) {
+    resetExpSlide(n);
+
+    const logo = document.getElementById(`logo-${n}`);
+    const title = document.getElementById(`title-${n}`);
+    const desc = document.getElementById(`desc-${n}`);
+    const status = document.getElementById(`status-${n}`);
+    const stack = document.getElementById(`stack-${n}`);
+
+    // step 1: logo
     setTimeout(() => {
       logo.style.left = '-8%';
       logo.style.opacity = '1';
     }, 200);
 
-    // step 2: main title shrinks to top-right
-    setTimeout(() => {
-      ft.style.top = '1.2rem';
-      ft.style.left = 'auto';
-      ft.style.right = '2rem';
-      ft.style.width = 'auto';
-      ft.style.textAlign = 'right';
-      h1.style.fontSize = '28px';
-    }, 600);
+    // step 2: shrink title (only slide 1) or keep small
+    if (shrinkTitle) {
+      setTimeout(() => titleSmall(), 600);
+    }
 
-    // step 3: VIGILANSEE fades in over logo
+    // step 3: project title
     setTimeout(() => {
       title.style.opacity = '1';
       title.style.transform = 'translateY(-50%)';
-    }, 1100);
+    }, shrinkTitle ? 1100 : 400);
 
     // step 4: description
     setTimeout(() => {
       desc.style.opacity = '1';
       desc.style.transform = 'translateY(0)';
-    }, 1600);
+    }, shrinkTitle ? 1600 : 800);
 
     // step 5: status
     setTimeout(() => {
       status.style.opacity = '1';
       status.style.transform = 'translateY(0)';
-    }, 2100);
+    }, shrinkTitle ? 2100 : 1100);
 
     // step 6: stack
     setTimeout(() => {
       stack.style.right = '4%';
       stack.style.opacity = '1';
-    }, 2400);
+    }, shrinkTitle ? 2400 : 1300);
   }
 
   let lastWheel = 0;
@@ -798,15 +775,15 @@
     if (Math.abs(diff) > 40) goTo(diff > 0 ? current + 1 : current - 1);
   });
 
+  // GitHub API dates
   const repos = [
-    { el: 'upd-blablacase', repo: 'BlaBlaCase' },
-    { el: 'upd-vigilansee', repo: 'VigilanSee' },
-    { el: 'upd-riftrewind', repo: 'rift-rewind' },
-    { el: 'upd-sentinel', repo: 'Sentinel-IA', owner: 'PernotYlan' },
-    { el: 'upd-area', repo: 'AREA' },
-    { el: 'upd-glados', repo: 'glados_ss' },
-    { el: 'upd-dnd', repo: 'Dnd_TIH' },
-    { el: 'upd-macro', repo: 'MacroTracker' },
+    { el: 'upd-1', repo: 'VigilanSee' },
+    { el: 'upd-2', repo: 'BlaBlaCase' },
+    { el: 'upd-3', repo: 'rift-rewind' },
+    { el: 'upd-4', repo: 'AREA' },
+    { el: 'upd-5', repo: 'glados_ss' },
+    { el: 'upd-6', repo: 'Dnd_TIH' },
+    { el: 'upd-7', repo: 'Sentinel-IA', owner: 'PernotYlan' },
   ];
   repos.forEach(({ el, repo, owner = 'CrackedOnTiti' }) => {
     fetch(`https://api.github.com/repos/${owner}/${repo}`)
@@ -821,19 +798,6 @@
         }
       }).catch(() => {});
   });
-
-  // exp slide date
-  fetch('https://api.github.com/repos/CrackedOnTiti/VigilanSee')
-    .then(r => r.json())
-    .then(data => {
-      if (data.pushed_at) {
-        const d = new Date(data.pushed_at);
-        const dd = String(d.getDate()).padStart(2, '0');
-        const mm = String(d.getMonth() + 1).padStart(2, '0');
-        const yyyy = d.getFullYear();
-        document.getElementById('exp-date').textContent = `Upd - ${dd}/${mm}/${yyyy}`;
-      }
-    }).catch(() => {});
 </script>
 </body>
 </html>
