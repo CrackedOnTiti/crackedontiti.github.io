@@ -838,7 +838,9 @@
     }).catch(() => {});
 
   // GoatCounter total views
-  fetch('https://crackedontiti.goatcounter.com/api/v0/stats/total')
+  fetch('https://crackedontiti.goatcounter.com/api/v0/stats/total', {
+    headers: { 'Authorization': 'Bearer kd4vjpk7gqiv3lbalrir4gaglh6sczycpe56zkb0f9ode22i' }
+  })
     .then(r => r.json())
     .then(data => {
       if (data.total !== undefined) document.getElementById('stat-views').textContent = data.total;
