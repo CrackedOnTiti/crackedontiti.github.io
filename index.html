@@ -967,6 +967,28 @@
     if (Math.abs(diff) > 40) goTo(diff > 0 ? current + 1 : current - 1);
   });
 
+  const CACHE_TTL = 2 * 60 * 60 * 1000;
+
+  function cacheGet(key) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return null;
+      const { ts, data } = JSON.parse(raw);
+      if (Date.now() - ts > CACHE_TTL) { localStorage.removeItem(key); return null; }
+      return data;
+    } catch { return null; }
+  }
+
+  function cacheSet(key, data) {
+    try { localStorage.setItem(key, JSON.stringify({ ts: Date.now(), data })); } catch {}
+  }
+
+  function cachedFetch(url, options = {}) {
+    const cached = cacheGet(url);
+    if (cached !== null) return Promise.resolve(cached);
+    return fetch(url, options).then(r => r.json()).then(data => { cacheSet(url, data); return data; });
+  }
+
   // GitHub API dates
   const repos = [
     { el: 'upd-1', repo: 'VigilanSee' },
@@ -978,8 +1000,7 @@
     { el: 'upd-7', repo: 'Sentinel-IA', owner: 'PernotYlan' },
   ];
   repos.forEach(({ el, repo, owner = 'CrackedOnTiti' }) => {
-    fetch(`https://api.github.com/repos/${owner}/${repo}`)
-      .then(r => r.json())
+    cachedFetch(`https://api.github.com/repos/${owner}/${repo}`)
       .then(data => {
         if (data.pushed_at) {
           const d = new Date(data.pushed_at);
@@ -992,8 +1013,7 @@
   });
 
   // GitHub total stars
-  fetch('https://api.github.com/users/CrackedOnTiti/repos?per_page=100')
-    .then(r => r.json())
+  cachedFetch('https://api.github.com/users/CrackedOnTiti/repos?per_page=100')
     .then(data => {
       if (Array.isArray(data)) {
         const stars = data.reduce((sum, r) => sum + r.stargazers_count, 0);
@@ -1017,19 +1037,16 @@
   let commitsFetched = 0;
 
   commitRepos.forEach(({ n, repo, owner }) => {
-    fetch(`https://api.github.com/repos/${owner}/${repo}/contributors`)
-      .then(r => r.json())
+    cachedFetch(`https://api.github.com/repos/${owner}/${repo}/contributors`)
       .then(data => {
         if (!Array.isArray(data)) return;
         const total = data.reduce((sum, c) => sum + c.contributions, 0);
         const mine = (data.find(c => c.login === 'CrackedOnTiti') || {}).contributions || 0;
         const pct = total > 0 ? Math.round((mine / total) * 100) : 0;
 
-        // color: white (low) → blue (high)
-        const r = Math.round(255 - (255 - 100) * (pct / 100));
-        const g = Math.round(255 - (255 - 160) * (pct / 100));
-        const b = 255;
-        const color = `rgb(${r},${g},${b})`;
+        const cr = Math.round(255 - (255 - 100) * (pct / 100));
+        const cg = Math.round(255 - (255 - 160) * (pct / 100));
+        const color = `rgb(${cr},${cg},255)`;
 
         const pctEl = document.getElementById(`commits-pct-${n}`);
         pctEl.textContent = `${pct}%`;
@@ -1048,10 +1065,9 @@
   });
 
   // GoatCounter total views
-  fetch('https://crackedontiti.goatcounter.com/api/v0/stats/total', {
+  cachedFetch('https://crackedontiti.goatcounter.com/api/v0/stats/total', {
     headers: { 'Authorization': 'Bearer kd4vjpk7gqiv3lbalrir4gaglh6sczycpe56zkb0f9ode22i' }
   })
-    .then(r => r.json())
     .then(data => {
       if (data.total !== undefined) document.getElementById('stat-views').textContent = data.total;
     }).catch(() => {});
