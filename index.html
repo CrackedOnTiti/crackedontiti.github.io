@@ -573,19 +573,19 @@
     <div class="content-slide" id="slide-8">
 
       <!-- Left side: text content -->
-      <div id="qr-left" style="position:absolute; left:50%; top:50%; transform:translate(-130%, -50%); z-index:3; display:flex; flex-direction:column; gap:2rem;">
+      <div id="qr-left" style="position:absolute; left:50%; top:50%; transform:translate(-130%, -50%); z-index:3; display:flex; flex-direction:column; gap:0rem;">
 
-        <div id="qr-contact" style="opacity:0; transform:translateY(10px); transition:opacity 0.7s ease, transform 0.7s ease; display:flex; flex-direction:column; gap:0.5rem;">
-          <div style="font-family:'Bebas Neue',sans-serif; font-size:36px; color:#e8e8e8; letter-spacing:0.1em;">Thank you for your time</div>
-          <div style="font-family:'Bebas Neue',sans-serif; font-size:36px; color:#e8e8e8; letter-spacing:0.1em;">You can reach me here</div>
+        <div id="qr-contact" style="opacity:0; transform:translateY(10px); transition:opacity 0.7s ease, transform 0.7s ease; display:flex; flex-direction:column; gap:0.5rem; height:220px; justify-content:center; align-items:center; width:100%;">
+          <div style="font-family:'Bebas Neue',sans-serif; font-size:36px; color:#e8e8e8; letter-spacing:0.1em; text-align:center;">Thank you for your time</div>
+          <div style="font-family:'Bebas Neue',sans-serif; font-size:36px; color:#e8e8e8; letter-spacing:0.1em; text-align:center;">You can reach me here</div>
         </div>
 
-        <div id="qr-stats" style="opacity:0; transform:translateY(10px); transition:opacity 0.7s ease, transform 0.7s ease; display:flex; flex-direction:row; gap:3rem; align-items:flex-end;">
-          <div style="display:flex; flex-direction:column; gap:0.2rem;">
+        <div id="qr-stats" style="opacity:0; transform:translateY(10px); transition:opacity 0.7s ease, transform 0.7s ease; display:flex; flex-direction:row; gap:3rem; align-items:center; height:220px; justify-content:center; width:100%;">
+          <div style="display:flex; flex-direction:column; gap:0.2rem; align-items:center;">
             <div style="font-family:'Bebas Neue',sans-serif; font-size:52px; color:#e8e8e8; letter-spacing:0.05em; line-height:1;" id="stat-views">—</div>
             <div style="font-family:'Bebas Neue',sans-serif; font-size:14px; color:#444; letter-spacing:0.18em;">Visitors</div>
           </div>
-          <div style="display:flex; flex-direction:column; gap:0.2rem;">
+          <div style="display:flex; flex-direction:column; gap:0.2rem; align-items:center;">
             <div style="font-family:'Bebas Neue',sans-serif; font-size:52px; color:#e8e8e8; letter-spacing:0.05em; line-height:1;" id="stat-stars">—</div>
             <div style="font-family:'Bebas Neue',sans-serif; font-size:14px; color:#444; letter-spacing:0.18em;">GitHub Stars</div>
           </div>
@@ -602,17 +602,13 @@
         opacity:0;
         transition: left 1s cubic-bezier(0.22,1,0.36,1), opacity 0.6s ease;
         z-index:3;
-        background:rgba(14,14,14,0.95);
-        border:0.5px solid #444;
-        border-radius:12px;
-        padding:1.25rem;
         display:flex;
         flex-direction:column;
         align-items:center;
         gap:0.75rem;
         width:180px;
       ">
-        <img src="assets/git_qr.png" style="width:130px;height:130px;border-radius:6px;opacity:0.85;" />
+        <img src="assets/git_qr.png" style="width:170px;height:170px;border-radius:6px;opacity:0.85;" />
         <div style="display:flex;align-items:center;gap:6px;">
           <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" style="width:14px;height:14px;filter:invert(1);opacity:0.5;" />
           <span style="font-family:'Bebas Neue',sans-serif;font-size:12px;color:#444;letter-spacing:0.12em;">GitHub</span>
@@ -627,17 +623,13 @@
         opacity:0;
         transition: left 1.2s cubic-bezier(0.22,1,0.36,1), opacity 0.6s ease;
         z-index:3;
-        background:rgba(14,14,14,0.95);
-        border:0.5px solid #444;
-        border-radius:12px;
-        padding:1.25rem;
         display:flex;
         flex-direction:column;
         align-items:center;
         gap:0.75rem;
         width:180px;
       ">
-        <img src="assets/linkedin_qr.png" style="width:130px;height:130px;border-radius:6px;opacity:0.85;" />
+        <img src="assets/linkedin_qr.png" style="width:170px;height:170px;border-radius:6px;opacity:0.85;" />
         <div style="display:flex;align-items:center;gap:6px;">
           <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" style="width:14px;height:14px;opacity:0.5;" />
           <span style="font-family:'Bebas Neue',sans-serif;font-size:12px;color:#444;letter-spacing:0.12em;">LinkedIn</span>
