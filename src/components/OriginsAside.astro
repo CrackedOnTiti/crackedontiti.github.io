@@ -1,0 +1,35 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
+import ProjectLinks from './ProjectLinks.astro';
+import Stack from './Stack.astro';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+const { project } = Astro.props;
+const p = project.data;
+const { Content } = await render(project);
+---
+<aside class="origins" aria-labelledby={`o-${p.slug}`}>
+  <p class="mono meta">{[p.period, p.role].join(' · ')}</p>
+  <h3 id={`o-${p.slug}`}>{p.title}</h3>
+  <p class="summary">{p.summary}</p>
+  <div class="prose"><Content /></div>
+  <Stack items={p.stack} />
+  <ProjectLinks project={project} />
+</aside>
+
+<style>
+  .origins {
+    display: grid;
+    gap: var(--space-xs);
+    max-width: 40rem;
+    padding: var(--space-m);
+    background: var(--surface);
+    border-left: 1px solid var(--rule-strong);
+  }
+  .meta { color: var(--text-faint); }
+  h3 { font-family: var(--font-mono); font-size: var(--step-1); font-weight: 600; }
+  .prose { color: var(--text-muted); }
+</style>

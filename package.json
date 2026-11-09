@@ -1,0 +1,27 @@
+{
+  "name": "crackedontiti-portfolio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "stats": "node scripts/fetch-github-stats.mjs",
+    "check:launch": "node scripts/check-launch.mjs",
+    "og": "${CHROME:-google-chrome-stable} --headless=new --disable-gpu --hide-scrollbars --allow-file-access-from-files --window-size=1200,630 --screenshot=public/og.png \"file://$PWD/scripts/og/og.html\"",
+    "build:redirect": "node scripts/build-redirect.mjs dist redirect"
+  },
+  "dependencies": {
+    "@astrojs/markdown-remark": "^7.3.6",
+    "astro": "^7.4.7"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@fontsource-variable/ibm-plex-sans": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@fontsource-variable/montserrat": "^5.3.0",
+    "@types/node": "^26.6.6",
+    "typescript": "^6.0.3",
+    "wrangler": "4.158.0"
+  }
+}

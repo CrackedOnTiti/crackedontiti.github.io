@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.astro/
+.wrangler/
+.dev.vars
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+
+# Private writer context (PRIVATE notes) and review notes: never in the public repo
+docs/*
+!docs/DEPLOY.md
+REVIEW.md
+redirect/

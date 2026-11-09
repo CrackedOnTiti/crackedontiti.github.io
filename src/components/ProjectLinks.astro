@@ -1,0 +1,33 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { statsFor, STAR_THRESHOLD } from '../lib/github';
+import { monthYear } from '../lib/format';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+const p = Astro.props.project.data;
+const stats = statsFor(p.links.repo);
+const labels: Record<string, string> = { repo: 'Repository', docs: 'Docs', devpost: 'Devpost', devlogs: 'Devlogs' };
+const closed = { private: 'Private repository', proprietary: 'Proprietary: write-up only' } as const;
+const links = Object.entries(p.links).filter((e): e is [string, string] => Boolean(e[1]));
+---
+{(links.length > 0 || p.closedSource || stats) && (
+  <ul class="links mono">
+    {links.map(([k, href]) => <li><a href={href}>{labels[k] ?? k}</a></li>)}
+    {p.closedSource && <li class="note">{closed[p.closedSource]}</li>}
+    {stats && stats.stars >= STAR_THRESHOLD && <li class="note">{stats.stars} stars</li>}
+    {stats && <li class="note">Updated {monthYear(stats.pushedAt)}</li>}
+  </ul>
+)}
+
+<style>
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs) var(--space-m);
+    list-style: none;
+    padding: 0;
+  }
+  .note { color: var(--text-faint); }
+</style>

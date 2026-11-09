@@ -1,0 +1,186 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Section from '../components/Section.astro';
+import FeaturedProject from '../components/FeaturedProject.astro';
+import ProjectRow from '../components/ProjectRow.astro';
+import BuildingProject from '../components/BuildingProject.astro';
+import OriginsAside from '../components/OriginsAside.astro';
+import ExperienceList from '../components/ExperienceList.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { site } from '../lib/site';
+import { byOrder } from '../lib/format';
+
+const all = await getCollection('projects');
+const by = (status: string) => all.filter((p) => p.data.status === status).sort(byOrder);
+const featured = by('featured');
+const built = by('built');
+const building = by('building');
+const origins = by('origins');
+
+const education = [
+  { what: 'Beijing Institute of Technology', detail: 'Exchange', when: 'Sep 2026 – Jun 2027' },
+  { what: 'Epitech Toulouse', detail: "Master's programme in IT", when: 'Class of 2028' },
+  { what: 'Formation Militaire Terre Avancée, 8e RPIMa Castres', detail: 'One year of training during high school', when: '' },
+];
+
+const security = [
+  { k: 'Club', v: 'Co-founded and co-led the Epitech Toulouse Cybersecurity Club, 2024 to 2026.' },
+  { k: 'Work', v: 'Sentinel; incident response after a remote-access scam; a security briefing for a client’s engineering team.', href: '/projects/sentinel/' },
+  { k: 'Study', v: 'Cybersecurity and low-level coursework at BIT Beijing.' },
+  { k: 'Practice', v: 'CTF write-ups on GitHub.', href: 'https://github.com/CrackedOnTiti/WriteUps', linkText: 'WriteUps' },
+  { k: 'Self-hosting', v: 'Proxmox, WireGuard, Raspberry Pi, Docker, Cloudflare tunnels.' },
+];
+
+const beyond = [
+  'Retired boxer planning an amateur comeback',
+  'Martial arts and philosophy',
+  'Gym',
+  'Gaming',
+  'Big Berserk fan',
+];
+---
+<Base>
+  <Hero />
+
+  <Section id="featured" label="Selected work" layout="wide" lede="Four projects with full write-ups: what the problem was, what I built and how it works.">
+    {featured.map((project, i) => <FeaturedProject project={project} lead={i === 0} />)}
+  </Section>
+
+  <Section id="experience" label="Experience">
+    <ExperienceList />
+    <div class="sub">
+      <h3 class="sub-label mono">Education</h3>
+      <ul class="edu">
+        {education.map((e) => (
+          <li>
+            <span class="edu-what">{e.what}</span>
+            <span class="edu-detail">{e.detail}</span>
+            {e.when && <span class="mono edu-when">{e.when}</span>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </Section>
+
+  <Section id="built" label="Also built">
+    <ul class="rows">
+      {built.map((project) => <ProjectRow project={project} />)}
+    </ul>
+  </Section>
+
+  <Section id="building" label="Building now" lede="Free, open-source, local-first tools, built alongside client work at Munnin.">
+    <div class="building-grid">
+      {building.map((project) => <BuildingProject project={project} />)}
+    </div>
+  </Section>
+
+  <Section id="origins" label="Where I started">
+    {origins.map((project) => <OriginsAside project={project} />)}
+  </Section>
+
+  <section id="security" class="security wrap" aria-labelledby="security-heading">
+    <h2 id="security-heading" class="sub-label mono">Security</h2>
+    <blockquote class="motto">
+      <p>The biggest killer of security is comfort.</p>
+    </blockquote>
+    <dl class="sec-list">
+      {security.map((s) => (
+        <div class="sec-item">
+          <dt class="mono">{s.k}</dt>
+          <dd>
+            {s.v}
+            {s.href && (
+              <>
+                {' '}<a href={s.href}>{s.linkText ?? 'Read the Sentinel write-up'}</a>
+              </>
+            )}
+          </dd>
+        </div>
+      ))}
+    </dl>
+    <div class="beyond">
+      <h3 class="sub-label mono">Beyond the code</h3>
+      <ul>
+        {beyond.map((b) => <li>{b}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <Section id="contact" label="Contact" lede="Internship offers, security roles or questions about a project. I read everything that comes through this form.">
+    <div class="contact-grid">
+      <ContactForm />
+      <ul class="contact-links">
+        <li><a href={site.links.linkedin} rel="me">LinkedIn</a><span class="mono">thierry-bungaroo</span></li>
+        <li><a href={site.links.github} rel="me">GitHub</a><span class="mono">CrackedOnTiti</span></li>
+      </ul>
+    </div>
+  </Section>
+</Base>
+
+<style>
+  .sub { margin-top: var(--space-xl); display: grid; gap: var(--space-s); }
+  .sub-label {
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+  }
+  .edu { list-style: none; padding: 0; display: grid; gap: var(--space-s); }
+  .edu li { display: grid; gap: 0.1rem; }
+  .edu-what { font-weight: 600; }
+  .edu-detail { color: var(--text-muted); }
+  .edu-when { color: var(--text-faint); }
+
+  .rows { list-style: none; padding: 0; }
+
+  .building-grid { display: grid; gap: var(--space-xl); }
+
+  .security { padding-top: var(--space-2xl); display: grid; gap: var(--space-xl); }
+  .motto {
+    margin: 0;
+    padding: var(--space-l) 0 var(--space-l) var(--space-m);
+    border-left: 3px solid var(--red);
+  }
+  .motto p {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 1.2rem + 4.2vw, 4.75rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.035em;
+    max-width: 16ch;
+  }
+  .sec-list { display: grid; gap: var(--space-m); max-width: 60rem; }
+  .sec-item { display: grid; gap: var(--space-3xs); }
+  .sec-item dt { color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.08em; }
+  .sec-item dd { margin: 0; max-width: var(--measure); }
+  .beyond { display: grid; gap: var(--space-s); }
+  .beyond ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs) 0;
+    color: var(--text-muted);
+  }
+  .beyond li:not(:last-child)::after { content: '·'; margin-inline: 0.7em; color: var(--rule-strong); }
+
+  .contact-grid { display: grid; gap: var(--space-xl); }
+  .contact-links { list-style: none; padding: 0; display: grid; gap: var(--space-s); align-content: start; }
+  .contact-links li { display: grid; gap: 0.1rem; }
+  .contact-links a { font-size: var(--step-1); font-weight: 600; }
+  .contact-links .mono { color: var(--text-faint); }
+
+  @media (min-width: 48rem) {
+    .sec-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-l) var(--space-xl); }
+    .edu li { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) auto; gap: var(--space-m); align-items: baseline; }
+  }
+  @media (min-width: 60rem) {
+    .building-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-xl); }
+    .security { grid-template-columns: var(--rail) minmax(0, 1fr); column-gap: var(--space-xl); }
+    .motto { grid-column: 1 / -1; }
+    .sec-list, .beyond { grid-column: 2; }
+    .contact-grid { grid-template-columns: minmax(0, 1fr) 14rem; }
+  }
+</style>

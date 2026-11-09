@@ -1,0 +1,93 @@
+---
+import { contactEndpoint, turnstileSiteKey, limits } from '../lib/contact';
+---
+<form
+  class="contact"
+  method="post"
+  action={contactEndpoint}
+  data-contact
+  data-endpoint={contactEndpoint}
+  data-sitekey={turnstileSiteKey}
+  novalidate
+>
+  <div class="field">
+    <label for="c-name">Name</label>
+    <input id="c-name" name="name" type="text" required maxlength={limits.name} autocomplete="name" />
+  </div>
+  <div class="field">
+    <label for="c-contact">How should I reply?</label>
+    <input
+      id="c-contact"
+      name="contact"
+      type="text"
+      required
+      minlength="3"
+      maxlength={limits.contact}
+      autocomplete="email"
+      aria-describedby="c-contact-hint"
+    />
+    <p id="c-contact-hint" class="hint mono">Email address, LinkedIn profile or phone number</p>
+  </div>
+  <div class="field">
+    <label for="c-message">Message</label>
+    <textarea
+      id="c-message"
+      name="message"
+      required
+      minlength={limits.messageMin}
+      maxlength={limits.message}
+      rows="6"
+    ></textarea>
+  </div>
+  <div class="trap" aria-hidden="true">
+    <label for="c-website">Leave this empty</label>
+    <input id="c-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+  <div class="turnstile" data-turnstile></div>
+  <div class="actions">
+    <button type="submit" disabled>Send</button>
+    <p class="hint mono">Spam check by Cloudflare Turnstile</p>
+  </div>
+  <p class="status" data-status role="status" aria-live="polite"></p>
+  <noscript>
+    <p class="hint">The form needs JavaScript for its spam check. LinkedIn works without it.</p>
+  </noscript>
+</form>
+
+<script src="../scripts/contact.ts"></script>
+
+<style>
+  .contact { display: grid; gap: var(--space-m); max-width: 36rem; }
+  .field { display: grid; gap: var(--space-3xs); }
+  label { font-weight: 500; }
+  input, textarea {
+    font: inherit;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--radius);
+    padding: 0.65rem 0.75rem;
+    width: 100%;
+  }
+  textarea { resize: vertical; min-height: 9rem; }
+  input:focus-visible, textarea:focus-visible { outline-offset: 0; border-color: var(--text-muted); }
+  input[aria-invalid='true'], textarea[aria-invalid='true'] { border-color: var(--red-text); }
+  .hint { color: var(--text-faint); }
+  .trap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-s) var(--space-m); }
+  button {
+    font: inherit;
+    font-weight: 600;
+    color: var(--bg);
+    background: var(--text);
+    border: 0;
+    border-radius: var(--radius);
+    padding: 0.7rem 1.6rem;
+    cursor: pointer;
+  }
+  button:hover:not(:disabled) { background: #ffffff; }
+  button:disabled { opacity: 0.55; cursor: default; }
+  .status:empty { display: none; }
+  .status[data-state='ok'] { color: var(--text); }
+  .status[data-state='error'] { color: var(--red-text); }
+</style>

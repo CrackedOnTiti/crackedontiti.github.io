@@ -1,0 +1,70 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Stack from '../../components/Stack.astro';
+import ProjectLinks from '../../components/ProjectLinks.astro';
+import { teamLabel } from '../../lib/format';
+
+// Detail pages exist for featured projects only.
+// Body (Markdown): Problem → What I built → How it works (inline SVG diagram) → Results. Links are added here.
+export const getStaticPaths = (async () => {
+  const featured = await getCollection('projects', (p) => p.data.status === 'featured');
+  return featured.map((project) => ({ params: { slug: project.data.slug }, props: { project } }));
+}) satisfies GetStaticPaths;
+
+const { project } = Astro.props;
+const p = project.data;
+const { Content } = await render(project);
+---
+<Base title={p.title} description={p.summary}>
+  <article class="wrap detail">
+    <p class="mono back"><a href="/#featured">All selected work</a></p>
+    <header class="head">
+      <h1>{p.title}</h1>
+      <p class="summary">{p.summary}</p>
+      <dl class="facts mono">
+        <div><dt>Role</dt><dd>{p.role}</dd></div>
+        {teamLabel(p.team) && <div><dt>Team</dt><dd>{teamLabel(p.team)}</dd></div>}
+        <div><dt>When</dt><dd>{p.period}</dd></div>
+      </dl>
+      <Stack items={p.stack} />
+    </header>
+    <div class="prose">
+      <Content />
+      <h2>Links</h2>
+      <ProjectLinks project={project} />
+    </div>
+  </article>
+</Base>
+
+<style>
+  .detail { padding-block: var(--space-l) 0; display: grid; gap: var(--space-xl); }
+  .back a { color: var(--text-muted); }
+  .back a::before { content: '← '; }
+  .head { display: grid; gap: var(--space-m); max-width: 52rem; }
+  h1 { font-size: var(--step-hero); line-height: 0.95; letter-spacing: -0.035em; font-weight: 800; }
+  .summary { font-size: var(--step-1); line-height: var(--leading-snug); max-width: 44ch; }
+  .facts { display: grid; gap: var(--space-2xs); }
+  .facts div { display: grid; grid-template-columns: 4.5rem 1fr; gap: var(--space-s); }
+  .facts dt { color: var(--text-faint); }
+  .facts dd { margin: 0; color: var(--text-muted); }
+
+  .prose { max-width: var(--measure); }
+  .prose :global(h2) {
+    font-size: var(--step-2);
+    letter-spacing: -0.02em;
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-s);
+    padding-top: var(--space-s);
+    border-top: 1px solid var(--rule);
+  }
+  .prose :global(h2:first-child) { margin-top: 0; }
+  .prose :global(p + p), .prose :global(ul + p), .prose :global(p + ul) { margin-top: var(--space-s); }
+  .prose :global(ul) { padding-left: 1.1em; display: grid; gap: var(--space-2xs); }
+  .prose :global(strong) { font-weight: 600; }
+
+  @media (min-width: 60rem) {
+    .prose :global(.diagram) { margin-right: -8rem; }
+  }
+</style>

@@ -1,0 +1,106 @@
+name: Build and deploy
+
+# main            -> Cloudflare Pages production (crackedontiti.dev), then the github.io redirect.
+# any other branch -> Cloudflare Pages preview only (<branch>.<project>.pages.dev, noindex).
+on:
+  push:
+    branches: ['**']
+  # Daily rebuild of main refreshes src/data/github.json (stars, last push, languages).
+  # GitHub disables schedules after 60 days without repo activity; the footer shows the stats date.
+  schedule:
+    - cron: '23 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  CF_PAGES_PROJECT: crackedontiti
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # Repository variables (Settings → Secrets and variables → Actions → Variables). Not secrets.
+      SITE_URL: ${{ vars.SITE_URL || 'https://crackedontiti.dev' }}
+      PUBLIC_CONTACT_ENDPOINT: ${{ vars.CONTACT_ENDPOINT }}
+      PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      # Fails while any TODO(content) or test contact config remains: nothing half-finished goes live.
+      - name: Launch check
+        run: npm run check:launch
+      - name: Refresh GitHub stats
+        run: npm run stats
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: npm run build
+      - name: Build github.io redirect
+        run: npm run build:redirect
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: dist
+          retention-days: 7
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: redirect
+
+  cloudflare:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: dist
+      - name: Deploy to Cloudflare Pages
+        id: deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          npx wrangler pages deploy dist \
+            --project-name="$CF_PAGES_PROJECT" \
+            --branch="$BRANCH" \
+            --commit-hash="$GITHUB_SHA" \
+            --commit-dirty=true | tee deploy.log
+          echo "url=$(grep -oE 'https://[a-z0-9.-]+\.pages\.dev' deploy.log | tail -1)" >> "$GITHUB_OUTPUT"
+
+  # Only after production is live on Cloudflare: github.io becomes a redirect to it.
+  redirect:
+    needs: cloudflare
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

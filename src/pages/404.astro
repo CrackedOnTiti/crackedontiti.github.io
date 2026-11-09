@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Not found">
+  <section class="wrap nf">
+    <p class="mono">404</p>
+    <h1>Nothing here.</h1>
+    <p><a href="/">Back to the start</a></p>
+  </section>
+</Base>
+
+<style>
+  .nf { padding-block: var(--space-2xl); display: grid; gap: var(--space-s); }
+  .nf .mono { color: var(--red-text); }
+  h1 { font-size: var(--step-3); }
+</style>

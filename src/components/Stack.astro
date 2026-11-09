@@ -1,0 +1,20 @@
+---
+interface Props {
+  items: string[];
+}
+---
+<ul class="stack mono" aria-label="Stack">
+  {Astro.props.items.map((s) => <li>{s}</li>)}
+</ul>
+
+<style>
+  .stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3xs) 0;
+    list-style: none;
+    padding: 0;
+    color: var(--text-muted);
+  }
+  li:not(:last-child)::after { content: '/'; color: var(--rule-strong); margin-inline: 0.6em; }
+</style>

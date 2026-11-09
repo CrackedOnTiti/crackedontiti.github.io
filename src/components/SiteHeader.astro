@@ -1,0 +1,42 @@
+---
+import { site } from '../lib/site';
+const base = Astro.url.pathname === '/' ? '' : '/';
+const items = [
+  ['Work', 'featured'],
+  ['Experience', 'experience'],
+  ['Security', 'security'],
+  ['Contact', 'contact'],
+];
+---
+<header class="site-header wrap">
+  <a class="brand mono" href="/">{site.handle}</a>
+  <nav aria-label="Primary">
+    <ul>
+      {items.map(([label, id]) => <li><a href={`${base}#${id}`}>{label}</a></li>)}
+    </ul>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2xs) var(--space-m);
+    padding-block: var(--space-m);
+  }
+  .brand { text-decoration: none; color: var(--text-muted); font-weight: 500; }
+  .brand:hover { color: var(--text); }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs) var(--space-m);
+    list-style: none;
+    padding: 0;
+    font-size: var(--step--1);
+    font-family: var(--font-mono);
+  }
+  nav a { text-decoration: none; color: var(--text-muted); }
+  nav a:hover { color: var(--text); text-decoration: underline; text-decoration-color: var(--red); }
+</style>

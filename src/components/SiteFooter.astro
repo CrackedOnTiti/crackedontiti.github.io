@@ -1,0 +1,23 @@
+---
+import { site } from '../lib/site';
+import { statsGeneratedAt } from '../lib/github';
+import { dayMonthYear } from '../lib/format';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="wrap inner mono">
+    <p>&copy; {year} {site.name}</p>
+    <p>Built with Astro. No trackers, no cookies.</p>
+    {statsGeneratedAt && <p>GitHub stats as of {dayMonthYear(statsGeneratedAt)}</p>}
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--rule);
+    margin-top: var(--space-2xl);
+    padding-block: var(--space-l);
+    color: var(--text-faint);
+  }
+  .inner { display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-l); }
+</style>

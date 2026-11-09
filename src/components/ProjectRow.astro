@@ -1,0 +1,46 @@
+---
+// Dense row for the "Also built" list.
+import type { CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
+import ProjectLinks from './ProjectLinks.astro';
+import Stack from './Stack.astro';
+import { teamLabel } from '../lib/format';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+const { project } = Astro.props;
+const p = project.data;
+const { Content } = await render(project);
+---
+<li class="row">
+  <div class="name">
+    <h3>{p.title}</h3>
+    <p class="mono meta">{[p.period, teamLabel(p.team)].filter(Boolean).join(' · ')}</p>
+  </div>
+  <div class="text">
+    <p class="summary">{p.summary}</p>
+    <div class="more"><Content /></div>
+    {p.role !== 'Solo' && <p class="role mono">{p.role}</p>}
+    <Stack items={p.stack} />
+    <ProjectLinks project={project} />
+  </div>
+</li>
+
+<style>
+  .row {
+    display: grid;
+    gap: var(--space-xs);
+    padding-block: var(--space-m);
+    border-top: 1px solid var(--rule);
+  }
+  h3 { font-size: var(--step-1); }
+  .meta, .role { color: var(--text-faint); }
+  .text { display: grid; gap: var(--space-2xs); max-width: var(--measure); }
+  .more { color: var(--text-muted); }
+  .more :global(p + p) { margin-top: var(--space-2xs); }
+
+  @media (min-width: 48rem) {
+    .row { grid-template-columns: 12rem minmax(0, 1fr); gap: var(--space-l); }
+  }
+</style>

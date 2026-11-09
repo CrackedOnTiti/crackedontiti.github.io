@@ -1,0 +1,32 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
+import ProjectLinks from './ProjectLinks.astro';
+import Stack from './Stack.astro';
+import ProjectScreenshot from './ProjectScreenshot.astro';
+import { teamLabel } from '../lib/format';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+const { project } = Astro.props;
+const p = project.data;
+const { Content } = await render(project);
+---
+<article class="building" aria-labelledby={`b-${p.slug}`}>
+  <h3 id={`b-${p.slug}`}>{p.title}</h3>
+  <p class="mono meta">{[p.period, teamLabel(p.team), p.role !== 'Solo' ? p.role : null].filter(Boolean).join(' · ')}</p>
+  <p class="summary">{p.summary}</p>
+  <ProjectScreenshot project={project} />
+  <div class="prose"><Content /></div>
+  <Stack items={p.stack} />
+  <ProjectLinks project={project} />
+</article>
+
+<style>
+  .building { display: grid; gap: var(--space-xs); align-content: start; }
+  h3 { font-size: var(--step-2); letter-spacing: -0.02em; }
+  .meta { color: var(--text-faint); }
+  .summary { font-size: var(--step-1); line-height: var(--leading-snug); }
+  .prose { color: var(--text-muted); display: grid; gap: var(--space-xs); }
+</style>
