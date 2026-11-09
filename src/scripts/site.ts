@@ -11,6 +11,9 @@ const motion = (): ScrollBehavior => (reducedMotion.matches ? 'auto' : 'smooth')
 /* ------------------------------------------------------------------ tabs */
 
 // Old section anchors (site v2) still land on the right tab.
+// Key in history.state marking entries this script created.
+const STATE = 'cotTab';
+
 const LEGACY_HASH: Record<string, string> = {
   featured: 'work',
   built: 'work',
@@ -60,6 +63,16 @@ function initTabs() {
   }
   inner.replaceChildren(list);
 
+  // Edge fades: say which ends of the row still have tabs hidden behind them.
+  const updateEdges = () => {
+    const max = inner.scrollWidth - inner.clientWidth;
+    inner.dataset.atStart = String(inner.scrollLeft <= 2);
+    inner.dataset.atEnd = String(inner.scrollLeft >= max - 2);
+  };
+  inner.addEventListener('scroll', updateEdges, { passive: true });
+  window.addEventListener('resize', updateEdges);
+  updateEdges();
+
   list.addEventListener('keydown', (e) => {
     const current = ids.indexOf((document.activeElement as HTMLElement | null)?.id.replace(/^tab-/, '') ?? '');
     if (current < 0) return;
@@ -78,6 +91,8 @@ function initTabs() {
 
   function select(id: string, opts: { history?: 'push' | 'replace'; focus?: boolean; scroll?: boolean } = {}) {
     if (!panels.has(id)) id = ids[0];
+    // Read before swapping panels: a shorter panel makes the browser clamp scrollY.
+    const yBefore = window.scrollY;
     const changed = id !== active;
     active = id;
     for (const [key, tab] of tabs) {
@@ -90,15 +105,22 @@ function initTabs() {
     if (opts.focus) tab.focus({ preventScroll: true });
     revealTab(tab);
 
-    if (opts.history) {
+    if (opts.history && location.hash !== `#${id}`) {
       const url = `${location.pathname}${location.search}#${id}`;
-      if (location.hash !== `#${id}`) history[opts.history === 'push' ? 'pushState' : 'replaceState'](null, '', url);
+      if (opts.history === 'push') {
+        // Remember where the reader was, so Back can return there (see onPop).
+        history.replaceState({ [STATE]: true, y: yBefore }, '');
+        history.pushState({ [STATE]: true, y: null }, '', url);
+      } else {
+        history.replaceState({ [STATE]: true, y: null }, '', url);
+      }
     }
     // Keep the start of the new panel in view: if the page is scrolled past the tab bar, go back to it.
-    if ((changed || opts.scroll) && (opts.scroll || window.scrollY > barTop())) {
-      window.scrollTo({ top: barTop(), behavior: 'auto' });
-    }
+    if ((changed || opts.scroll) && (opts.scroll || window.scrollY > barTop())) jumpTo(barTop());
   }
+
+  // 'instant', not 'auto': html has scroll-behavior: smooth, and a tab switch should jump.
+  const jumpTo = (top: number) => window.scrollTo({ top, behavior: 'instant' });
 
   // Where the bar sits when not stuck: the top of the visible panel minus the bar's height.
   // (A stuck sticky element reports its stuck position, so it cannot be measured directly.)
@@ -135,20 +157,38 @@ function initTabs() {
   select(initial ?? ids[0]);
   if (initial) {
     // The browser already jumped to the (then-stacked) section; line the tab bar up with the top instead.
-    window.scrollTo({ top: barTop(), behavior: 'auto' });
+    jumpTo(barTop());
     dropTargetFocus();
     // The browser may focus the fragment target only after load.
     window.addEventListener('load', () => setTimeout(dropTargetFocus), { once: true });
   }
 
-  // Back/Forward, and in-page links such as href="#contact".
-  const onNav = () => {
+  // Mark the entry the page loaded on, so Back to it is recognised as ours.
+  history.replaceState({ [STATE]: true, y: null }, '');
+
+  // Back/Forward through tab entries: switch tab, and restore the scroll position saved on push.
+  window.addEventListener('popstate', (e) => {
+    const saved = (e.state as { [STATE]?: boolean; y?: number | null } | null) ?? null;
+    if (!saved?.[STATE]) return; // not ours: an in-page link entry, handled by hashchange
+    select(fromHash() ?? ids[0]);
+    if (typeof saved.y === 'number') {
+      const y = saved.y;
+      jumpTo(y);
+      // Traversing to a #hash entry makes the browser scroll to the fragment as well (smoothly, per
+      // the CSS); apply the saved position again once that has started, which cancels it.
+      requestAnimationFrame(() => jumpTo(y));
+      window.addEventListener('hashchange', () => jumpTo(y), { once: true });
+    }
+    dropTargetFocus();
+  });
+
+  // In-page links such as href="#contact" create entries without our state: open the tab, show its top.
+  window.addEventListener('hashchange', () => {
+    if ((history.state as { [STATE]?: boolean } | null)?.[STATE]) return; // a tab entry: popstate did it
     const id = fromHash();
     select(id ?? ids[0], { scroll: id !== null });
     dropTargetFocus();
-  };
-  window.addEventListener('popstate', onNav);
-  window.addEventListener('hashchange', onNav);
+  });
 }
 
 /* ------------------------------------------------------------- expanders */
@@ -157,9 +197,18 @@ function initTabs() {
 // accessibility tree); the height animation itself is CSS (grid-template-rows 0fr → 1fr).
 function initExpanders() {
   const items = [...document.querySelectorAll<HTMLElement>('[data-expander]')].flatMap((row) => {
-    const button = row.querySelector<HTMLButtonElement>('[data-expander-toggle]');
+    const head = row.querySelector<HTMLElement>('[data-expander-toggle]');
     const panel = row.querySelector<HTMLElement>('[data-expander-panel]');
-    return button && panel ? [{ row, button, panel }] : [];
+    if (!head || !panel) return [];
+    // The HTML has a plain heading (nothing to press without JS); the button exists only from here.
+    const button = document.createElement('button');
+    // Copy every attribute (class and Astro's data-astro-cid-* scope) so the scoped CSS still applies.
+    for (const { name, value } of head.attributes) if (name !== 'data-controls') button.setAttribute(name, value);
+    button.type = 'button';
+    button.setAttribute('aria-controls', head.dataset.controls ?? panel.id);
+    button.append(...head.childNodes);
+    head.replaceWith(button);
+    return [{ row, button, panel }];
   });
   if (items.length === 0) return;
 
@@ -200,8 +249,18 @@ function initCarousel() {
   const title = (slide: HTMLElement) => slide.querySelector('h4')?.textContent?.trim() ?? '';
   let index = 0;
 
+  const viewport = root.querySelector<HTMLElement>('[data-carousel-viewport]');
+  // The viewport takes the current slide's height (CSSOM, CSP-safe), so short slides leave no gap.
+  const fit = () => {
+    // + the viewport's own top and bottom border (box-sizing: border-box).
+    if (viewport) viewport.style.setProperty('--slide-h', `${slides[index].offsetHeight + viewport.offsetHeight - viewport.clientHeight}px`);
+  };
+  const resize = new ResizeObserver(fit);
+  slides.forEach((s) => resize.observe(s));
+
   const go = (n: number) => {
     index = (n + slides.length) % slides.length;
+    fit();
     // A CSS custom property set through the CSSOM: allowed by the CSP (no style attribute in the HTML).
     track.style.setProperty('--slide', String(index));
     slides.forEach((slide, i) => { slide.inert = i !== index; });

@@ -26,11 +26,21 @@ const { tabs } = Astro.props;
     background: var(--bg);
     border-block: 1px solid var(--rule);
   }
+  /* The row scrolls sideways on narrow screens. A fade marks the edge with more tabs behind it:
+     on the right by default (CSS only, also without JS); the script updates both sides on scroll. */
   .inner {
+    --fade-l: 0rem;
+    --fade-r: 2.5rem;
     display: flex;
     gap: var(--space-2xs);
     overflow-x: auto;
     scrollbar-width: none;
+    mask-image: linear-gradient(to right, transparent, #000 var(--fade-l), #000 calc(100% - var(--fade-r)), transparent);
+  }
+  .inner[data-at-start='false'] { --fade-l: 2.5rem; }
+  .inner[data-at-end='true'] { --fade-r: 0rem; }
+  @media (min-width: 48rem) {
+    .inner { mask-image: none; }
   }
   .inner::-webkit-scrollbar { display: none; }
   .inner :global(.tablist) { display: flex; flex-wrap: nowrap; gap: var(--space-2xs); }

@@ -1,6 +1,7 @@
 ---
-// Expandable featured project. Without JavaScript every panel is open. With it (src/scripts/site.ts),
-// one panel is open at a time and the height animates via grid-template-rows 0fr → 1fr.
+// Expandable featured project. Without JavaScript the row is a plain heading above an open panel.
+// With it (src/scripts/site.ts), the heading content moves into a real <button aria-expanded>, one
+// panel is open at a time, and the height animates via grid-template-rows 0fr → 1fr.
 import type { CollectionEntry } from 'astro:content';
 import MediaSlot from './MediaSlot.astro';
 import ProjectFacts from './ProjectFacts.astro';
@@ -22,7 +23,7 @@ const diagram = diagramSpec ? renderDiagram(diagramSpec) : null;
 ---
 <article class="row" data-expander data-default-open={open ? '' : undefined}>
   <h3 class="row-h">
-    <button type="button" class="toggle" aria-expanded="true" aria-controls={panelId} data-expander-toggle>
+    <span class="toggle" data-controls={panelId} data-expander-toggle>
       <span class="badge" aria-hidden="true">{p.monogram}</span>
       <span class="titles">
         <span class="label label--red tag">{p.tag}</span>
@@ -30,7 +31,7 @@ const diagram = diagramSpec ? renderDiagram(diagramSpec) : null;
         <span class="tagline">{p.tagline}</span>
       </span>
       <span class="arrow" aria-hidden="true">‹</span>
-    </button>
+    </span>
   </h3>
   <div class="panel" id={panelId} data-expander-panel>
     <div class="clip">
@@ -115,14 +116,13 @@ const diagram = diagramSpec ? renderDiagram(diagramSpec) : null;
     transition: transform 300ms var(--ease), color var(--dur) var(--ease);
   }
   .row:not([data-ready]) .arrow, .row:not([data-ready]) .badge { transition: none; }
-  .toggle:hover .title { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.12em; }
+  button.toggle:hover .title { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.12em; }
   .toggle[aria-expanded='true'] .badge { border-color: var(--red); color: var(--red-text); }
   .toggle[aria-expanded='true'] .arrow { color: var(--red-text); transform: rotate(-90deg); }
 
-  /* Without the script the toggle does nothing: no arrow, no pointer. */
-  :global(html:not(.js)) .arrow { display: none; }
-  :global(html:not(.js)) .toggle { cursor: default; }
-  :global(html:not(.js)) .toggle:hover .title { text-decoration: none; }
+  /* Before the script swaps in the button: a plain heading, no arrow. */
+  span.toggle { cursor: auto; }
+  span.toggle .arrow { display: none; }
 
   .panel { display: grid; grid-template-rows: 1fr; }
   .panel[data-open='false'] { grid-template-rows: 0fr; visibility: hidden; }
