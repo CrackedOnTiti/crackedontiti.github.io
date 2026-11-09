@@ -61,10 +61,7 @@ import { about, interests, munnin, stack } from '../data/profile';
   </div>
 
   <div class="stack">
-    <div class="stack-head">
-      <h3 class="stack-title">Stack</h3>
-      <p class="label">What I've shipped with</p>
-    </div>
+    <h3 class="stack-title">Stack</h3>
     <div class="groups">
       {stack.map((g) => (
         <div>
@@ -145,15 +142,7 @@ import { about, interests, munnin, stack } from '../data/profile';
   .soon { color: var(--text-faint); }
 
   .stack { margin-top: 5rem; }
-  .stack-head {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: var(--space-xs);
-  }
   .stack-title { font-size: var(--step-2); }
-  .stack-head .label { text-transform: none; letter-spacing: 0.02em; }
   .groups {
     margin-top: var(--space-m);
     display: grid;
