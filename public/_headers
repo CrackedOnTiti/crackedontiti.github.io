@@ -1,6 +1,9 @@
 # Cloudflare Pages headers for crackedontiti.dev (also applied to *.pages.dev previews).
 # The same CSP is repeated as a <meta> tag in Base.astro.
 # The CSP placeholder below is filled at build time from src/lib/csp.mjs. Do not edit the policy here.
+# "! Access-Control-Allow-Origin" detaches the "Access-Control-Allow-Origin: *" Pages adds to every
+# response by default. Nothing here is meant to be read cross-origin: fonts, /_astro/ and images are
+# same-origin, and Turnstile and the contact Worker set their own CORS.
 
 /*
   Content-Security-Policy: %CSP%
@@ -11,6 +14,7 @@
   Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=(), browsing-topics=()
   Cross-Origin-Opener-Policy: same-origin
   Cross-Origin-Resource-Policy: same-origin
+  ! Access-Control-Allow-Origin
 
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable

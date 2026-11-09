@@ -51,16 +51,26 @@ Keep the page open: you need the **Site key** (public) in step 6 and the **Secre
 
 ## 4. Contact Worker
 
-From the repo root, on your machine:
+Messages are delivered by email through Resend, and optionally also to ntfy. Both are tried; a
+message counts as sent if at least one delivers.
+
+**4a. Resend (once).** The sender is `Portfolio contact <contact@crackedontiti.com>`, and
+`crackedontiti.com` is already verified in Resend (*Domains* → **Verified**). Create the key:
+*API Keys* → *Create API key* → permission **Sending access**, domain `crackedontiti.com`.
+Copy the key once.
+
+**4b. Secrets and deploy.** From the repo root, on your machine:
 
 ```sh
 cd worker/contact
 npm ci
 npx wrangler login
 npx wrangler secret put TURNSTILE_SECRET   # paste the Turnstile Secret key (step 2)
-npx wrangler secret put NTFY_TOPIC_URL     # e.g. https://ntfy.sh/<your-topic>
+npx wrangler secret put RESEND_API_KEY     # Resend API key (step 4a)
+npx wrangler secret put CONTACT_TO         # your inbox address
+# optional second channel:
+npx wrangler secret put NTFY_TOPIC_URL     # e.g. https://ntfy.sh/<long-random-topic>
 npx wrangler secret put NTFY_TOKEN         # optional: only if your ntfy topic needs a token
-                                           # (ntfy.sh, no account: skip it; use a long random topic)
 npm test && npm run typecheck
 npx wrangler deploy
 ```
@@ -131,7 +141,9 @@ curl -s https://crackedontiti.github.io/projects/sentinel/ | grep -E 'canonical|
 ```
 
 - securityheaders.com on `https://crackedontiti.dev` → aim for **A**.
-- Send yourself a message through the form; it should arrive in ntfy within seconds.
+- Send yourself a message through the form; it should arrive by email (and in ntfy, if
+  configured) within seconds. If nothing arrives, `npx wrangler tail` in `worker/contact` shows
+  which channel failed and why (status only).
 - `https://crackedontiti.github.io/` should land on `https://crackedontiti.dev/`.
 - Other repos' project pages (e.g. `crackedontiti.github.io/Glados_Documentation/`, `/AREA/`) are
   separate repos and keep working.

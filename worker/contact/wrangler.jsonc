@@ -9,13 +9,18 @@
   "observability": { "enabled": true },
   "vars": {
     // Sites allowed to post (CORS + Turnstile hostname check). Comma-separated origins.
-    "ALLOWED_ORIGINS": "https://crackedontiti.dev"
+    "ALLOWED_ORIGINS": "https://crackedontiti.dev",
+    // Full sender on the Resend-verified domain (crackedontiti.com). Not secret.
+    // The recipient (CONTACT_TO) is a secret.
+    "CONTACT_FROM": "Portfolio contact <contact@crackedontiti.com>"
   },
   // Per-IP limit. Cloudflare's rate limiter is per location and approximate; Turnstile is the main gate.
   "ratelimits": [
     { "name": "CONTACT_LIMITER", "namespace_id": "1001", "simple": { "limit": 3, "period": 60 } }
   ]
-  // Secrets (never in this file): TURNSTILE_SECRET, NTFY_TOPIC_URL, and optionally NTFY_TOKEN.
-  // Without NTFY_TOKEN the topic URL is the only secret: use a long random topic name.
+  // Secrets (never in this file): TURNSTILE_SECRET, plus at least one delivery channel:
+  //   email: RESEND_API_KEY + CONTACT_TO
+  //   push:  NTFY_TOPIC_URL (+ optional NTFY_TOKEN; without it, use a long random topic name)
+  // Both channels are tried; a message counts as sent if at least one delivers.
   // Set with `npx wrangler secret put <NAME>`; for `wrangler dev`, put them in .dev.vars (gitignored).
 }
