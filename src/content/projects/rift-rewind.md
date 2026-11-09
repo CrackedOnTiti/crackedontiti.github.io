@@ -10,6 +10,22 @@ stack: [Python, Flask, AWS Elastic Beanstalk, DynamoDB, Amazon Bedrock, Claude, 
 links:
   devpost: https://devpost.com/software/jinx-s-workshop
   repo: https://github.com/CrackedOnTiti/rift-rewind
+tag: "Hackathon · $1,000 prize"
+monogram: "RR"
+tagline: "An AI League of Legends coach that remembers you."
+intro: "Most entries competed on statistics. Ours won the Roast prize at the AWS × Riot Games hackathon by being a coach you can actually argue with: it remembers your past games and checks whether you applied its advice."
+flow:
+  - "Riot API"
+  - "Flask backend"
+  - "Claude on Bedrock"
+  - "Tool calls"
+  - "DynamoDB memory"
+highlights:
+  - "Led backend and cloud: Elastic Beanstalk, DynamoDB, Bedrock"
+  - "Built the AI layer: tool calling and per-player memory"
+  - "Database architecture and CLI testing tools"
+state: "Shipped · prize winner"
+mediaPlaceholder: "Coach chat and player card screenshots"
 summary: AI League of Legends coach that remembers each player across sessions. Won the Roast Master 3000 Prize ($1,000) at the AWS × Riot Games Rift Rewind hackathon.
 ---
 

@@ -10,6 +10,22 @@ stack: [Haskell]
 links:
   repo: https://github.com/CrackedOnTiti/glados_ss
   docs: https://crackedontiti.github.io/Glados_Documentation/
+tag: "Epitech"
+monogram: "GL"
+tagline: "A compiler and virtual machine, in Haskell."
+intro: "A statically typed, C-like language compiled to a custom WebAssembly-like bytecode and run on our own VM, with the AST and IR available for inspection."
+flow:
+  - "Source"
+  - "Parser"
+  - "AST"
+  - "IR"
+  - "Bytecode"
+  - "VM"
+highlights:
+  - "Co-built the compiler"
+  - "Co-built the virtual machine"
+state: "Shipped"
+mediaPlaceholder: "AST and IR output example"
 summary: A compiler and virtual machine in Haskell. A C-like language compiled to custom bytecode.
 ---
 

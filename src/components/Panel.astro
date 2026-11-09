@@ -1,0 +1,31 @@
+---
+// One tab panel. Every panel is in the HTML and visible without JavaScript; the script hides the
+// inactive ones. `heading` is visually hidden when the design shows no heading for the panel.
+// `ownHeading`: the slot renders its own <h2 id="{id}-heading">.
+interface Props {
+  id: string;
+  heading?: string;
+  hideHeading?: boolean;
+  ownHeading?: boolean;
+}
+const { id, heading, hideHeading = false, ownHeading = false } = Astro.props;
+---
+<section id={id} class="panel wrap" data-panel aria-labelledby={`${id}-heading`}>
+  {!ownHeading && <h2 id={`${id}-heading`} class:list={[hideHeading ? 'visually-hidden' : 'panel-heading']}>{heading}</h2>}
+  <slot />
+</section>
+
+<style>
+  .panel { padding-block: var(--space-xl) var(--space-2xl); }
+  .panel + .panel { border-top: 1px solid var(--rule); }
+  .panel[hidden] { display: none; }
+  /* With tabs active only one panel shows; no rule above it. */
+  .panel:global(.is-tab) { border-top: 0; }
+  .panel-heading {
+    font-size: var(--step-2);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-m);
+  }
+  .panel:focus-visible { outline-offset: -2px; }
+</style>

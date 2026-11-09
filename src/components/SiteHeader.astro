@@ -1,42 +1,53 @@
 ---
 import { site } from '../lib/site';
-const base = Astro.url.pathname === '/' ? '' : '/';
-const items = [
-  ['Work', 'featured'],
-  ['Experience', 'experience'],
-  ['Security', 'security'],
-  ['Contact', 'contact'],
-];
+import Raven from './Raven.astro';
 ---
 <header class="site-header wrap">
-  <a class="brand mono" href="/">{site.handle}</a>
-  <nav aria-label="Primary">
-    <ul>
-      {items.map(([label, id]) => <li><a href={`${base}#${id}`}>{label}</a></li>)}
-    </ul>
-  </nav>
+  <a class="brand" href="/" aria-label={`${site.name}, home`}>
+    <Raven size="small" />
+    <span class="brand-name">CRACKEDONTITI.DEV</span>
+  </a>
+  <ul class="ext" role="list">
+    <li><a href={site.links.linkedin} rel="me">LinkedIn<span aria-hidden="true"> ↗</span></a></li>
+    <li><a href={site.links.github} rel="me">GitHub<span aria-hidden="true"> ↗</span></a></li>
+  </ul>
 </header>
 
 <style>
   .site-header {
+    position: relative;
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
     justify-content: space-between;
-    gap: var(--space-2xs) var(--space-m);
-    padding-block: var(--space-m);
+    align-items: center;
+    gap: var(--space-s) var(--space-m);
+    padding-top: var(--space-m);
   }
-  .brand { text-decoration: none; color: var(--text-muted); font-weight: 500; }
-  .brand:hover { color: var(--text); }
-  ul {
+  .brand {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2xs) var(--space-m);
+    align-items: center;
+    gap: var(--space-xs);
+    text-decoration: none;
+  }
+  .brand-name {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    letter-spacing: 0.08em;
+    color: var(--text-faint);
+  }
+  .brand:hover .brand-name { color: var(--text); }
+  .ext {
+    display: flex;
+    gap: var(--space-m);
     list-style: none;
     padding: 0;
-    font-size: var(--step--1);
     font-family: var(--font-mono);
+    font-size: 0.8125rem;
   }
-  nav a { text-decoration: none; color: var(--text-muted); }
-  nav a:hover { color: var(--text); text-decoration: underline; text-decoration-color: var(--red); }
+  .ext a { display: inline-block; padding-block: 0.6rem; text-decoration: none; }
+  .ext a:hover { text-decoration: underline; }
+
+  @media (min-width: 48rem) {
+    .site-header { padding-top: 2rem; }
+  }
 </style>

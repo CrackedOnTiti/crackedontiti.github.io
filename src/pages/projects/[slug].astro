@@ -21,7 +21,7 @@ const code = p.closedSource === 'proprietary' ? 'Proprietary: write-up only' : p
 ---
 <Base title={p.title} description={p.summary}>
   <article class="wrap detail">
-    <p class="mono back"><a href="/#featured">All selected work</a></p>
+    <p class="mono back"><a href="/#work">All selected work</a></p>
     <header class="head">
       <h1>{p.title}</h1>
       <p class="summary">{p.summary}</p>
@@ -67,6 +67,7 @@ const code = p.closedSource === 'proprietary' ? 'Proprietary: write-up only' : p
     border-top: 1px solid var(--rule);
   }
   .prose :global(h2:first-child) { margin-top: 0; }
+  .prose :global(h3) { font-size: var(--step-1); margin-top: var(--space-l); margin-bottom: var(--space-2xs); }
   .prose :global(p + p), .prose :global(ul + p), .prose :global(p + ul) { margin-top: var(--space-s); }
   .prose :global(ul) { padding-left: 1.1em; display: grid; gap: var(--space-2xs); }
   .prose :global(strong) { font-weight: 600; }

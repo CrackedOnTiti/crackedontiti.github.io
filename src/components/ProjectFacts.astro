@@ -1,0 +1,35 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ProjectLinks from './ProjectLinks.astro';
+import { teamLabel } from '../lib/format';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+const { project } = Astro.props;
+const p = project.data;
+const writeup = p.status === 'featured' ? `/projects/${p.slug}/` : null;
+---
+<dl class="facts">
+  <dt>Role</dt><dd>{p.role}</dd>
+  {teamLabel(p.team) && p.role !== 'Solo' && <><dt>Team</dt><dd>{teamLabel(p.team)}</dd></>}
+  <dt>Stack</dt><dd>{p.stack.join(', ')}</dd>
+  <dt>Status</dt><dd>{p.state}</dd>
+</dl>
+<div class="links">
+  {writeup && <a class="writeup" href={writeup}>Read the write-up<span class="visually-hidden">: {p.title}</span><span aria-hidden="true"> →</span></a>}
+  <ProjectLinks project={project} />
+</div>
+
+<style>
+  .facts {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: var(--space-2xs) var(--space-s);
+    font-size: var(--step--1);
+  }
+  dt { color: var(--text-faint); }
+  dd { margin: 0; }
+  .links { display: grid; gap: var(--space-2xs); font-family: var(--font-mono); font-size: var(--step--1); }
+  .writeup { font-weight: 500; }
+</style>
