@@ -8,8 +8,8 @@ import Raven from './Raven.astro';
     <span class="brand-name">CRACKEDONTITI.DEV</span>
   </a>
   <ul class="ext" role="list">
-    <li><a href={site.links.linkedin} rel="me">LinkedIn<span aria-hidden="true"> ↗</span></a></li>
-    <li><a href={site.links.github} rel="me">GitHub<span aria-hidden="true"> ↗</span></a></li>
+    <li><a href={site.links.linkedin} rel="me">LinkedIn<span aria-hidden="true">↗</span></a></li>
+    <li><a href={site.links.github} rel="me">GitHub<span aria-hidden="true">↗</span></a></li>
   </ul>
 </header>
 
@@ -26,6 +26,7 @@ import Raven from './Raven.astro';
   .brand {
     display: flex;
     align-items: center;
+    min-height: 2.75rem;
     gap: var(--space-xs);
     text-decoration: none;
   }
@@ -44,7 +45,7 @@ import Raven from './Raven.astro';
     font-family: var(--font-mono);
     font-size: 0.8125rem;
   }
-  .ext a { display: inline-block; padding-block: 0.6rem; text-decoration: none; }
+  .ext a { display: inline-flex; align-items: center; gap: 0.3em; min-height: 2.75rem; text-decoration: none; }
   .ext a:hover { text-decoration: underline; }
 
   @media (min-width: 48rem) {

@@ -26,11 +26,11 @@ const total = String(projects.length).padStart(2, '0');
     </div>
   </div>
   <div class="viewport" data-carousel-viewport>
-    <ul class="track" id="more-track" role="list" data-carousel-track>
+    <div class="track" id="more-track" data-carousel-track>
       {projects.map((project, i) => {
         const p = project.data;
         return (
-          <li class="slide" role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${projects.length}: ${p.title}`} data-carousel-slide>
+          <div class="slide" role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${projects.length}: ${p.title}`} data-carousel-slide>
             <div class="s-main">
               <p class="label label--red">{[section[p.status], p.tag].join(' · ')}</p>
               <h4 class="s-title">{p.title}</h4>
@@ -45,10 +45,10 @@ const total = String(projects.length).padStart(2, '0');
               <MediaSlot project={project} />
               <ProjectFacts project={project} />
             </div>
-          </li>
+          </div>
         );
       })}
-    </ul>
+    </div>
   </div>
   <div class="picker" hidden data-carousel-picker>
     {projects.map((project, i) => (
@@ -84,7 +84,6 @@ const total = String(projects.length).padStart(2, '0');
   .nav-btn:hover { border-color: var(--text-faint); }
 
   .viewport { border: 1px solid var(--rule); background: var(--surface); }
-  .track { list-style: none; padding: 0; }
   .slide {
     display: flex;
     flex-wrap: wrap;
@@ -94,9 +93,14 @@ const total = String(projects.length).padStart(2, '0');
   .slide + .slide { border-top: 1px solid var(--rule); }
 
   /* Carousel mode, switched on by the script. --slide is set from the script (CSSOM, CSP-safe). */
-  .carousel:global(.is-live) .viewport { overflow: hidden; }
+  .carousel:global(.is-live) .viewport {
+    overflow: hidden;
+    height: var(--slide-h, auto);
+    transition: height var(--dur-slide) var(--ease);
+  }
   .carousel:global(.is-live) .track {
     display: flex;
+    align-items: flex-start;
     transform: translateX(calc(var(--slide, 0) * -100%));
     transition: transform var(--dur-slide) var(--ease);
     touch-action: pan-y;

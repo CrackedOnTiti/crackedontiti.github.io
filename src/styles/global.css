@@ -79,7 +79,6 @@ button, input, textarea { font: inherit; }
 :focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 3px;
-  border-radius: var(--radius);
 }
 
 ::selection { background: var(--red-deep); color: var(--text); }
