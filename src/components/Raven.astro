@@ -1,0 +1,29 @@
+---
+// Munnin raven. Small: decorative mark in the header. Large: the logo in the Munnin band.
+import { Picture } from 'astro:assets';
+import raven from '../assets/brand/munnin-raven.png';
+
+interface Props {
+  size: 'small' | 'large';
+}
+const { size } = Astro.props;
+const w = size === 'small' ? 48 : 200;
+---
+<Picture
+  src={raven}
+  alt={size === 'small' ? '' : 'Munnin raven logo'}
+  formats={['avif', 'webp']}
+  fallbackFormat="png"
+  width={w}
+  widths={[w, w * 2]}
+  sizes={`${w}px`}
+  loading={size === 'small' ? 'eager' : 'lazy'}
+  decoding="async"
+  class:list={['raven', `raven--${size}`]}
+/>
+
+<style>
+  .raven { display: block; height: auto; }
+  .raven--small { width: 3rem; }
+  .raven--large { width: min(12.5rem, 60vw); }
+</style>

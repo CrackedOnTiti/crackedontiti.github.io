@@ -1,0 +1,169 @@
+---
+import Panel from './Panel.astro';
+import Raven from './Raven.astro';
+import StackTile from './StackTile.astro';
+import { about, interests, munnin, stack } from '../data/profile';
+---
+<Panel id="about" heading="About" hideHeading>
+  <div class="top">
+    <div class="who">
+      <p class="label label--red">Who I am</p>
+      <p class="headline">{about.headline}</p>
+      <p class="body">{about.body}</p>
+      <div class="plans">
+        <div class="plan plan--next">
+          <h3 class="label">Next</h3>
+          <p>{about.next}</p>
+        </div>
+        <div class="plan">
+          <h3 class="label">Later</h3>
+          <p>{about.later}</p>
+        </div>
+      </div>
+    </div>
+    <div class="interests">
+      <h3 class="label label--red">Interests</h3>
+      <ol role="list">
+        {interests.map((h, i) => (
+          <li>
+            <span class="num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <p class="i-title">{h.title}</p>
+              <p class="i-body">{h.body}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+
+  <div class="munnin">
+    <Raven size="large" />
+    <div class="m-text">
+      <p class="label label--red">{munnin.kicker}</p>
+      <h3 class="m-title">{munnin.title}</h3>
+      <div class="offers">
+        {munnin.offers.map((o, i) => (
+          <div class:list={['offer', { 'offer--hot': i === 0 }]}>
+            <p class="o-title">{o.title}</p>
+            <p class="o-body">{o.body}</p>
+          </div>
+        ))}
+      </div>
+      <p class="m-site">
+        {munnin.site.live ? (
+          <a href={munnin.site.href}>{munnin.site.label}<span aria-hidden="true"> ↗</span></a>
+        ) : (
+          <>{munnin.site.label} <span class="soon">(coming soon)</span></>
+        )}
+      </p>
+    </div>
+  </div>
+
+  <div class="stack">
+    <div class="stack-head">
+      <h3 class="stack-title">Stack</h3>
+      <p class="label">What I've shipped with</p>
+    </div>
+    <div class="groups">
+      {stack.map((g) => (
+        <div>
+          <h4 class="label g-label">{g.group}</h4>
+          <ul class="tiles" role="list">
+            {g.items.map((item) => <StackTile item={item} />)}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</Panel>
+
+<style>
+  .top { display: flex; flex-wrap: wrap; gap: var(--space-xl); }
+  .who { flex: 999 1 32.5rem; min-width: 0; }
+  .headline {
+    margin-top: var(--space-xs);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--step-3);
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+  .body { margin-top: var(--space-m); max-width: 40rem; color: var(--text-muted); }
+  .plans {
+    margin-top: var(--space-l);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+    gap: var(--space-m);
+  }
+  .plan { border-left: 2px solid var(--rule-strong); padding-left: 1.25rem; }
+  .plan--next { border-left-color: var(--red); }
+  .plan p { margin-top: 0.375rem; }
+
+  .interests { flex: 1 1 20rem; display: flex; flex-direction: column; gap: var(--space-xs); }
+  .interests ol { list-style: none; padding: 0; }
+  .interests li {
+    display: flex;
+    gap: var(--space-s);
+    align-items: baseline;
+    padding-block: 0.875rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .num {
+    min-width: 2rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.375rem;
+    color: var(--rule-strong);
+  }
+  .i-title { font-weight: 500; }
+  .i-body { font-size: var(--step--1); color: var(--text-faint); }
+
+  .munnin {
+    margin-top: 5rem;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-l);
+    padding: var(--space-m);
+  }
+  .m-text { flex: 999 1 25rem; min-width: 0; }
+  .m-title { margin-top: var(--space-2xs); font-size: var(--step-3); line-height: 1.15; }
+  .offers {
+    margin-top: var(--space-s);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(13.75rem, 100%), 1fr));
+    gap: 1.25rem;
+  }
+  .offer { border-left: 2px solid var(--rule-strong); padding-left: var(--space-s); }
+  .offer--hot { border-left-color: var(--red); }
+  .o-title { font-weight: 500; }
+  .o-body { font-size: 0.9375rem; color: var(--text-muted); }
+  .m-site { margin-top: 1.25rem; font-family: var(--font-mono); font-size: var(--step--1); }
+  .soon { color: var(--text-faint); }
+
+  .stack { margin-top: 5rem; }
+  .stack-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-xs);
+  }
+  .stack-title { font-size: var(--step-2); }
+  .stack-head .label { text-transform: none; letter-spacing: 0.02em; }
+  .groups {
+    margin-top: var(--space-m);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(16.25rem, 100%), 1fr));
+    gap: 2rem;
+  }
+  .g-label { margin-bottom: var(--space-xs); }
+  .tiles { display: flex; flex-wrap: wrap; gap: 0.625rem; list-style: none; padding: 0; }
+
+  @media (min-width: 48rem) {
+    .munnin { padding: var(--space-l); }
+  }
+</style>

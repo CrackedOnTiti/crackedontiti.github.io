@@ -5,7 +5,10 @@
 // is ~0.82px on a 360px phone (328px column) and ~1.04px on desktop (416px). With the sizes below,
 // the smallest text (edge labels) renders at ~13px on mobile and ~16.6px on desktop.
 //
-// Spec:  { id, title, desc, caption?, steps: Step[] }
+// Spec:  { id, title, desc, caption?, steps: Step[], loop? }
+// loop:  { from, to, label }           feedback arrow up the right-hand side, from the box of step
+//                                      `from` back into the box of step `to` (single-box steps,
+//                                      indexes into steps). Boxes narrow to leave room for the lane.
 // Step:  { box, edge? }                one box, arrow from the previous step (label = edge)
 //      | { row: Box[], edge? }         boxes side by side (fan-out / fan-in arrows)
 //      | { box, detached: true }       a box with no arrow into it (e.g. a background job)
@@ -33,6 +36,9 @@ const EDGE_RATIO = 0.61;
 const LEFT_X = 40;            // x of the straight-through arrow
 const RIGHT_X = 128;          // left edge of the right lane's boxes
 const RIGHT_W = W - PAD - RIGHT_X;
+
+// Feedback loop lane on the right
+const LOOP_W = 40;
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -97,12 +103,16 @@ function edgeLabel(x, y, label, minX = PAD, maxX = W - PAD) {
   return textBlock(wrap(label, leftRoom, EDGE, EDGE_RATIO), x - 12, y, 'end');
 }
 
+// Per-diagram marker id, so several diagrams on one page never share an id.
+let markerId = 'd-arrow';
 const line = (x1, y1, x2, y2) => `<line class="d-edge" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`;
 const arrow = (x, y1, y2) =>
-  `<line class="d-edge" x1="${x}" y1="${y1}" x2="${x}" y2="${y2 - 2}" marker-end="url(#d-arrow)"/>`;
+  `<line class="d-edge" x1="${x}" y1="${y1}" x2="${x}" y2="${y2 - 2}" marker-end="url(#${markerId})"/>`;
 
 export function renderDiagram(spec) {
-  const usable = W - PAD * 2;
+  markerId = `${spec.id}-arrow`;
+  const usable = W - PAD * 2 - (spec.loop ? LOOP_W : 0);
+  const spans = []; // per step: { top, bottom, single } of its boxes
   let body = '';
   let bottom = null;     // y where the previous step ends
   let centers = [];      // x centres of the previous step's boxes
@@ -172,8 +182,26 @@ export function renderDiagram(spec) {
     }
 
     laid.forEach((b, i) => (body += drawBox(b, PAD + i * (bw + GAP_X), top, h)));
+    spans[spec.steps.indexOf(step)] = { top, bottom: top + h, single: boxes.length === 1 };
     bottom = top + h;
     centers = next;
+  }
+
+  if (spec.loop) {
+    const { from, to, label } = spec.loop;
+    const a = spans[from];
+    const b = spans[to];
+    if (!a?.single || !b?.single || to >= from) throw new Error(`${spec.id}: loop needs single-box steps, to < from`);
+    const x0 = PAD + usable;          // right edge of the boxes
+    const lane = x0 + 16;
+    const y1 = (a.top + a.bottom) / 2;
+    const y2 = (b.top + b.bottom) / 2;
+    body += `<path class="d-edge" d="M${x0} ${y1} H${lane} V${y2} H${x0 + 2}" marker-end="url(#${markerId})"/>`;
+    if (label) {
+      const lx = W - PAD - 4;
+      const ly = (y1 + y2) / 2;
+      body += `<text class="d-edge-label" x="${lx}" y="${ly}" text-anchor="middle" transform="rotate(-90 ${lx} ${ly})">${esc(label)}</text>`;
+    }
   }
 
   const H = Math.ceil(bottom + PAD);
@@ -183,7 +211,7 @@ export function renderDiagram(spec) {
     `<figure class="diagram">` +
     `<svg viewBox="0 0 ${W} ${H}" role="img" aria-labelledby="${tid} ${did}" xmlns="http://www.w3.org/2000/svg">` +
     `<title id="${tid}">${esc(spec.title)}</title><desc id="${did}">${esc(spec.desc)}</desc>` +
-    `<defs><marker id="d-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="d-arrowhead" d="M0 0 L10 5 L0 10 z"/></marker></defs>` +
+    `<defs><marker id="${markerId}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="d-arrowhead" d="M0 0 L10 5 L0 10 z"/></marker></defs>` +
     body +
     `</svg>` +
     (spec.caption ? `<figcaption>${esc(spec.caption)}</figcaption>` : '') +

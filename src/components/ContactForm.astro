@@ -31,9 +31,8 @@ import { contactEndpoint, turnstileSiteKey, limits, isPreview } from '../lib/con
       minlength="3"
       maxlength={limits.contact}
       autocomplete="email"
-      aria-describedby="c-contact-hint"
+      placeholder="Email, LinkedIn or phone"
     />
-    <p id="c-contact-hint" class="hint mono">Email address, LinkedIn profile or phone number</p>
   </div>
   <div class="field">
     <label for="c-message">Message</label>
@@ -43,7 +42,7 @@ import { contactEndpoint, turnstileSiteKey, limits, isPreview } from '../lib/con
       required
       minlength={limits.messageMin}
       maxlength={limits.message}
-      rows="6"
+      rows="5"
     ></textarea>
   </div>
   <div class="trap" aria-hidden="true">
@@ -61,43 +60,42 @@ import { contactEndpoint, turnstileSiteKey, limits, isPreview } from '../lib/con
   </noscript>
 </form>
 
-<script src="../scripts/contact.ts"></script>
 </>
 )}
 
 <style>
-  .contact { display: grid; gap: var(--space-m); max-width: 36rem; }
-  .field { display: grid; gap: var(--space-3xs); }
-  label { font-weight: 500; }
+  .contact { display: flex; flex-direction: column; gap: 1.25rem; }
+  .field { display: flex; flex-direction: column; gap: var(--space-2xs); }
+  label { font-size: var(--step--1); }
   input, textarea {
     font: inherit;
+    font-size: 1rem;
     color: var(--text);
     background: var(--surface);
     border: 1px solid var(--rule-strong);
-    border-radius: var(--radius);
-    padding: 0.65rem 0.75rem;
+    border-radius: 0;
+    padding: 0.875rem;
     width: 100%;
   }
-  textarea { resize: vertical; min-height: 9rem; }
-  input:focus-visible, textarea:focus-visible { outline-offset: 0; border-color: var(--text-muted); }
+  input::placeholder { color: var(--text-faint); opacity: 1; }
+  textarea { resize: vertical; min-height: 8rem; }
+  input:focus-visible, textarea:focus-visible { outline-offset: 0; border-color: var(--text-faint); }
   input[aria-invalid='true'], textarea[aria-invalid='true'] { border-color: var(--red-text); }
-  .hint { color: var(--text-faint); }
+  .hint { color: var(--text-faint); font-size: var(--step--2); }
   .trap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
   .actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-s) var(--space-m); }
   button {
-    font: inherit;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--bg);
     background: var(--text);
     border: 0;
-    border-radius: var(--radius);
-    padding: 0.7rem 1.6rem;
+    padding: 0.875rem 2rem;
     cursor: pointer;
   }
   button:hover:not(:disabled) { background: #ffffff; }
   button:disabled { opacity: 0.55; cursor: default; }
   .status:empty { display: none; }
-  .preview-note { max-width: 36rem; padding: var(--space-m); border: 1px dashed var(--rule-strong); color: var(--text-muted); }
   .status[data-state='ok'] { color: var(--text); }
   .status[data-state='error'] { color: var(--red-text); }
+  .preview-note { padding: var(--space-m); border: 1px dashed var(--rule-strong); color: var(--text-muted); }
 </style>

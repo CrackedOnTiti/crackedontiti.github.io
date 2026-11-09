@@ -1,0 +1,65 @@
+---
+// Without JavaScript: in-page links to the stacked sections.
+// With JavaScript (src/scripts/site.ts): rebuilt as an ARIA tablist of real <button>s, one panel at a time,
+// the active tab mirrored in the URL hash.
+export interface Tab { id: string; label: string }
+interface Props {
+  tabs: Tab[];
+}
+const { tabs } = Astro.props;
+---
+<nav class="tabbar" aria-label="Sections" data-tabbar>
+  <div class="wrap inner" data-tabbar-inner>
+    {tabs.map((t, i) => (
+      <a class="tab" href={`#${t.id}`} data-tab={t.id}>
+        <span class="tab-num">{String(i + 1).padStart(2, '0')}</span> {t.label}
+      </a>
+    ))}
+  </div>
+</nav>
+
+<style>
+  .tabbar {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--bg);
+    border-block: 1px solid var(--rule);
+  }
+  .inner {
+    display: flex;
+    gap: var(--space-2xs);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .inner::-webkit-scrollbar { display: none; }
+  .inner :global(.tablist) { display: flex; flex-wrap: nowrap; gap: var(--space-2xs); }
+  /* :global so the buttons the script creates get the same look. */
+  .inner :global(.tab) {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    min-height: 2.75rem;
+    padding: 1rem 0.75rem;
+    background: none;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    color: var(--text-faint);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.9375rem;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  .inner :global(.tab:hover) { color: var(--text); }
+  .inner :global(.tab[aria-selected='true']) { color: var(--text); border-bottom-color: var(--red); }
+  .inner :global(.tab:focus-visible) { outline-offset: -4px; }
+
+  @media (min-width: 48rem) {
+    .inner :global(.tab) { padding: 1.25rem 1rem; }
+  }
+</style>

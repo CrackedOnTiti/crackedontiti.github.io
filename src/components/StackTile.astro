@@ -1,0 +1,40 @@
+---
+// Stack badge: the simple-icons glyph (CC0, inlined at build time, no CDN) on a coloured tile.
+// Tools without a simple-icons entry get a monogram, as in the design.
+import * as icons from 'simple-icons';
+import type { StackItem } from '../data/profile';
+
+interface Props {
+  item: StackItem;
+}
+const { item } = Astro.props;
+const fg = item.fg ?? '#111110';
+const icon = item.icon ? (icons as unknown as Record<string, { path: string } | undefined>)[item.icon] : undefined;
+if (item.icon && !icon) throw new Error(`simple-icons has no export "${item.icon}"`);
+const mono = item.mono ?? item.name.slice(0, 2);
+---
+<li class="tile">
+  <svg class="badge" viewBox="0 0 28 28" width="28" height="28" aria-hidden="true" focusable="false">
+    <rect width="28" height="28" fill={item.bg} />
+    {icon ? (
+      <svg x="6" y="6" width="16" height="16" viewBox="0 0 24 24"><path d={icon.path} fill={fg} /></svg>
+    ) : (
+      <text x="14" y="18" text-anchor="middle" fill={fg} class="mono-glyph">{mono}</text>
+    )}
+  </svg>
+  <span>{item.name}</span>
+</li>
+
+<style>
+  .tile {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    padding: 0.375rem 0.75rem 0.375rem 0.375rem;
+    font-size: var(--step--1);
+  }
+  .badge { flex: 0 0 auto; }
+  .mono-glyph { font-family: var(--font-mono); font-weight: 700; font-size: 11px; }
+</style>

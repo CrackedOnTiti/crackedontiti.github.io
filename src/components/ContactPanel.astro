@@ -1,0 +1,30 @@
+---
+import Panel from './Panel.astro';
+import ContactForm from './ContactForm.astro';
+import { contact } from '../data/profile';
+---
+<Panel id="contact" ownHeading>
+  <div class="layout">
+    <div class="intro">
+      <h2 id="contact-heading" class="title">{contact.title}</h2>
+      <p class="body">{contact.body}</p>
+    </div>
+    <div class="form">
+      <ContactForm />
+    </div>
+  </div>
+</Panel>
+
+<style>
+  .layout { display: flex; flex-wrap: wrap; gap: var(--space-l) var(--space-xl); }
+  .intro { flex: 1 1 20rem; }
+  .title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2.5rem, 1.8rem + 3vw, 3.5rem);
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .body { margin-top: 1.25rem; color: var(--text-muted); max-width: 30rem; }
+  .form { flex: 2 1 30rem; min-width: 0; }
+</style>

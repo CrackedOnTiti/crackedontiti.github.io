@@ -1,0 +1,100 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import Panel from './Panel.astro';
+import { byOrder } from '../lib/format';
+import { education } from '../data/profile';
+
+const [lead, ...others] = (await getCollection('experience')).sort(byOrder);
+const leadProject = lead?.data.project ? await getEntry(lead.data.project) : undefined;
+const when = (r: { data: { period: string; location?: string } }) =>
+  [r.data.period, r.data.location].filter(Boolean).join(' · ');
+---
+<Panel id="experience" heading="Experience" hideHeading>
+  <div class="layout">
+    {lead && (
+      <article class="lead" aria-labelledby="role-lead">
+        <p class="label">{when(lead)}</p>
+        <h3 id="role-lead" class="lead-title">{lead.data.role}</h3>
+        <p class="org">{lead.data.org}</p>
+        <p class="lead-summary">{lead.data.summary}</p>
+        {lead.data.highlights.length > 0 && (
+          <ul class="points" role="list">
+            {lead.data.highlights.map((h) => <li>{h}</li>)}
+          </ul>
+        )}
+        {leadProject && (
+          <p class="more"><a href={`/projects/${leadProject.data.slug}/`}>Read the {leadProject.data.title} write-up<span aria-hidden="true"> →</span></a></p>
+        )}
+      </article>
+    )}
+    <ol class="roles" role="list">
+      {others.map((r) => (
+        <li>
+          <p class="label">{when(r)}</p>
+          <h3 class="role-title">{r.data.role}</h3>
+          <p class="org org--small">{r.data.org}</p>
+          <p class="role-summary">{r.data.summary}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+
+  <h3 class="edu-heading">Education</h3>
+  <ul class="edu" role="list">
+    {education.map((e) => (
+      <li>
+        <p class="label">{e.when}</p>
+        <p class="edu-what">{e.what}</p>
+        <p class="edu-detail">{e.detail}</p>
+      </li>
+    ))}
+  </ul>
+</Panel>
+
+<style>
+  .layout { display: flex; flex-wrap: wrap; gap: 2rem; }
+  .lead {
+    flex: 999 1 35rem;
+    min-width: 0;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--red);
+    padding: var(--space-m);
+  }
+  .lead-title { margin-top: var(--space-2xs); font-size: clamp(1.625rem, 1.3rem + 1.4vw, 2rem); line-height: 1.1; }
+  .org { color: var(--red-text); }
+  .org--small { font-size: var(--step--1); }
+  .lead-summary { margin-top: var(--space-s); color: var(--text-muted); }
+  .points {
+    margin-top: var(--space-m);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(12.5rem, 100%), 1fr));
+    gap: var(--space-s);
+    list-style: none;
+    padding: 0;
+  }
+  .points li { border-left: 2px solid var(--rule-strong); padding-left: 0.875rem; font-size: 0.9375rem; }
+  .more { margin-top: var(--space-m); font-family: var(--font-mono); font-size: var(--step--1); }
+
+  .roles { flex: 1 1 20rem; list-style: none; padding: 0; }
+  .roles li { padding-block: var(--space-m); border-bottom: 1px solid var(--rule); }
+  .roles li:first-child { padding-top: 0; }
+  .role-title { margin-top: var(--space-3xs); font-size: 1.25rem; }
+  .role-summary { margin-top: var(--space-2xs); font-size: 0.9375rem; color: var(--text-muted); }
+
+  .edu-heading { margin: var(--space-xl) 0 1.25rem; font-size: 1.375rem; }
+  .edu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(16.25rem, 100%), 1fr));
+    gap: var(--space-s);
+    list-style: none;
+    padding: 0;
+  }
+  .edu li { background: var(--surface); border: 1px solid var(--rule); padding: var(--space-m); }
+  .edu-what { margin-top: 0.375rem; font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; line-height: 1.25; }
+  .edu-detail { font-size: var(--step--1); color: var(--text-muted); }
+
+  @media (min-width: 48rem) {
+    .lead { padding: var(--space-l); }
+  }
+</style>

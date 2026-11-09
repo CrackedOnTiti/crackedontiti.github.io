@@ -56,24 +56,42 @@ export const specs = {
 
   vigilansee: {
     id: 'vigilansee-diagram',
-    title: 'VigilanSee concept',
+    title: 'VigilanSee analysis pipeline',
     desc:
-      'Everything runs on the server side; nothing is installed on the player’s machine. Player behaviour on the ' +
-      'game server builds a behavioural fingerprint per player that survives team changes. The same signals flag ' +
-      'cheating, griefing and coordinated trolling, which feed community moderation.',
-    caption: 'Concept view of a project in progress. Stack: Rust, PostgreSQL, Docker, REST API.',
+      'Raw replay data (CS2 .dem files and match records) goes to a high-frequency parser that reads 128 ticks per ' +
+      'second. A neural and algorithmic audit then runs biometric vector analysis of aim and movement, plus ' +
+      'physics-based sabotage detection. The output is a forensic verdict: a risk score from 0 to 100 and an ' +
+      'evidence-ready report.',
+    caption: 'Everything runs on the server side; nothing is installed on the player\u2019s machine.',
     steps: [
-      { box: { title: 'Game server (CS2 first)', sub: 'nothing installed on the player’s machine' } },
-      { edge: 'player behaviour', box: { title: 'Behavioural fingerprint per player', sub: 'survives team changes', kind: 'hot' } },
+      { box: { title: 'Raw replay data', sub: 'CS2 .dem files + match records' } },
+      { box: { title: 'High-frequency parser', sub: '128 ticks per second' } },
       {
-        row: [
-          { title: 'Cheating', sub: 'aim-lock, pre-aiming through walls' },
-          { title: 'Griefing', sub: 'team flashes, molotovs' },
-          { title: 'Trolling', sub: 'coordinated' },
-        ],
+        box: {
+          title: 'Neural and algorithmic audit',
+          sub: 'biometric vector analysis of aim and movement + physics-based sabotage detection',
+          kind: 'hot',
+        },
       },
-      { box: { title: 'Community moderation' } },
+      { box: { title: 'Forensic verdict', sub: 'risk score 0\u2013100 + evidence-ready report' } },
     ],
+  },
+
+  'vigilansee-risk': {
+    id: 'vigilansee-risk-diagram',
+    title: 'Dynamic risk-factor attribution',
+    desc:
+      'A suspicion, from player reports or automatic detection, goes to the AI. The AI picks its tools through a ' +
+      'light overview analysis, then assigns a risk factor that sets the analysis intensity: nothing, light, medium ' +
+      'or heavy. The results feed back to the AI so it improves its choices.',
+    caption: 'Heavy analysis only for players who warrant it.',
+    steps: [
+      { box: { title: 'Suspicion', sub: 'player reports or automatic detection' } },
+      { box: { title: 'AI', sub: 'picks tools via a light overview analysis', kind: 'hot' } },
+      { edge: 'risk factor', box: { title: 'Analysis intensity', sub: 'nothing \u00b7 light \u00b7 medium \u00b7 heavy' } },
+      { box: { title: 'Results' } },
+    ],
+    loop: { from: 3, to: 1, label: 'improves its choices' },
   },
 
   'rift-rewind': {

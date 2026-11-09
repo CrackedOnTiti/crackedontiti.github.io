@@ -10,6 +10,27 @@ stack: [Rust, PostgreSQL, Docker, REST API]
 links:
   devlogs: https://github.com/CrackedOnTiti/VigilanSee/discussions
 hideRepoUntil: README rewrite at the next merge (then add links.repo https://github.com/CrackedOnTiti/VigilanSee)
+tag: "End-of-studies · in progress"
+monogram: "VS"
+tagline: "Anti-cheat that reads behaviour, not your hard drive."
+intro: "No kernel driver, nothing installed on the player's machine. Each player gets a behavioural fingerprint that survives team changes, so aim-locking, pre-aiming through walls and deliberate team-griefing all stand out."
+flow:
+  - title: "Raw replay data"
+    detail: "CS2 .dem files + match records"
+  - title: "High-frequency parser"
+    detail: "128 ticks per second"
+  - title: "Neural and algorithmic audit"
+    detail: "biometric vector analysis of aim and movement + physics-based sabotage detection"
+  - title: "Forensic verdict"
+    detail: "risk score 0–100 + evidence-ready report"
+flowNote: "A developer API for sending match data directly is planned."
+panelDiagram: "vigilansee-risk"
+highlights:
+  - "Modelling maths (shrinkage-based optimisation)"
+  - "CI, Docker build checks and Dependabot"
+  - "Architecture decision records and weekly devlogs"
+state: "In development · CS2 first"
+mediaPlaceholder: "VigilanSee logo and dashboard screenshot"
 summary: Server-side behavioural anti-cheat and community moderation, CS2 first, designed to be game-agnostic. Nothing is installed on the player's machine.
 ---
 
@@ -38,6 +59,15 @@ skips the corner checks everyone else makes.
 
 The same signals catch griefing, such as deliberately flashing or molotoving teammates, and
 coordinated trolling.
+
+### Dynamic risk-factor attribution
+
+<div data-diagram="vigilansee-risk"></div>
+
+Not every player gets the same scrutiny. A suspicion, from player reports or automatic detection,
+goes to the AI, which picks its tools through a light overview analysis and assigns a risk factor.
+That factor sets how hard the analysis looks: nothing, light, medium or heavy. The results feed
+back to the AI so its choices improve over time.
 
 ## Results
 

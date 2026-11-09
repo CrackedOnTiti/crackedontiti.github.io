@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import Panel from './Panel.astro';
+import FeaturedRow from './FeaturedRow.astro';
+import Carousel from './Carousel.astro';
+import { byOrder } from '../lib/format';
+
+const all = await getCollection('projects');
+const by = (status: string) => all.filter((p) => p.data.status === status).sort(byOrder);
+const featured = by('featured');
+// Carousel order: also built, then building now, then where I started.
+const more = [...by('built'), ...by('building'), ...by('origins')];
+---
+<Panel id="work" heading="Selected work">
+  <div class="rows">
+    {featured.map((project, i) => <FeaturedRow project={project} open={i === 0} />)}
+  </div>
+  <Carousel projects={more} />
+</Panel>
+
+<style>
+  .rows { border-bottom: 1px solid var(--rule); }
+</style>

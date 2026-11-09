@@ -8,6 +8,28 @@ team: 2
 period: Mar – Jul 2026
 stack: [Python, Redis, PostgreSQL, scikit-learn, XGBoost, TensorFlow/Keras, Zeek, Filebeat, FastAPI, Docker, WireGuard, Raspberry Pi, Ollama]
 closedSource: proprietary
+tag: "Internship · 2026"
+monogram: "SN"
+tagline: "ML network threat detection for small businesses."
+intro: "Commercial detection tools cost six figures a year or ship your traffic abroad. Sentinel watches client networks from a small on-site tap and only spends heavy compute on what actually looks wrong."
+flow:
+  - "Pi tap · WireGuard"
+  - "Zeek + syslog"
+  - "Redis"
+  - "Isolation Forest"
+  - "XGBoost"
+  - "Autoencoder"
+  - "PostgreSQL"
+  - "Dashboard + local analyst"
+flowNote: "Only events the Isolation Forest flags go on to XGBoost and the autoencoder. Normal events go straight to PostgreSQL."
+highlights:
+  - "Chose the stack and drove the technical decisions"
+  - "Built the cascade and per-client workers on Redis"
+  - "Set up biweekly retraining with live model hot-swap"
+  - "Designed the database: one PostgreSQL schema per client"
+  - "Built the client dashboard"
+state: "In use at Interface Numérique"
+mediaPlaceholder: "Architecture write-up only, no client data"
 summary: ML network threat detection for SMEs, built during my internship at Interface Numérique. Raspberry Pi sensors, a three-model detection cascade, and plain-language reports from a local model.
 ---
 

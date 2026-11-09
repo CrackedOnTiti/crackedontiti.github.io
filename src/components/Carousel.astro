@@ -1,0 +1,143 @@
+---
+// "Also built · building now". Without JavaScript: the slides stack, controls stay hidden.
+// With it (src/scripts/site.ts): one slide at a time, prev/next, counter, name buttons, swipe.
+import type { CollectionEntry } from 'astro:content';
+import MediaSlot from './MediaSlot.astro';
+import ProjectFacts from './ProjectFacts.astro';
+
+interface Props {
+  projects: CollectionEntry<'projects'>[];
+}
+const { projects } = Astro.props;
+const section: Record<string, string> = {
+  built: 'Also built',
+  building: 'Building now',
+  origins: 'Where I started',
+};
+const total = String(projects.length).padStart(2, '0');
+---
+<section class="carousel" aria-roledescription="carousel" aria-labelledby="more-heading" data-carousel>
+  <div class="head">
+    <h3 id="more-heading" class="head-title">Also built · building now</h3>
+    <div class="controls" hidden data-carousel-controls>
+      <span class="counter" aria-live="polite"><span data-carousel-counter>01 / {total}</span><span class="visually-hidden" data-carousel-current>, {projects[0]?.data.title}</span></span>
+      <button type="button" class="nav-btn" aria-label="Previous project" aria-controls="more-track" data-carousel-prev>‹</button>
+      <button type="button" class="nav-btn" aria-label="Next project" aria-controls="more-track" data-carousel-next>›</button>
+    </div>
+  </div>
+  <div class="viewport" data-carousel-viewport>
+    <ul class="track" id="more-track" role="list" data-carousel-track>
+      {projects.map((project, i) => {
+        const p = project.data;
+        return (
+          <li class="slide" role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${projects.length}: ${p.title}`} data-carousel-slide>
+            <div class="s-main">
+              <p class="label label--red">{[section[p.status], p.tag].join(' · ')}</p>
+              <h4 class="s-title">{p.title}</h4>
+              <p class="s-tagline">{p.tagline}</p>
+              <p class="s-intro">{p.intro}</p>
+              <ul class="s-points">
+                {p.highlights.map((pt) => <li>{pt}</li>)}
+              </ul>
+              {p.note && <p class="s-note">{p.note}</p>}
+            </div>
+            <div class="s-side">
+              <MediaSlot project={project} />
+              <ProjectFacts project={project} />
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+  <div class="picker" hidden data-carousel-picker>
+    {projects.map((project, i) => (
+      <button type="button" class="pick" aria-controls="more-track" data-carousel-go={i}>{project.data.title}</button>
+    ))}
+  </div>
+</section>
+
+<style>
+  .carousel { margin-top: 4.5rem; }
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-s);
+    margin-bottom: 1.25rem;
+  }
+  .head-title { font-size: var(--step-2); }
+  .controls { display: flex; align-items: center; gap: var(--space-xs); }
+  .controls[hidden], .picker[hidden] { display: none; }
+  .counter { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--text-faint); font-variant-numeric: tabular-nums; }
+  .nav-btn {
+    width: 3rem;
+    height: 3rem;
+    background: var(--surface);
+    border: 1px solid var(--rule-strong);
+    color: var(--text);
+    font-size: 1.375rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .nav-btn:hover { border-color: var(--text-faint); }
+
+  .viewport { border: 1px solid var(--rule); background: var(--surface); }
+  .track { list-style: none; padding: 0; }
+  .slide {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-l);
+    padding: var(--space-m);
+  }
+  .slide + .slide { border-top: 1px solid var(--rule); }
+
+  /* Carousel mode, switched on by the script. --slide is set from the script (CSSOM, CSP-safe). */
+  .carousel:global(.is-live) .viewport { overflow: hidden; }
+  .carousel:global(.is-live) .track {
+    display: flex;
+    transform: translateX(calc(var(--slide, 0) * -100%));
+    transition: transform var(--dur-slide) var(--ease);
+    touch-action: pan-y;
+  }
+  .carousel:global(.is-live) .slide { flex: 0 0 100%; min-width: 0; border-top: 0; }
+
+  .s-main { flex: 999 1 32.5rem; min-width: 0; }
+  .s-side { flex: 1 1 18.75rem; display: flex; flex-direction: column; gap: var(--space-s); }
+  .s-title {
+    margin-top: var(--space-2xs);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2rem, 1.3rem + 2.6vw, 3.25rem);
+    line-height: 1;
+  }
+  .s-tagline { margin-top: var(--space-s); font-size: 1.125rem; }
+  .s-intro { margin-top: var(--space-s); color: var(--text-muted); }
+  .s-points { margin-top: 1.25rem; padding-left: 1.25rem; color: var(--text-muted); }
+  .s-points li + li { margin-top: 0.375rem; }
+  .s-note {
+    margin-top: var(--space-s);
+    font-size: var(--step--1);
+    color: var(--text-faint);
+    border-left: 2px solid var(--rule-strong);
+    padding-left: var(--space-xs);
+  }
+
+  .picker { margin-top: var(--space-s); display: flex; flex-wrap: wrap; gap: var(--space-2xs); }
+  .pick {
+    min-height: 2.75rem;
+    padding: 0.5rem 0.875rem;
+    background: var(--surface);
+    color: var(--text-faint);
+    border: 1px solid var(--rule);
+    font-size: 0.8125rem;
+    cursor: pointer;
+  }
+  .pick:hover { color: var(--text); }
+  .pick[aria-current='true'] { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+  @media (min-width: 48rem) {
+    .slide { padding: 3rem; gap: 3rem; }
+  }
+</style>
