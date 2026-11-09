@@ -1,7 +1,11 @@
 name: Build and deploy
 
-# main            -> Cloudflare Pages production (crackedontiti.dev), then the github.io redirect.
-# any other branch -> Cloudflare Pages preview only (<branch>.<project>.pages.dev, noindex).
+# main             -> Cloudflare Pages production (crackedontiti.dev)
+#                  -> smoke test: crackedontiti.dev must serve THIS build
+#                  -> only then: github.io becomes a redirect to it
+# any other branch -> Cloudflare Pages preview only (<branch>.<project>.pages.dev, noindex)
+#
+# Actions are pinned to commit SHAs (all Node 24). To update: bump the SHA and the comment together.
 on:
   push:
     branches: ['**']
@@ -20,20 +24,24 @@ concurrency:
 
 env:
   CF_PAGES_PROJECT: crackedontiti
+  SITE_URL: ${{ vars.SITE_URL || 'https://crackedontiti.dev' }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
       # Repository variables (Settings → Secrets and variables → Actions → Variables). Not secrets.
-      SITE_URL: ${{ vars.SITE_URL || 'https://crackedontiti.dev' }}
       PUBLIC_CONTACT_ENDPOINT: ${{ vars.CONTACT_ENDPOINT }}
       PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
+      # Stamped into every page as <meta name="build">; the smoke test looks for it.
+      PUBLIC_BUILD_ID: ${{ github.sha }}
+      # Previews show a note instead of the contact form (the Worker only accepts production).
+      PUBLIC_DEPLOY_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -48,12 +56,12 @@ jobs:
       - run: npm run build
       - name: Build github.io redirect
         run: npm run build:redirect
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: site
           path: dist
           retention-days: 7
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: redirect
 
@@ -64,15 +72,15 @@ jobs:
       name: ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}
       url: ${{ steps.deploy.outputs.url }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: site
           path: dist
@@ -90,9 +98,32 @@ jobs:
             --commit-dirty=true | tee deploy.log
           echo "url=$(grep -oE 'https://[a-z0-9.-]+\.pages\.dev' deploy.log | tail -1)" >> "$GITHUB_OUTPUT"
 
-  # Only after production is live on Cloudflare: github.io becomes a redirect to it.
-  redirect:
+  # Production must answer 200 on the custom domain with this exact build before github.io
+  # (the URL recruiters already have) is pointed at it. If it fails, the redirect job is skipped
+  # and the run is marked failed.
+  smoke:
     needs: cloudflare
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check that the custom domain serves this build
+        run: |
+          for i in $(seq 1 10); do
+            code=$(curl -s -o page.html -w '%{http_code}' --max-time 20 "$SITE_URL/") || true  # 000 = unreachable
+            if [ "$code" = 200 ] \
+              && grep -q "<meta name=\"build\" content=\"$GITHUB_SHA\"" page.html \
+              && grep -q '<title>Thierry Bungaroo' page.html; then
+              echo "OK: $SITE_URL serves build $GITHUB_SHA"
+              exit 0
+            fi
+            echo "Attempt $i/10: HTTP $code, build marker not found yet; retrying in 30s"
+            sleep 30
+          done
+          echo "::error title=Smoke test failed::$SITE_URL is not serving build $GITHUB_SHA (last HTTP $code). The github.io redirect was NOT deployed; github.io still serves its previous version."
+          exit 1
+
+  redirect:
+    needs: smoke
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
@@ -103,4 +134,4 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

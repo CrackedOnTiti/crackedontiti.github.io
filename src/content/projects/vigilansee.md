@@ -15,8 +15,8 @@ summary: Server-side behavioural anti-cheat and community moderation, CS2 first,
 
 ## Problem
 
-No kernel-level, client-side anti-cheat. Everything runs on the server side, and nothing is
-installed on the player's machine.
+Detect cheating without a kernel-level, client-side anti-cheat. Everything runs on the server side,
+and nothing is installed on the player's machine.
 
 ## What I built
 

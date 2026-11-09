@@ -125,14 +125,15 @@ a:focus-visible { color: var(--text); text-decoration-color: var(--red); text-de
 }
 
 /* Inline SVG diagrams (src/diagrams). Classes only: the CSP forbids inline styles. */
-.diagram { margin-block: var(--space-l); max-width: 40rem; }
-.diagram svg { width: 100%; height: auto; overflow: visible; }
+/* Capped so 1 viewBox unit ≈ 1px on desktop; text stays ≥ 13px at 360px (see render.mjs). */
+.diagram { margin-block: var(--space-l); max-width: 26rem; }
+.diagram svg { width: 100%; height: auto; }
 .diagram figcaption { margin-top: var(--space-s); color: var(--text-muted); font-size: var(--step--1); }
 .d-box { fill: var(--surface); stroke: var(--rule-strong); stroke-width: 1.5; }
 .d-hot { stroke: var(--red); stroke-width: 2; }
 .d-note { fill: none; stroke-dasharray: 6 5; }
-.d-title { fill: var(--text); font-family: var(--font-display); font-weight: 600; font-size: 24px; }
-.d-sub { fill: var(--text-muted); font-family: var(--font-mono); font-size: 21px; }
+.d-title { fill: var(--text); font-family: var(--font-display); font-weight: 600; font-size: 20px; }
+.d-sub { fill: var(--text-muted); font-family: var(--font-mono); font-size: 17px; }
 .d-edge { stroke: var(--text-faint); stroke-width: 1.5; fill: none; }
 .d-arrowhead { fill: var(--text-faint); }
-.d-edge-label { fill: var(--text-muted); font-family: var(--font-mono); font-size: 20px; }
+.d-edge-label { fill: var(--text-muted); font-family: var(--font-mono); font-size: 16px; }

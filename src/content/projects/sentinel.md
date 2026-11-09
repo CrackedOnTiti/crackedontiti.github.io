@@ -38,8 +38,13 @@ tunnel. Zeek and Filebeat produce the network logs; syslog covers host monitorin
 **Detection cascade.** Events arrive in Redis. A core process parses and routes Zeek and syslog
 events, and an Isolation Forest sweeps all of them. Only flagged events go on to a per-client Redis
 queue, where worker processes run XGBoost (multiclass, pre-trained on UNSW-NB15) and then an
-autoencoder (7→16→8→4→8→16→7, flagging reconstruction error above mean + 2σ). The cheap model sees
-everything; the expensive models only see what looks suspicious, which means fewer false positives.
+autoencoder (7→16→8→4→8→16→7, flagging reconstruction error above mean + 2σ). Normal events go
+straight to PostgreSQL, and the anomalies the autoencoder confirms are written there too. The cheap
+model sees everything; the expensive models only see what looks suspicious, which means fewer false
+positives.
+
+**Storage.** PostgreSQL is where all the data ends up, with one schema per client for tenant
+isolation. The dashboard and the analyst model both read from it.
 
 **Continuous learning.** The Isolation Forest and the autoencoder retrain on each client's own
 traffic every two weeks (cron), and the new models are hot-swapped without restarting the service.

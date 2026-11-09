@@ -26,7 +26,7 @@ const education = [
 ];
 
 const security = [
-  { k: 'Club', v: 'Co-founded and co-led the Epitech Toulouse Cybersecurity Club, 2024 to 2026.' },
+  { k: 'Club', v: 'Founder and co-lead of the Epitech Toulouse Cybersecurity Club, 2024 to 2026.' },
   { k: 'Work', v: 'Sentinel; incident response after a remote-access scam; a security briefing for a client’s engineering team.', href: '/projects/sentinel/' },
   { k: 'Study', v: 'Cybersecurity and low-level coursework at BIT Beijing.' },
   { k: 'Practice', v: 'CTF write-ups on GitHub.', href: 'https://github.com/CrackedOnTiti/WriteUps', linkText: 'WriteUps' },
@@ -64,22 +64,6 @@ const beyond = [
     </div>
   </Section>
 
-  <Section id="built" label="Also built">
-    <ul class="rows">
-      {built.map((project) => <ProjectRow project={project} />)}
-    </ul>
-  </Section>
-
-  <Section id="building" label="Building now" lede="Free, open-source, local-first tools, built alongside client work at Munnin.">
-    <div class="building-grid">
-      {building.map((project) => <BuildingProject project={project} />)}
-    </div>
-  </Section>
-
-  <Section id="origins" label="Where I started">
-    {origins.map((project) => <OriginsAside project={project} />)}
-  </Section>
-
   <section id="security" class="security wrap" aria-labelledby="security-heading">
     <h2 id="security-heading" class="sub-label mono">Security</h2>
     <blockquote class="motto">
@@ -108,6 +92,22 @@ const beyond = [
     </div>
   </section>
 
+  <Section id="built" label="Also built">
+    <ul class="rows">
+      {built.map((project) => <ProjectRow project={project} />)}
+    </ul>
+  </Section>
+
+  <Section id="building" label="Building now" lede="Free, open-source, local-first tools, built alongside client work at Munnin.">
+    <div class="building-grid">
+      {building.map((project) => <BuildingProject project={project} />)}
+    </div>
+  </Section>
+
+  <Section id="origins" label="Where I started">
+    {origins.map((project) => <OriginsAside project={project} />)}
+  </Section>
+
   <Section id="contact" label="Contact" lede="Internship offers, security roles or questions about a project. I read everything that comes through this form.">
     <div class="contact-grid">
       <ContactForm />
@@ -135,7 +135,7 @@ const beyond = [
 
   .rows { list-style: none; padding: 0; }
 
-  .building-grid { display: grid; gap: var(--space-xl); }
+  .building-grid { display: grid; gap: var(--space-l); }
 
   .security { padding-top: var(--space-2xl); display: grid; gap: var(--space-xl); }
   .motto {
@@ -159,12 +159,10 @@ const beyond = [
   .beyond ul {
     list-style: none;
     padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2xs) 0;
+    display: grid;
+    gap: var(--space-3xs);
     color: var(--text-muted);
   }
-  .beyond li:not(:last-child)::after { content: '·'; margin-inline: 0.7em; color: var(--rule-strong); }
 
   .contact-grid { display: grid; gap: var(--space-xl); }
   .contact-links { list-style: none; padding: 0; display: grid; gap: var(--space-s); align-content: start; }
@@ -177,7 +175,7 @@ const beyond = [
     .edu li { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) auto; gap: var(--space-m); align-items: baseline; }
   }
   @media (min-width: 60rem) {
-    .building-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-xl); }
+    .building-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-l); }
     .security { grid-template-columns: var(--rail) minmax(0, 1fr); column-gap: var(--space-xl); }
     .motto { grid-column: 1 / -1; }
     .sec-list, .beyond { grid-column: 2; }

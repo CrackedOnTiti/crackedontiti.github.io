@@ -8,6 +8,7 @@ team: 1
 period: In progress
 stack: [Rust, Tauri v2, SQLite, Typst, Svelte 5, TypeScript]
 hideRepoUntil: beta 0.8 is public (then add links.repo https://github.com/CrackedOnTiti/Munnin-devis)
+note: PDF invoices only; not an e-invoicing platform under the 2027 reform.
 summary: Free, open-source (AGPL-3.0), offline-first quote and invoice manager for French freelancers and small businesses. No account, no cloud, no telemetry; the data stays on your computer.
 ---
 
@@ -19,5 +20,3 @@ stay present.
 
 Why: invoicing is a legal obligation, not a premium feature, and existing tools charge monthly and
 lock the look of your documents.
-
-PDF invoices only; not an e-invoicing platform under the 2027 reform.

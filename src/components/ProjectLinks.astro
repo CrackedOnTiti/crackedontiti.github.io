@@ -5,19 +5,32 @@ import { monthYear } from '../lib/format';
 
 interface Props {
   project: CollectionEntry<'projects'>;
+  /** "Updated <month>" from the last push. Off for origins: it contradicts "unchanged since 2024". */
+  showUpdated?: boolean;
+  /** "Private repository" / "Proprietary" note. Off where the page shows it elsewhere. */
+  showClosed?: boolean;
 }
-const p = Astro.props.project.data;
+const { project, showUpdated = project.data.status !== 'origins', showClosed = true } = Astro.props;
+const p = project.data;
 const stats = statsFor(p.links.repo);
 const labels: Record<string, string> = { repo: 'Repository', docs: 'Docs', devpost: 'Devpost', devlogs: 'Devlogs' };
-const closed = { private: 'Private repository', proprietary: 'Proprietary: write-up only' } as const;
 const links = Object.entries(p.links).filter((e): e is [string, string] => Boolean(e[1]));
+const notes = [
+  showClosed && p.closedSource ? closedLabel(p.closedSource) : null,
+  stats && stats.stars >= STAR_THRESHOLD ? `${stats.stars} stars` : null,
+  stats && showUpdated ? `Updated ${monthYear(stats.pushedAt)}` : null,
+].filter((n): n is string => Boolean(n));
+
+function closedLabel(kind: 'private' | 'proprietary') {
+  return kind === 'private' ? 'Private repository' : 'Proprietary: write-up only';
+}
 ---
-{(links.length > 0 || p.closedSource || stats) && (
+{(links.length > 0 || notes.length > 0) && (
   <ul class="links mono">
-    {links.map(([k, href]) => <li><a href={href}>{labels[k] ?? k}</a></li>)}
-    {p.closedSource && <li class="note">{closed[p.closedSource]}</li>}
-    {stats && stats.stars >= STAR_THRESHOLD && <li class="note">{stats.stars} stars</li>}
-    {stats && <li class="note">Updated {monthYear(stats.pushedAt)}</li>}
+    {links.map(([k, href]) => (
+      <li><a href={href}>{labels[k] ?? k}<span class="visually-hidden">: {p.title}</span></a></li>
+    ))}
+    {notes.map((n) => <li class="note">{n}</li>)}
   </ul>
 )}
 

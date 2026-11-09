@@ -33,6 +33,8 @@ const projects = defineCollection({
       hideRepoUntil: z.string().optional(),
       order: z.number().int(),
       summary: z.string(),
+      /** One line that must always be visible (e.g. a legal or scope disclaimer). */
+      note: z.string().optional(),
       /** Real screenshot (no client data). Alt text is required with it. */
       screenshot: image().optional(),
       screenshotAlt: z.string().optional(),

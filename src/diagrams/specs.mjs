@@ -5,38 +5,49 @@ export const specs = {
     id: 'sentinel-diagram',
     title: 'Sentinel detection pipeline',
     desc:
-      'Raspberry Pi taps and host syslog at the client site send traffic logs over a one-way WireGuard tunnel ' +
-      'into Redis. A core process parses and routes events; an Isolation Forest sweeps all of them. Flagged events ' +
-      'go to a per-client Redis queue, where workers run XGBoost and then an autoencoder. Results land in ' +
-      'PostgreSQL with one schema per client, feeding the client dashboard and a local analyst model served with Ollama. ' +
-      'The Isolation Forest and autoencoder retrain on each client’s traffic every two weeks and are hot-swapped.',
+      'Raspberry Pi taps and host syslog at the client site send logs over a one-way WireGuard tunnel into Redis. ' +
+      'An Isolation Forest sweeps every event. Normal events go straight to PostgreSQL. Flagged events go to a ' +
+      'per-client Redis queue, where workers run XGBoost and then an autoencoder; anomalies are written to PostgreSQL. ' +
+      'PostgreSQL holds all the data, with one schema per client; the client dashboard and the local analyst model ' +
+      'read from it. Separately, the Isolation Forest and the autoencoder retrain on each client\u2019s traffic every ' +
+      'two weeks and are hot-swapped.',
     caption:
       'Cheap model on everything, expensive models only on what looks suspicious. The red boxes are the detection cascade.',
     steps: [
       {
         row: [
-          { title: 'Raspberry Pi tap', sub: 'client site, Zeek + Filebeat' },
-          { title: 'Host monitoring', sub: 'syslog' },
+          { title: 'Raspberry Pi tap', sub: 'Zeek + Filebeat' },
+          { title: 'Hosts', sub: 'syslog' },
         ],
       },
-      { edge: 'WireGuard, one-way mirror', box: { title: 'Redis ingestion' } },
-      { box: { title: 'Core process', sub: 'parses and routes Zeek / syslog events' } },
+      { edge: 'WireGuard, one-way', box: { title: 'Redis', sub: 'ingestion' } },
       { box: { title: 'Isolation Forest', sub: 'sweeps every event', kind: 'hot' } },
-      { edge: 'flagged events only', box: { title: 'Per-client Redis queue' } },
-      { box: { title: 'XGBoost', sub: 'multiclass, pre-trained on UNSW-NB15', kind: 'hot' } },
-      { box: { title: 'Autoencoder', sub: '7-16-8-4-8-16-7, flag if error > mean + 2σ', kind: 'hot' } },
-      { box: { title: 'PostgreSQL', sub: 'one schema per client (tenant isolation)' } },
+      {
+        split: {
+          left: { edge: 'normal events' },
+          right: {
+            edge: 'flagged',
+            boxes: [
+              { title: 'Per-client Redis queue' },
+              { title: 'XGBoost', sub: 'multiclass, trained on UNSW-NB15', kind: 'hot' },
+              { title: 'Autoencoder', sub: 'error > mean + 2\u03c3', kind: 'hot' },
+            ],
+            out: 'anomalies',
+          },
+        },
+      },
+      { box: { title: 'PostgreSQL', sub: 'all data, one schema per client' } },
       {
         row: [
-          { title: 'Client dashboard', sub: 'live, remote machine isolation' },
-          { title: 'Analyst model', sub: 'local Llama 3 via Ollama, plain-language reports' },
+          { title: 'Client dashboard', sub: 'live, remote isolation' },
+          { title: 'Analyst model', sub: 'local Llama 3, Ollama' },
         ],
       },
       {
-        edge: 'every two weeks (cron)',
+        detached: true,
         box: {
-          title: 'Retrain on the client’s own traffic',
-          sub: 'Isolation Forest + autoencoder, hot-swapped without restarting',
+          title: 'Every two weeks (cron)',
+          sub: 'Isolation Forest + autoencoder retrain on the client\u2019s traffic, hot-swapped',
           kind: 'note',
         },
       },

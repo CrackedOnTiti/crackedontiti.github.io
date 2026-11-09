@@ -16,6 +16,8 @@ export const getStaticPaths = (async () => {
 const { project } = Astro.props;
 const p = project.data;
 const { Content } = await render(project);
+const hasLinks = Object.values(p.links).some(Boolean);
+const code = p.closedSource === 'proprietary' ? 'Proprietary: write-up only' : p.closedSource === 'private' ? 'Private repository' : null;
 ---
 <Base title={p.title} description={p.summary}>
   <article class="wrap detail">
@@ -27,13 +29,18 @@ const { Content } = await render(project);
         <div><dt>Role</dt><dd>{p.role}</dd></div>
         {teamLabel(p.team) && <div><dt>Team</dt><dd>{teamLabel(p.team)}</dd></div>}
         <div><dt>When</dt><dd>{p.period}</dd></div>
+        {code && <div><dt>Code</dt><dd>{code}</dd></div>}
       </dl>
       <Stack items={p.stack} />
     </header>
     <div class="prose">
       <Content />
-      <h2>Links</h2>
-      <ProjectLinks project={project} />
+      {hasLinks && (
+        <>
+          <h2>Links</h2>
+          <ProjectLinks project={project} showClosed={false} />
+        </>
+      )}
     </div>
   </article>
 </Base>
@@ -64,7 +71,4 @@ const { Content } = await render(project);
   .prose :global(ul) { padding-left: 1.1em; display: grid; gap: var(--space-2xs); }
   .prose :global(strong) { font-weight: 600; }
 
-  @media (min-width: 60rem) {
-    .prose :global(.diagram) { margin-right: -8rem; }
-  }
 </style>

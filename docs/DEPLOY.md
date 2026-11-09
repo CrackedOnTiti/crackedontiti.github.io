@@ -6,8 +6,10 @@ order. Secrets are only ever typed into a prompt or a dashboard field, never int
 
 ```
 push to main ─► build (launch check, stats, astro build, redirect stubs)
-               ├─► Cloudflare Pages "crackedontiti" (production) ─► crackedontiti.dev
-               └─► (after Cloudflare succeeds) GitHub Pages ─► crackedontiti.github.io = redirect
+               └─► Cloudflare Pages "crackedontiti" (production)
+                   └─► smoke test: https://crackedontiti.dev returns 200 with THIS build's marker
+                       ├─ pass ─► GitHub Pages ─► crackedontiti.github.io = redirect
+                       └─ fail ─► redirect skipped, run marked failed, github.io unchanged
 push to any other branch ─► Cloudflare Pages preview only (<branch>.crackedontiti.pages.dev)
 ```
 
@@ -99,16 +101,27 @@ Repo **CrackedOnTiti/crackedontiti.github.io** → *Settings*:
    - `SITE_URL` = `https://crackedontiti.dev` (optional; this is the default)
 3. *Pages* → *Build and deployment* → *Source*: **GitHub Actions**.
    Do **not** set a custom domain here: github.io must stay the redirect.
+   **Do this before merging into `main`.** While the source is "Deploy from a branch", every push to
+   `main` makes GitHub publish the raw branch with Jekyll (no index page, `docs/` exposed). After
+   switching, open https://crackedontiti.github.io once to confirm the old site still loads; it stays
+   up until the redirect job replaces it.
 4. Optional hardening: *Environments* → `production` → *Deployment branches*: **Selected branches**
    → `main`. (The workflow creates `production`, `preview` and `github-pages` on first run.)
 
 ## 7. First deploy
 
 1. Push the branch first, without merging: it deploys a **preview** only, at
-   `https://site-v2.crackedontiti.pages.dev`. Check it. The contact form will refuse to send there
-   on purpose (the origin is not allowed); everything else should work.
-2. Merge into `main` and push. The workflow deploys production to Cloudflare, and only if that
-   succeeds, replaces github.io with the redirect.
+   `https://site-v2.crackedontiti.pages.dev`. Check it. Preview builds show a note in place of the
+   contact form (the Worker only accepts the production origin); everything else should work.
+2. Make sure the custom domain from step 5 shows **Active**.
+3. Merge into `main` and push. The workflow deploys production to Cloudflare, then the **smoke** job
+   fetches https://crackedontiti.dev up to 10 times over ~5 minutes and requires HTTP 200, the page
+   title and `<meta name="build" content="<commit SHA>">`. Only then does the **redirect** job replace
+   github.io. If the smoke test fails, the run is red with the reason, and github.io keeps serving
+   whatever it served before. Fix the cause (usually the domain not Active yet) and re-run the
+   workflow.
+4. Send yourself a message through the form on https://crackedontiti.dev right away (previews show a
+   note instead of the form, so production is the first place it can be tested end to end).
 
 ## 8. Verify
 

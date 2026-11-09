@@ -1,6 +1,13 @@
 ---
-import { contactEndpoint, turnstileSiteKey, limits } from '../lib/contact';
+import { contactEndpoint, turnstileSiteKey, limits, isPreview } from '../lib/contact';
 ---
+{isPreview ? (
+  <p class="preview-note" role="note">
+    This is a preview build. The contact form only works on
+    <a href="https://crackedontiti.dev/#contact">crackedontiti.dev</a>; LinkedIn works from anywhere.
+  </p>
+) : (
+<>
 <form
   class="contact"
   method="post"
@@ -55,6 +62,8 @@ import { contactEndpoint, turnstileSiteKey, limits } from '../lib/contact';
 </form>
 
 <script src="../scripts/contact.ts"></script>
+</>
+)}
 
 <style>
   .contact { display: grid; gap: var(--space-m); max-width: 36rem; }
@@ -88,6 +97,7 @@ import { contactEndpoint, turnstileSiteKey, limits } from '../lib/contact';
   button:hover:not(:disabled) { background: #ffffff; }
   button:disabled { opacity: 0.55; cursor: default; }
   .status:empty { display: none; }
+  .preview-note { max-width: 36rem; padding: var(--space-m); border: 1px dashed var(--rule-strong); color: var(--text-muted); }
   .status[data-state='ok'] { color: var(--text); }
   .status[data-state='error'] { color: var(--red-text); }
 </style>

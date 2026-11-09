@@ -17,6 +17,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL('/og.png', Astro.site);
 // Production only: the dev server injects inline scripts and styles.
 const csp = import.meta.env.PROD ? buildCsp({ endpoint: contactEndpoint, meta: true }) : null;
+// Commit SHA in CI; the post-deploy smoke test checks the live site serves this exact build.
+const buildId: string | undefined = import.meta.env.PUBLIC_BUILD_ID;
 ---
 <!doctype html>
 <html lang="en">
@@ -29,6 +31,7 @@ const csp = import.meta.env.PROD ? buildCsp({ endpoint: contactEndpoint, meta: t
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <meta name="theme-color" content="#121212" />
+    {buildId && <meta name="build" content={buildId} />}
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.name} />

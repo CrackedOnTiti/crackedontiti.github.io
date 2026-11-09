@@ -36,7 +36,8 @@ const href = `/projects/${p.slug}/`;
     padding-block: var(--space-l);
     border-top: 1px solid var(--rule);
   }
-  .meta { color: var(--text-faint); display: flex; flex-wrap: wrap; gap: 0 var(--space-s); }
+  .meta { color: var(--text-faint); display: flex; flex-wrap: wrap; gap: 0 0.5em; }
+  .meta span + span::before { content: '· '; }
   .main { display: grid; gap: var(--space-xs); max-width: 44rem; }
   h3 { font-size: var(--step-3); letter-spacing: -0.03em; line-height: var(--leading-tight); }
   h3 a { text-decoration: none; }
@@ -60,5 +61,6 @@ const href = `/projects/${p.slug}/`;
       gap: var(--space-xl);
     }
     .meta { flex-direction: column; padding-top: 0.9rem; }
+    .meta span + span::before { content: none; }
   }
 </style>

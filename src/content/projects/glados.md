@@ -20,9 +20,7 @@ virtual machine, all in Haskell.
 
 ## What I built
 
-In a team of five, I co-built the compiler and the VM, the bytecode format and the command-line
-tool, wrote most of the test suites, and wrote the language documentation: the mdBook site and the
-BNF grammar.
+In a team of five, I co-built the compiler and the VM.
 
 ## How it works
 
@@ -30,6 +28,6 @@ BNF grammar.
 
 ## Results
 
-A working toolchain: C-like syntax with optional semicolons, static typing, recursion and control
-flow. Programs compile to a WebAssembly-like custom bytecode and run on our VM. The command-line
-tool can show the AST and the IR, compile to bytecode, or run a bytecode file. 208 test cases.
+A working toolchain for a C-like language with optional semicolons and static typing. Programs
+compile to a WebAssembly-like custom bytecode and run on our VM, and the toolchain can display the
+AST and the IR for debugging.
