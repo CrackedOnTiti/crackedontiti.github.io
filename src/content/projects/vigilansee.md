@@ -12,6 +12,7 @@ links:
 hideRepoUntil: README rewrite at the next merge (then add links.repo https://github.com/CrackedOnTiti/VigilanSee)
 tag: "End-of-studies · in progress"
 monogram: "VS"
+logo: ../../assets/projects/vigilansee/vigilansee-logo.png
 tagline: "Anti-cheat that reads behaviour, not your hard drive."
 intro: "No kernel driver, nothing installed on the player's machine. Each player gets a behavioural fingerprint that survives team changes, so aim-locking, pre-aiming through walls and deliberate team-griefing all stand out."
 flow:
@@ -24,13 +25,16 @@ flow:
   - title: "Forensic verdict"
     detail: "risk score 0–100 + evidence-ready report"
 flowNote: "A developer API for sending match data directly is planned."
-panelDiagram: "vigilansee-risk"
 highlights:
   - "Modelling maths (shrinkage-based optimisation)"
   - "CI, Docker build checks and Dependabot"
   - "Architecture decision records and weekly devlogs"
 state: "In development · CS2 first"
-mediaPlaceholder: "VigilanSee logo and dashboard screenshot"
+media:
+  - image: ../../assets/projects/vigilansee/vigilansee-risk-factor.webp
+    alt: "Diagram of dynamic risk-factor attribution: (1) a suspicion from player reports or automatic detection goes to the AI; (2, 3) the AI selects its tools through a light overview analysis; (4) it attributes a risk factor that sets the analysis intensity: nothing, light, medium or heavy; (5) the results feed back to the AI."
+    caption: "Dynamic risk-factor attribution."
+mediaHeading: "Design"
 summary: Server-side behavioural anti-cheat and community moderation, CS2 first, designed to be game-agnostic. Nothing is installed on the player's machine.
 ---
 

@@ -1,6 +1,7 @@
 ---
 import type { GetStaticPaths } from 'astro';
-import { Image } from 'astro:assets';
+import { Image, Picture } from 'astro:assets';
+import { widthsFor } from '../../lib/media';
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Stack from '../../components/Stack.astro';
@@ -26,7 +27,7 @@ const code = p.closedSource === 'proprietary' ? 'Proprietary: write-up only' : p
   <article class="wrap detail">
     <p class="mono back"><a href="/#work">All selected work</a></p>
     <header class="head">
-      {p.logo && <Image class="logo" src={p.logo} alt="" widths={[96, 192]} sizes="5rem" format="webp" decoding="async" />}
+      {p.logo && <Image class="logo" src={p.logo} alt="" widths={[128, 256]} sizes="8rem" format="webp" decoding="async" />}
       <h1>{p.title}</h1>
       <p class="summary">{p.summary}</p>
       <dl class="facts mono">
@@ -37,11 +38,23 @@ const code = p.closedSource === 'proprietary' ? 'Proprietary: write-up only' : p
       </dl>
       <Stack items={p.stack} />
     </header>
+    {p.cover && (
+      <Picture
+        class="cover"
+        src={p.cover.image}
+        alt={p.cover.alt}
+        formats={['avif']}
+        fallbackFormat="webp"
+        widths={widthsFor(p.cover.image, [640, 1000, 1600])}
+        sizes="(min-width: 60rem) 52rem, 100vw"
+        decoding="async"
+      />
+    )}
     <div class="prose">
       <Content />
       {p.media.length > 0 && (
         <>
-          <h2 id="seen-running">Seen running</h2>
+          <h2 id="media">{p.mediaHeading}</h2>
           <ProjectMedia project={project} />
         </>
       )}
@@ -60,6 +73,7 @@ const code = p.closedSource === 'proprietary' ? 'Proprietary: write-up only' : p
   .back a { color: var(--text-muted); }
   .back a::before { content: '← '; }
   .head { display: grid; gap: var(--space-m); max-width: 52rem; }
+  .detail :global(.cover) { display: block; width: 100%; max-width: 52rem; height: auto; border: 1px solid var(--rule-strong); }
   .head :global(.logo) { width: auto; height: 5rem; }
   h1 { font-size: var(--step-hero); line-height: 0.95; letter-spacing: -0.035em; font-weight: 800; }
   .summary { font-size: var(--step-1); line-height: var(--leading-snug); max-width: 44ch; }

@@ -25,6 +25,8 @@ const projects = defineCollection({
           docs: z.url().optional(),
           devpost: z.url().optional(),
           devlogs: z.url().optional(),
+          /** Outbound link to a video page. Never embedded (CSP, and blocked in China). */
+          video: z.url().optional(),
         })
         .default({}),
       /** No public code: shows a note instead of a repo link. */
@@ -73,6 +75,12 @@ const projects = defineCollection({
           ]),
         )
         .default([]),
+      /** Wide header image for the write-up page (featured only). Alt text required. */
+      cover: z.strictObject({ image: image(), alt: z.string().min(1) }).optional(),
+      /** Write-up heading over the media; "Seen running" unless the media is not the product running. */
+      mediaHeading: z.string().default('Seen running'),
+      /** One line shown under the media, wherever it appears (e.g. a rights note). */
+      mediaNote: z.string().optional(),
     })
     .refine((p) => p.status !== 'featured' || (p.flow.length > 0 && !!p.monogram), {
       message: 'featured projects need flow and monogram',

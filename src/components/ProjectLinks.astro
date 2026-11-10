@@ -13,7 +13,7 @@ interface Props {
 const { project, showUpdated = project.data.status !== 'origins', showClosed = true } = Astro.props;
 const p = project.data;
 const stats = statsFor(p.links.repo);
-const labels: Record<string, string> = { repo: 'Repository', docs: 'Docs', devpost: 'Devpost', devlogs: 'Devlogs' };
+const labels: Record<string, string> = { repo: 'Repository', docs: 'Docs', devpost: 'Devpost', devlogs: 'Devlogs', video: 'Submission video' };
 const links = Object.entries(p.links).filter((e): e is [string, string] => Boolean(e[1]));
 const notes = [
   showClosed && p.closedSource ? closedLabel(p.closedSource) : null,

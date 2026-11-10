@@ -8,7 +8,7 @@ import { isImage, isTall, widthsFor } from '../lib/media';
 interface Props {
   project: CollectionEntry<'projects'>;
 }
-const { media } = Astro.props.project.data;
+const { media, mediaNote } = Astro.props.project.data;
 ---
 <div class="media">
   {media.map((m) => isImage(m) ? (
@@ -29,6 +29,7 @@ const { media } = Astro.props.project.data;
   ) : (
     <Terminal name={m.terminal} title={m.title} caption={m.caption} />
   ))}
+  {mediaNote && <p class="media-note">{mediaNote}</p>}
 </div>
 
 <style>
@@ -36,5 +37,6 @@ const { media } = Astro.props.project.data;
   .shot { margin: 0; }
   .shot :global(img) { display: block; width: 100%; height: auto; border: 1px solid var(--rule-strong); background: var(--surface-2); }
   .shot :global(img.tall) { width: auto; max-width: 100%; max-height: 36rem; }
+  .media-note { font-size: var(--step--1); color: var(--text-faint); border-left: 2px solid var(--rule-strong); padding-left: var(--space-xs); }
   figcaption { color: var(--text-faint); margin-top: var(--space-2xs); font-size: var(--step--2); }
 </style>
