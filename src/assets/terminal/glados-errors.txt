@@ -1,0 +1,22 @@
+$ cat /g/tests/dotC/test_3_2_undefined_func.c
+  int main() {
+      return multiply(5, 3);  // multiply not defined
+  }
+  
+  /* Expected: Undefined function error */
+$ glados  < test_3_2_undefined_func.c
+Undefined function 'multiply' at SourcePos {sourceName = "input", sourceLine = Pos 2, sourceColumn = Pos 12}
+
+[exit 84]
+
+$ cat /g/tests/dotC/test_4_1_undef_var.c
+  int main() {
+      return x;  // x not defined
+  }
+  
+  /* Expected: Undefined variable error */
+$ glados  < test_4_1_undef_var.c
+Undefined variable 'x' at SourcePos {sourceName = "input", sourceLine = Pos 2, sourceColumn = Pos 12}
+
+[exit 84]
+

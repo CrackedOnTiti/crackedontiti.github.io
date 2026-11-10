@@ -6,6 +6,7 @@
   --bg: #111110;
   --surface: #1a1918;
   --surface-2: #1e1d1b;
+  --code-bg: #0b0b0a;       /* terminal captures */
   --rule: #2a2925;
   --rule-strong: #3a3833;   /* decorative only (1.6:1) */
   --text: #edeae4;          /* 15.7:1 / 14.6:1 */

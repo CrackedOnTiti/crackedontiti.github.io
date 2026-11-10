@@ -1,0 +1,25 @@
+    Comparison Operations
+      executes EqInt (true) [✔]
+      executes EqInt (false) [✔]
+      executes LtInt [✔]
+    Logical Operations
+      executes AndBool (true && false) [✔]
+      executes OrBool (true || false) [✔]
+    Control Flow Operations
+      executes Jump [✔]
+      executes JumpIfFalse (condition is false, should jump) [✔]
+      executes JumpIfFalse (condition is true, should not jump) [✔]
+      executes Halt [✔]
+  execute (main loop)
+    executes a simple program: 5 + 3 [✔]
+    executes with local variables [✔]
+    executes with Jump [✔]
+    executes JumpIfFalse (true, don't jump) [✔]
+    executes JumpIfFalse (false, do jump) [✔]
+    returns error on division by zero [✔]
+    returns error when halting with empty stack [✔]
+    executes Call and Return - simple function call [✔]
+    executes Call and Return - nested calls [✔]
+Finished in 0.0194 seconds
+208 examples, 0 failures
+glados> Test suite glados-test passed

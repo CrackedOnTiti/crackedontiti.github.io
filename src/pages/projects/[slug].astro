@@ -1,13 +1,16 @@
 ---
 import type { GetStaticPaths } from 'astro';
+import { Image } from 'astro:assets';
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Stack from '../../components/Stack.astro';
 import ProjectLinks from '../../components/ProjectLinks.astro';
+import ProjectMedia from '../../components/ProjectMedia.astro';
 import { teamLabel } from '../../lib/format';
 
 // Detail pages exist for featured projects only.
-// Body (Markdown): Problem → What I built → How it works (inline SVG diagram) → Results. Links are added here.
+// Body (Markdown): Problem → What I built → How it works (inline SVG diagram) → Results.
+// "Seen running" (frontmatter media) and Links are added here.
 export const getStaticPaths = (async () => {
   const featured = await getCollection('projects', (p) => p.data.status === 'featured');
   return featured.map((project) => ({ params: { slug: project.data.slug }, props: { project } }));
@@ -23,6 +26,7 @@ const code = p.closedSource === 'proprietary' ? 'Proprietary: write-up only' : p
   <article class="wrap detail">
     <p class="mono back"><a href="/#work">All selected work</a></p>
     <header class="head">
+      {p.logo && <Image class="logo" src={p.logo} alt="" widths={[96, 192]} sizes="5rem" format="webp" decoding="async" />}
       <h1>{p.title}</h1>
       <p class="summary">{p.summary}</p>
       <dl class="facts mono">
@@ -35,6 +39,12 @@ const code = p.closedSource === 'proprietary' ? 'Proprietary: write-up only' : p
     </header>
     <div class="prose">
       <Content />
+      {p.media.length > 0 && (
+        <>
+          <h2 id="seen-running">Seen running</h2>
+          <ProjectMedia project={project} />
+        </>
+      )}
       {hasLinks && (
         <>
           <h2>Links</h2>
@@ -50,6 +60,7 @@ const code = p.closedSource === 'proprietary' ? 'Proprietary: write-up only' : p
   .back a { color: var(--text-muted); }
   .back a::before { content: '← '; }
   .head { display: grid; gap: var(--space-m); max-width: 52rem; }
+  .head :global(.logo) { width: auto; height: 5rem; }
   h1 { font-size: var(--step-hero); line-height: 0.95; letter-spacing: -0.035em; font-weight: 800; }
   .summary { font-size: var(--step-1); line-height: var(--leading-snug); max-width: 44ch; }
   .facts { display: grid; gap: var(--space-2xs); }

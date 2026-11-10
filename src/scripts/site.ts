@@ -1,4 +1,4 @@
-// The site's one module: tabs, featured-project expanders, carousel, and the contact form.
+// The site's one module: tabs, featured-project expanders, carousel, media galleries, and the contact form.
 // Everything here is progressive enhancement: without it, the page is one long, complete document.
 // No inline styles or scripts (CSP): state goes through attributes, classes and CSS custom properties.
 import './contact';
@@ -233,6 +233,27 @@ function initCarousel() {
   go(0);
 }
 
+/* -------------------------------------------------------------- galleries */
+
+// Project media (MediaSlot): one item at a time, thumbnails switch. Without the script every item
+// is stacked and the thumbnails stay hidden.
+function initGalleries() {
+  for (const root of document.querySelectorAll<HTMLElement>('[data-gallery]')) {
+    const frames = [...root.querySelectorAll<HTMLElement>('[data-gallery-frame]')];
+    const thumbs = root.querySelector<HTMLElement>('[data-gallery-thumbs]');
+    const buttons = [...root.querySelectorAll<HTMLButtonElement>('[data-gallery-go]')];
+    if (frames.length < 2 || !thumbs) continue;
+    const show = (n: number) => {
+      frames.forEach((f, i) => { f.hidden = i !== n; });
+      buttons.forEach((b, i) => b.setAttribute('aria-pressed', String(i === n)));
+    };
+    buttons.forEach((b) => b.addEventListener('click', () => show(Number(b.dataset.galleryGo))));
+    thumbs.hidden = false;
+    show(0);
+  }
+}
+
 initTabs();
 initExpanders();
 initCarousel();
+initGalleries();

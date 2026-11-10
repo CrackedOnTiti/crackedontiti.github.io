@@ -1,19 +1,77 @@
 ---
-// Screenshot if the project has one; otherwise a neutral placeholder describing what will go there.
+// The media column of a featured panel or a carousel slide: the project's media with the lead shown
+// first, or a neutral placeholder while it has none. Without JavaScript every item is stacked; with
+// it (src/scripts/site.ts) one item shows at a time and the thumbnails switch between them.
+import { Picture } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
-import ProjectScreenshot from './ProjectScreenshot.astro';
+import Terminal from './Terminal.astro';
+import { isImage, isTall, mediaLabel, widthsFor } from '../lib/media';
 
 interface Props {
   project: CollectionEntry<'projects'>;
 }
 const { project } = Astro.props;
 const p = project.data;
+const media = p.media;
+const id = (i: number) => `media-${p.slug}-${i + 1}`;
 ---
-{p.screenshot ? (
-  <ProjectScreenshot project={project} />
-) : (
+{media.length === 0 ? (
   <div class="slot" role="img" aria-label={`Placeholder for ${p.title} media: ${p.mediaPlaceholder ?? 'screenshot to come'}`}>
     <span aria-hidden="true">[ {p.mediaPlaceholder ?? 'screenshot to come'} ]</span>
+  </div>
+) : (
+  <div class="gallery" data-gallery>
+    {media.map((m, i) => (
+      <div class="frame" id={id(i)} data-gallery-frame>
+        {isImage(m) ? (
+          <figure class="shot">
+            <Picture
+              src={m.image}
+              alt={m.alt}
+              class:list={{ tall: isTall(m) }}
+              formats={['avif']}
+              fallbackFormat="webp"
+              widths={widthsFor(m.image, [480, 800, 1200])}
+              sizes="(min-width: 60rem) 30rem, 100vw"
+              loading="lazy"
+              decoding="async"
+            />
+            {m.caption && <figcaption class="mono">{m.caption}</figcaption>}
+          </figure>
+        ) : (
+          <Terminal name={m.terminal} title={m.title} caption={m.caption} compact />
+        )}
+      </div>
+    ))}
+    {media.length > 1 && (
+      <div class="thumbs" role="group" aria-label={`${p.title}: ${media.length} items`} hidden data-gallery-thumbs>
+        {media.map((m, i) => (
+          <button
+            type="button"
+            class="thumb"
+            aria-controls={id(i)}
+            aria-pressed={i === 0 ? 'true' : 'false'}
+            aria-label={`${i + 1} of ${media.length}: ${mediaLabel(m)}`}
+            data-gallery-go={i}
+          >
+            {isImage(m) ? (
+              <Picture
+                src={m.image}
+                alt=""
+                formats={['avif']}
+                fallbackFormat="webp"
+                widths={widthsFor(m.image, [160, 320])}
+                sizes="5rem"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <span class="t-thumb mono" aria-hidden="true">&gt;_{i + 1}</span>
+            )}
+          </button>
+        ))}
+      </div>
+    )}
   </div>
 )}
 
@@ -31,4 +89,30 @@ const p = project.data;
     font-size: var(--step--2);
     color: var(--text-faint);
   }
+
+  .gallery { display: grid; gap: var(--space-s); min-width: 0; }
+  .frame { min-width: 0; }
+  .frame[hidden] { display: none; }
+  .shot { margin: 0; }
+  .shot :global(img) { display: block; width: 100%; height: auto; border: 1px solid var(--rule-strong); background: var(--surface-2); }
+  .shot :global(img.tall) { width: auto; max-width: 100%; max-height: 28rem; margin-inline: auto; }
+  figcaption { color: var(--text-faint); margin-top: var(--space-2xs); font-size: var(--step--2); }
+
+  .thumbs[hidden] { display: none; }
+  /* Up to five per row: the longest gallery (Munnin Devis) fits on one line in the side column. */
+  .thumbs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-2xs); }
+  .thumb {
+    aspect-ratio: 3 / 2;
+    padding: 0;
+    overflow: hidden;
+    background: var(--surface-2);
+    border: 1px solid var(--rule);
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  .thumb:hover { opacity: 1; }
+  .thumb[aria-pressed='true'] { opacity: 1; border-color: var(--red); }
+  .thumb :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .t-thumb { display: flex; height: 100%; align-items: center; justify-content: center; font-size: var(--step--1); color: var(--text-muted); background: var(--code-bg); }
 </style>

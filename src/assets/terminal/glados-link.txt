@@ -1,0 +1,29 @@
+
+$ cat /g/tests/linker/test_basic_lib.c
+  // LinkTest: lib for test_basic_main.c
+  // Library with utility functions
+  int add(int a, int b) {
+      return a + b;
+  }
+  
+  int multiply(int x, int y) {
+      return x * y;
+  }
+$ cat /g/tests/linker/test_basic_main.c
+  // LinkTest: main
+  // LinkWith: test_basic_lib.c
+  // Expected: Success (return 16)
+  // Main program that uses library functions
+  int add(int a, int b);
+  int multiply(int x, int y);
+  
+  int main() {
+      int result;
+      result = add(5, 3);
+      result = multiply(result, 2);
+      return result;
+  }
+$ glados --compile-obj < test_basic_lib.c > lib.gbo; glados --compile-obj < test_basic_main.c > main.gbo
+$ glados --link lib.gbo main.gbo > out.gbc && glados --run out.gbc
+[link exit 0]
+VInt 16

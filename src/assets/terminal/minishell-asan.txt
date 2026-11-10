@@ -1,0 +1,36 @@
+### input: echo a
+==152==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x5020000000e0 at pc 0x55631160104c bp 0x7ffc639299b0 sp 0x7ffc639299a8
+WRITE of size 8 at 0x5020000000e0 thread T0
+    #0 0x55631160104b in inputer /tmp/b/main.c:82
+    #1 0x556311601240 in twodot_handler /tmp/b/main.c:98
+    #2 0x556311601547 in inf_lp /tmp/b/main.c:139
+    #3 0x5563116015fe in main /tmp/b/main.c:152
+0x5020000000e0 is located 0 bytes after 16-byte region [0x5020000000d0,0x5020000000e0)
+allocated by thread T0 here:
+    #0 0x7f2151b2ec57 in malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:69
+    #1 0x55631160248f in str_to_array_t /tmp/b/my_str_to_word_array_twodots.c:72
+    #2 0x5563116011f2 in twodot_handler /tmp/b/main.c:97
+    #3 0x556311601547 in inf_lp /tmp/b/main.c:139
+    #4 0x5563116015fe in main /tmp/b/main.c:152
+SUMMARY: AddressSanitizer: heap-buffer-overflow /tmp/b/main.c:82 in inputer
+
+### empty environment: env -i ./mysh_asan, then ls
+
+(plain build first, truly empty environment)
+Segmentation fault (core dumped)
+[shell exit status: 139  (139 = SIGSEGV)]
+
+### leak check (detect_leaks=1) on: true
+
+==171==ERROR: LeakSanitizer: detected memory leaks
+Direct leak of 131264 byte(s) in 4 object(s) allocated from:
+Direct leak of 112 byte(s) in 4 object(s) allocated from:
+Direct leak of 32 byte(s) in 1 object(s) allocated from:
+Direct leak of 32 byte(s) in 1 object(s) allocated from:
+Direct leak of 16 byte(s) in 1 object(s) allocated from:
+Direct leak of 16 byte(s) in 1 object(s) allocated from:
+Direct leak of 6 byte(s) in 1 object(s) allocated from:
+Direct leak of 5 byte(s) in 1 object(s) allocated from:
+Indirect leak of 32 byte(s) in 3 object(s) allocated from:
+Indirect leak of 32 byte(s) in 3 object(s) allocated from:
+SUMMARY: AddressSanitizer: 131547 byte(s) leaked in 20 allocation(s).

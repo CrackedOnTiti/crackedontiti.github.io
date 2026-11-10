@@ -1,0 +1,64 @@
+$ make
+built: mysh 216224 bytes
+built: mysh_asan (-fsanitize=address)
+### minishell sample session (input piped, so no prompt is printed)
+
+    echo hello from mysh
+hello from mysh
+    [exit status: 84]
+
+    ls
+notes.txt
+todo.md
+    [exit status: 84]
+
+    echo one ; echo two ; echo three
+one
+two
+three
+    [exit status: 84]
+
+    /bin/echo absolute path works
+absolute path works
+    [exit status: 84]
+
+    setenv GREETING bonjour
+    env
+HOME=/home/demo
+USER=demo
+PATH=/usr/local/bin:/usr/bin:/bin
+TERM=xterm
+GREETING=bonjour
+    [exit status: 84]
+
+    unsetenv GREETING
+    env
+HOME=/home/demo
+USER=demo
+PATH=/usr/local/bin:/usr/bin:/bin
+TERM=xterm
+    [exit status: 84]
+
+    cd /tmp ; /bin/pwd ; cd - ; /bin/pwd
+/tmp
+/tmp/demo
+    [exit status: 84]
+
+    nosuchcommand
+nosuchcommand: Command not found.
+    [exit status: 84]
+
+    setenv 1BAD x
+    [exit status: 84]
+
+    ls | wc -l
+ls: cannot access '|': No such file or directory
+ls: cannot access 'wc': No such file or directory
+    [exit status: 2]
+
+    echo hi > out.txt ; ls
+hi > out.txt
+notes.txt
+todo.md
+    [exit status: 84]
+

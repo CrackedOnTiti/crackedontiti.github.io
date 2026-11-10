@@ -1,0 +1,58 @@
+---
+// A terminal capture as a styled code block. `compact` caps the height (side slots); the block then
+// scrolls, so it is focusable for keyboard users.
+import { terminalHtml } from '../lib/terminal';
+
+interface Props {
+  name: string;
+  title: string;
+  caption?: string;
+  compact?: boolean;
+}
+const { name, title, caption, compact = false } = Astro.props;
+const html = terminalHtml(name);
+---
+<figure class:list={['term', { compact }]}>
+  <div class="bar mono" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span>{title}</div>
+  <pre tabindex="0" aria-label={`Terminal output: ${title}`}><code set:html={html} /></pre>
+  {caption && <figcaption class="mono">{caption}</figcaption>}
+</figure>
+
+<style>
+  .term { margin: 0; min-width: 0; }
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 0.5rem 0.75rem;
+    background: var(--surface-2);
+    border: 1px solid var(--rule-strong);
+    border-bottom: 0;
+    font-size: var(--step--2);
+    color: var(--text-faint);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .dots { display: inline-flex; gap: 0.3rem; flex: 0 0 auto; }
+  .dots i { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--rule-strong); }
+  .dots i:first-child { background: var(--red); }
+  pre {
+    margin: 0;
+    padding: var(--space-s);
+    background: var(--code-bg);
+    border: 1px solid var(--rule-strong);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    line-height: 1.55;
+    overflow: auto;
+    tab-size: 4;
+  }
+  pre:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .compact pre { max-height: 20rem; }
+  pre :global(.t-cmd) { color: var(--text); font-weight: 600; }
+  pre :global(.t-prompt) { color: var(--red-text); }
+  pre :global(.t-note) { color: var(--text-faint); font-style: italic; }
+  figcaption { color: var(--text-faint); margin-top: var(--space-2xs); font-size: var(--step--2); }
+</style>

@@ -1,0 +1,40 @@
+---
+// Write-up pages: every media item at reading width, in order.
+import { Picture } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import Terminal from './Terminal.astro';
+import { isImage, isTall, widthsFor } from '../lib/media';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+const { media } = Astro.props.project.data;
+---
+<div class="media">
+  {media.map((m) => isImage(m) ? (
+    <figure class="shot">
+      <Picture
+        src={m.image}
+        alt={m.alt}
+        class:list={{ tall: isTall(m) }}
+        formats={['avif']}
+        fallbackFormat="webp"
+        widths={widthsFor(m.image, [640, 1000, 1440])}
+        sizes="(min-width: 48rem) 44rem, 100vw"
+        loading="lazy"
+        decoding="async"
+      />
+      {m.caption && <figcaption class="mono">{m.caption}</figcaption>}
+    </figure>
+  ) : (
+    <Terminal name={m.terminal} title={m.title} caption={m.caption} />
+  ))}
+</div>
+
+<style>
+  .media { display: grid; gap: var(--space-l); }
+  .shot { margin: 0; }
+  .shot :global(img) { display: block; width: 100%; height: auto; border: 1px solid var(--rule-strong); background: var(--surface-2); }
+  .shot :global(img.tall) { width: auto; max-width: 100%; max-height: 36rem; }
+  figcaption { color: var(--text-faint); margin-top: var(--space-2xs); font-size: var(--step--2); }
+</style>

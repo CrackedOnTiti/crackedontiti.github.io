@@ -25,7 +25,13 @@ highlights:
   - "Built the AI layer: tool calling and per-player memory"
   - "Database architecture and CLI testing tools"
 state: "Shipped · prize winner"
-mediaPlaceholder: "Coach chat and player card screenshots"
+media:
+  - image: ../../assets/projects/rift-rewind/rift-rewind-coaching.png
+    alt: "Vi's coaching session page: the recent matches column (empty) and the AI coach chat panel with its opening greeting."
+    caption: "Coaching session page, run locally without API keys; the greeting is static text."
+  - image: ../../assets/projects/rift-rewind/rift-rewind-card-demo-no-art.png
+    alt: "Player card rendered by the project's own card generator with demo inputs: golden border, level and rank circles, and an info panel for \"DemoPlayer\"; no champion artwork."
+    caption: "Player card from the project's renderer, with demo inputs and no artwork."
 summary: AI League of Legends coach that remembers each player across sessions. Won the Roast Master 3000 Prize ($1,000) at the AWS × Riot Games Rift Rewind hackathon.
 ---
 

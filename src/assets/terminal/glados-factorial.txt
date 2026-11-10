@@ -1,0 +1,47 @@
+$ cat /g/tests/dotC/factorial.c
+  int factorial(int n) {
+      if (n <= 1) {
+          return 1
+      }
+      return n * factorial(n - 1)
+  }
+  
+  int main() {
+      int result = factorial(5);
+      return result
+  }
+$ glados  < factorial.c
+VInt 120
+
+$ glados --ir < factorial.c
+// GLaDOS IR - Compiled Program
+// Entry point: function 1
+
+U0 factorial()  // Function 0
+{
+  // params: 1, locals: 0
+     0: GET.LOCAL[0];
+     1: PUSH.I64 1;
+     2: CMP.LE;
+     3: JZ @3;
+     4: PUSH.I64 1;
+     5: RET;
+     6: GET.LOCAL[0];
+     7: GET.LOCAL[0];
+     8: PUSH.I64 1;
+     9: SUB.I64;
+    10: CALL func0;
+    11: MUL.I64;
+    12: RET;
+}
+
+U0 main()  // Function 1
+{
+  // params: 0, locals: 1
+     0: PUSH.I64 5;
+     1: CALL func0;
+     2: SET.LOCAL[0];
+     3: GET.LOCAL[0];
+     4: RET;
+}
+

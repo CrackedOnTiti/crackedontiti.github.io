@@ -1,6 +1,7 @@
 ---
 // "Also built · building now". Without JavaScript: the slides stack, controls stay hidden.
 // With it (src/scripts/site.ts): one slide at a time, prev/next, counter, name buttons, swipe.
+import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import MediaSlot from './MediaSlot.astro';
 import ProjectFacts from './ProjectFacts.astro';
@@ -33,7 +34,10 @@ const total = String(projects.length).padStart(2, '0');
           <li class="slide" role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${projects.length}: ${p.title}`} data-carousel-slide>
             <div class="s-main">
               <p class="label label--red">{[section[p.status], p.tag].join(' · ')}</p>
-              <h4 class="s-title">{p.title}</h4>
+              <h4 class="s-title">
+                {p.logo && <Image class="s-logo" src={p.logo} alt="" widths={[64, 128]} sizes="3rem" format="webp" loading="lazy" decoding="async" />}
+                {p.title}
+              </h4>
               <p class="s-tagline">{p.tagline}</p>
               <p class="s-intro">{p.intro}</p>
               <ul class="s-points">
@@ -88,6 +92,8 @@ const total = String(projects.length).padStart(2, '0');
   .slide {
     display: flex;
     flex-wrap: wrap;
+    /* Slides share the tallest one's height; keep the wrapped columns together at the top. */
+    align-content: flex-start;
     gap: var(--space-l);
     padding: var(--space-m);
   }
@@ -112,6 +118,7 @@ const total = String(projects.length).padStart(2, '0');
     font-size: clamp(2rem, 1.3rem + 2.6vw, 3.25rem);
     line-height: 1;
   }
+  .s-title :global(.s-logo) { display: inline-block; width: auto; height: 0.85em; margin-right: 0.3em; vertical-align: -0.05em; }
   .s-tagline { margin-top: var(--space-s); font-size: 1.125rem; }
   .s-intro { margin-top: var(--space-s); color: var(--text-muted); }
   .s-points { margin-top: 1.25rem; padding-left: 1.25rem; color: var(--text-muted); }

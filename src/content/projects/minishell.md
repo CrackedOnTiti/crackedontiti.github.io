@@ -17,7 +17,13 @@ highlights:
   - "Audit with AddressSanitizer: heap overflows, fd leaks, wait-status bugs"
   - "What I would do differently today"
 state: "Archived"
-mediaPlaceholder: "AddressSanitizer output excerpt"
+media:
+  - terminal: minishell-asan
+    title: "mysh_asan (-fsanitize=address)"
+    caption: "AddressSanitizer run, excerpt: a heap overflow on \"echo a\", a crash with an empty environment, and 131,547 bytes leaked on \"true\"."
+  - terminal: minishell-session
+    title: "mysh < session"
+    caption: "What works (PATH lookup, \";\", setenv and unsetenv, \"cd -\") and what does not: no pipes, no redirections, exit status 84."
 summary: My first-year Unix shell in C. The code is unchanged from what I submitted in 2024; a 2026 self-audit of what was wrong with it sits alongside.
 ---
 

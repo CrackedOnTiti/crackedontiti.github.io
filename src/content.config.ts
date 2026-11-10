@@ -52,16 +52,28 @@ const projects = defineCollection({
       state: z.string(),
       /** Two-letter monogram on the featured row. */
       monogram: z.string().max(2).optional(),
-      /** Describes the screenshot that will fill the media slot; shown as a placeholder until then. */
+      /**
+       * Project logo (square-ish, transparent). Decorative: always shown next to the project name,
+       * so it carries no alt text. Replaces the monogram on the featured row.
+       */
+      logo: image().optional(),
+      /** Describes the media still to come; shown as a neutral placeholder while `media` is empty. */
       mediaPlaceholder: z.string().optional(),
       /** One line that must always be visible (e.g. a legal or scope disclaimer). */
       note: z.string().optional(),
-      /** Real screenshot (no client data). Alt text is required with it. */
-      screenshot: image().optional(),
-      screenshotAlt: z.string().optional(),
-      screenshotCaption: z.string().optional(),
+      /**
+       * Screenshots and terminal captures, lead first. Images: no client or real user data, alt text
+       * required. Terminals: a file name in src/assets/terminal/ (verbatim output), shown as text.
+       */
+      media: z
+        .array(
+          z.union([
+            z.strictObject({ image: image(), alt: z.string().min(1), caption: z.string().optional() }),
+            z.strictObject({ terminal: z.string().regex(/^[a-z0-9-]+$/), title: z.string(), caption: z.string().optional() }),
+          ]),
+        )
+        .default([]),
     })
-    .refine((p) => !p.screenshot || !!p.screenshotAlt, { message: 'screenshot needs screenshotAlt' })
     .refine((p) => p.status !== 'featured' || (p.flow.length > 0 && !!p.monogram), {
       message: 'featured projects need flow and monogram',
     })
