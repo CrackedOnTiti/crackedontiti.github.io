@@ -132,12 +132,16 @@ export const security = {
     { big: 'CTF', small: 'Write-ups published on GitHub', href: 'https://github.com/CrackedOnTiti/WriteUps' },
     { big: 'Homelab', small: 'Proxmox, WireGuard, Docker, Cloudflare tunnels' },
   ],
-  /** Profile URLs and official badges pending from Thierry; tiles are not links until `profile` is set. */
+  /**
+   * Tiles link to each platform's official site (`profile`, once Thierry sends it, takes over).
+   * Logos are the official artwork, unmodified, self-hosted: simple-icons glyphs in public/brands/,
+   * Blue Team Labs Online's own logo (from blueteamlabs.online) in src/assets/brands/.
+   */
   platforms: [
-    { name: 'Hack The Box', focus: 'Offensive labs', profile: undefined as string | undefined },
-    { name: 'TryHackMe', focus: 'Guided rooms', profile: undefined as string | undefined },
-    { name: 'Root Me', focus: 'Challenges', profile: undefined as string | undefined },
-    { name: 'Blue Team Labs Online', focus: 'Defensive investigations', profile: undefined as string | undefined },
+    { name: 'Hack The Box', focus: 'Offensive labs', site: 'https://www.hackthebox.com/', logo: '/brands/hackthebox.svg', profile: undefined as string | undefined },
+    { name: 'TryHackMe', focus: 'Guided rooms', site: 'https://tryhackme.com/', logo: '/brands/tryhackme.svg', profile: undefined as string | undefined },
+    { name: 'Root Me', focus: 'Challenges', site: 'https://www.root-me.org/', logo: '/brands/rootme.svg', profile: undefined as string | undefined },
+    { name: 'Blue Team Labs Online', focus: 'Defensive investigations', site: 'https://blueteamlabs.online/', logo: 'btlo', profile: undefined as string | undefined },
   ],
 };
 

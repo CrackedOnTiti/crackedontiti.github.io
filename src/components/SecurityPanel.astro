@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import Panel from './Panel.astro';
+import btlo from '../assets/brands/blueteamlabs-online.png';
 import { security } from '../data/profile';
 ---
 <Panel id="security" heading="Security work">
@@ -34,18 +36,23 @@ import { security } from '../data/profile';
   <div class="training">
     <h3 class="label">My main cybersec training tools</h3>
     <ul class="platforms" role="list">
-      {security.platforms.map((pl) => {
-        const inner = (
-          <>
-            <span class="logo" aria-hidden="true"></span>
+      {security.platforms.map((pl) => (
+        <li>
+          <a class="platform" href={pl.profile ?? pl.site} rel="noopener">
+            <span class="logo">
+              {pl.logo === 'btlo' ? (
+                <Image src={btlo} alt="" widths={[48, 96]} sizes="2.25rem" loading="lazy" decoding="async" />
+              ) : (
+                <img src={pl.logo} alt="" width="24" height="24" loading="lazy" decoding="async" />
+              )}
+            </span>
             <span>
               <span class="pl-name">{pl.name}</span>
               <span class="pl-focus">{pl.focus}</span>
             </span>
-          </>
-        );
-        return <li>{pl.profile ? <a class="platform" href={pl.profile}>{inner}</a> : <div class="platform">{inner}</div>}</li>;
-      })}
+          </a>
+        </li>
+      ))}
     </ul>
   </div>
 </Panel>
@@ -111,8 +118,18 @@ import { security } from '../data/profile';
     text-decoration: none;
   }
   a.platform:hover { border-color: var(--text-faint); }
-  /* Neutral slot: official badges to come. No platform logos are drawn here. */
-  .logo { flex: 0 0 auto; width: 3rem; height: 3rem; border: 1px dashed var(--rule-strong); }
+  /* Official logos, unmodified, in the same 3rem square; each fits a 2.25rem box. */
+  .logo {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    background: var(--bg);
+    border: 1px solid var(--rule);
+  }
+  .logo :global(img) { width: 2.25rem; height: 2.25rem; object-fit: contain; }
   .pl-name { display: block; font-family: var(--font-display); font-weight: 700; }
   .pl-focus { display: block; font-size: 0.8125rem; color: var(--text-faint); }
 

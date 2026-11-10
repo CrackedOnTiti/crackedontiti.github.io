@@ -21,7 +21,7 @@ const { project } = Astro.props;
 const p = project.data;
 const { Content } = await render(project);
 const hasLinks = Object.values(p.links).some(Boolean);
-const code = p.closedSource === 'proprietary' ? 'Proprietary: write-up only' : p.closedSource === 'private' ? 'Private repository' : null;
+const code = p.closedSource === 'proprietary' ? 'Proprietary: no public code' : p.closedSource === 'private' ? 'Private repository' : null;
 ---
 <Base title={p.title} description={p.summary}>
   <article class="wrap detail">

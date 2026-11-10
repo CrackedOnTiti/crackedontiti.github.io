@@ -22,7 +22,7 @@ const notes = [
 ].filter((n): n is string => Boolean(n));
 
 function closedLabel(kind: 'private' | 'proprietary') {
-  return kind === 'private' ? 'Private repository' : 'Proprietary: write-up only';
+  return kind === 'private' ? 'Private repository' : 'Proprietary: no public code';
 }
 ---
 {(links.length > 0 || notes.length > 0) && (

@@ -1,5 +1,10 @@
 ---
+import { Image } from 'astro:assets';
 import { site } from '../lib/site';
+// LinkedIn's official white [in] bug (brand.linkedin.com download, unmodified): LinkedIn allows
+// only blue, black or white, so it does not take the link colour. GitHub: the simple-icons
+// Invertocat in white, for the same reason (GitHub asks that its logo colour not be changed).
+import inBug from '../assets/brands/linkedin-inbug-white.png';
 import Raven from './Raven.astro';
 ---
 <header class="site-header wrap">
@@ -8,8 +13,18 @@ import Raven from './Raven.astro';
     <span class="brand-name">CRACKEDONTITI.DEV</span>
   </a>
   <ul class="ext" role="list">
-    <li><a href={site.links.linkedin} rel="me">LinkedIn<span aria-hidden="true"> ↗</span></a></li>
-    <li><a href={site.links.github} rel="me">GitHub<span aria-hidden="true"> ↗</span></a></li>
+    <li>
+      <a href={site.links.linkedin} rel="me">
+        <Image class="ext-icon" src={inBug} alt="" aria-hidden="true" widths={[16, 32, 48]} sizes="15px" loading="eager" decoding="async" />
+        LinkedIn<span aria-hidden="true"> ↗</span>
+      </a>
+    </li>
+    <li>
+      <a href={site.links.github} rel="me">
+        <img class="ext-icon" src="/brands/github.svg" alt="" aria-hidden="true" width="16" height="16" decoding="async" />
+        GitHub<span aria-hidden="true"> ↗</span>
+      </a>
+    </li>
   </ul>
 </header>
 
@@ -44,7 +59,14 @@ import Raven from './Raven.astro';
     font-family: var(--font-mono);
     font-size: 0.8125rem;
   }
-  .ext a { display: inline-block; padding-block: 0.6rem; text-decoration: none; }
+  .ext a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.75rem; /* 44px touch target */
+    text-decoration: none;
+  }
+  .ext :global(.ext-icon) { flex: 0 0 auto; width: auto; height: 0.9375rem; }
   .ext a:hover { text-decoration: underline; }
 
   @media (min-width: 48rem) {
