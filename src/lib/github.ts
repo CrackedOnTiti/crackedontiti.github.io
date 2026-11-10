@@ -18,5 +18,3 @@ export function statsFor(url: string | undefined): RepoStats | undefined {
 
 /** Star counts below this are not shown: they read as weak, not as evidence. */
 export const STAR_THRESHOLD = 10;
-
-export const statsGeneratedAt = (data as { generatedAt: string | null }).generatedAt;

@@ -1,13 +1,11 @@
 ---
 import { site } from '../lib/site';
-import { statsGeneratedAt } from '../lib/github';
-import { dayMonthYear } from '../lib/format';
 const year = new Date().getFullYear();
 ---
 <footer class="wrap">
   <div class="inner">
     <p>&copy; {year} {site.name}</p>
-    <p>Built with Astro · served by Cloudflare · no trackers{statsGeneratedAt && <> · GitHub stats as of {dayMonthYear(statsGeneratedAt)}</>}</p>
+    <p>Built with Astro · served by Cloudflare · no trackers</p>
   </div>
 </footer>
 

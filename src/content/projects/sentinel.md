@@ -32,7 +32,7 @@ state: "In use at Interface Numérique"
 media:
   - image: ../../assets/projects/sentinel/sentinel-dashboard.webp
     alt: "Sentinel dashboard, in French, for the invented client \"Demo SME\": four tiles (184,237 packets processed, 41 anomalies detected, 2 alerts in 24 hours, average threat score 3.12), a 7-day chart of traffic and anomalies, and a live feed of connections."
-    caption: "Dashboard, 7 days, with invented demo data (Demo SME)."
+    caption: "Dashboard, 7 days, with invented demo data (Demo SME, French UI)."
   - image: ../../assets/projects/sentinel/sentinel-dashboard-24h.webp
     alt: "The same dashboard switched to the 24-hour view: hourly traffic with a spike of anomalies late in the period, above the live connection feed. All data invented (Demo SME)."
     caption: "Dashboard, 24 hours, with invented demo data (Demo SME)."

@@ -13,7 +13,7 @@ export const about = {
   headline:
     'I like taking systems apart to see where they break, then building the thing that would have caught it.',
   body:
-    'Fourth-year Epitech student, French and British, currently spending a year at BIT in Beijing. My internship put me on a real ML detection platform and in front of a real incident, and that settled it: security is the job.',
+    'Fourth-year Epitech student, French and British, currently spending a year at BIT in Beijing. Native in French and English, learning Mandarin. My internship put me on a real ML detection platform and in front of a real incident, and that settled it: security is the job.',
   next: 'A 5th-year internship in security, part-time then full-time, from mid-2027. Pentest or detection.',
   later: 'Offensive security first, then leading security engagements and the people who run them.',
 };
@@ -107,7 +107,7 @@ export const security = {
       title: "Briefing a client's engineering team",
       situation: "A client's engineers needed to understand which security practices actually matter and why.",
       action: 'Wrote and presented the briefing myself, explaining the reasoning instead of handing out rules.',
-      result: 'A team that understood the why. Comfort is the threat, not the tooling.',
+      result: 'A team that understood the why behind each practice.',
     },
     {
       kind: 'Maintenance · Munnin',

@@ -1,16 +1,13 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { statsFor, STAR_THRESHOLD } from '../lib/github';
-import { monthYear } from '../lib/format';
 
 interface Props {
   project: CollectionEntry<'projects'>;
-  /** "Updated <month>" from the last push. Off for origins: it contradicts "unchanged since 2024". */
-  showUpdated?: boolean;
   /** "Private repository" / "Proprietary" note. Off where the page shows it elsewhere. */
   showClosed?: boolean;
 }
-const { project, showUpdated = project.data.status !== 'origins', showClosed = true } = Astro.props;
+const { project, showClosed = true } = Astro.props;
 const p = project.data;
 const stats = statsFor(p.links.repo);
 const labels: Record<string, string> = { repo: 'Repository', docs: 'Docs', devpost: 'Devpost', devlogs: 'Devlogs', video: 'Submission video' };
@@ -18,7 +15,6 @@ const links = Object.entries(p.links).filter((e): e is [string, string] => Boole
 const notes = [
   showClosed && p.closedSource ? closedLabel(p.closedSource) : null,
   stats && stats.stars >= STAR_THRESHOLD ? `${stats.stars} stars` : null,
-  stats && showUpdated ? `Updated ${monthYear(stats.pushedAt)}` : null,
 ].filter((n): n is string => Boolean(n));
 
 function closedLabel(kind: 'private' | 'proprietary') {
