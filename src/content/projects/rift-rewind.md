@@ -16,7 +16,7 @@ monogram: "RR"
 # The team's own artwork: the hanging sign from the landing page.
 logo: ../../assets/projects/rift-rewind/rift-rewind-sign.png
 tagline: "An AI League of Legends coach that remembers you."
-intro: "Most entries competed on statistics. Ours won the Roast prize at the AWS × Riot Games hackathon by being a coach you can actually argue with: it remembers your past games and checks whether you applied its advice."
+intro: "Won the Roast prize at the AWS × Riot Games hackathon. A coach you can argue with: it remembers your recent conversations and can pull up your recent matches."
 flow:
   - "Riot API"
   - "Flask backend"
@@ -27,7 +27,7 @@ highlights:
   - "Led backend and cloud: Elastic Beanstalk, DynamoDB, Bedrock"
   - "Built the AI layer: tool calling and per-player memory"
   - "Database architecture and CLI testing tools"
-state: "Shipped · prize winner"
+state: "Shipped · prize winner · demo offline (video available)"
 cover:
   image: ../../assets/projects/rift-rewind/rift-rewind-banner.webp
   alt: "Rift Rewind banner: the team's graffiti-style title, \"Jinx's Magical Rewind Machine\", sprayed over an overhead view of Summoner's Rift."
@@ -53,30 +53,30 @@ summary: AI League of Legends coach that remembers each player across sessions. 
 
 ## Problem
 
-Stat dumps don't coach anyone. Sites like op.gg show KDA, CS and damage, but not the story of a
-game, and they don't remember that three games ago you struggled with early jungle invades. The
-goal was a coach that holds a conversation, remembers what a player struggled with, and checks
-whether the advice was applied.
+Stat sites show KDA, CS and damage, but they don't talk you through your games or remember what
+you discussed last time. The goal was a coach you can argue with: it remembers your recent
+conversations and can pull up your recent matches.
 
 ## What it does
 
-- **Interactive map.** Click a zone of Summoner's Rift, such as top lane, the dragon pit or the
-  enemy jungle, and get feedback on that area in Coach or Roast mode.
-- **Conversational coach.** Chat with Claude Sonnet 4.5, which remembers previous sessions and can
-  query the player's match history in real time.
-- **Shareable player cards** with AI-written titles such as "The Scaling Menace" or "The 0/10
-  Powerspike Enthusiast".
+- **Interactive map.** Click a zone of Summoner's Rift, such as top lane, the jungle or the dragon
+  pit, and get feedback on that area in Coach or Roast mode.
+- **Conversational coach.** Chat with Claude Sonnet 4.5, which remembers your recent conversations
+  and can query your match history on demand.
+- **Player cards** with an AI-written title, such as "Rising Shadow", unlocked once every zone is
+  discovered.
 
 ## What I built
 
 I was the backend and cloud lead in a team of three:
 
-- the Python/Flask backend, deployed on AWS Elastic Beanstalk;
-- the data layer: DynamoDB for player conversations and dynamic data, SQLite for static League
-  reference data (champions, items, runes);
-- the AI layer: Claude Sonnet 4.5 on Amazon Bedrock, with a custom LangChain tool-calling system
-  that gives it champion counters and matchups, build and item statistics, the player's match
-  history and per-zone performance;
+- the Flask auth and AI-coach endpoints, plus backend integration, deployed on AWS Elastic
+  Beanstalk;
+- the data layer: DynamoDB for players, matches, sessions and conversations, SQLite for static
+  League reference data (champions, items, runes);
+- the AI layer: Claude Sonnet 4.5 on Amazon Bedrock through LangChain, with tool calling over
+  champion, item and rune data (SQLite, synced from Data Dragon) and the player's stored match
+  history (DynamoDB);
 - per-player conversation memory in DynamoDB;
 - CLI testing tools.
 
@@ -84,39 +84,25 @@ I was the backend and cloud lead in a team of three:
 
 <div data-diagram="rift-rewind"></div>
 
-The coach builds a profile of each player across sessions, remembers past issues and checks
-whether advice was applied, as a conversation rather than a stat dump.
+The coach chat runs 8 tools behind a tool-calling loop capped at 10 rounds, with exponential
+backoff on Bedrock throttling.
 
-## What we learned
+## Design notes
 
-### Fewer, better tools
+### DynamoDB tables
 
-The first version gave Claude too many tools: it called ten or more functions per response,
-burning tokens and money. We consolidated related queries into single tools, pre-fetched common
-data into the context, and used the tool descriptions to guide its choices.
+Per-entity tables keyed by PUUID, with a `RiotIdIndex` GSI on Players and a `TimestampIndex` LSI
+on MatchHistory, on on-demand billing.
 
-### One DynamoDB table
+### Bounded memory
 
-Moving to a single-table design, with conversations and matches stored under each player's key,
-cut the number of tables from five to one and query latency by 60%.
+Every exchange is stored in DynamoDB. Each request only carries short excerpts from the player's
+3 most recent conversations, so the prompt size stays bounded.
 
-### Memory that stays affordable
+### Zone stories on demand
 
-Storing every message got expensive. A sliding window keeps the last 10 messages in DynamoDB and
-has Claude summarise older ones into compact metadata: an 80% cost reduction, with the context
-kept.
-
-### Concurrent conversations
-
-Two chats at the same time could overwrite each other's history. DynamoDB conditional writes with
-version numbers fixed it.
-
-### Roast mode, tuned
-
-Early testers found the roasts too savage. The system prompt now asks for humour that stays
-constructive, and zone stories are generated on demand when the player clicks a zone.
+Zone stories are generated on demand when the player clicks a zone.
 
 ## Results
 
-Won the **Roast Master 3000 Prize ($1,000)** at the AWS × Riot Games Rift Rewind hackathon. Most
-entries competed on statistics; this one won on personality and coaching quality.
+Won the **Roast Master 3000 Prize ($1,000)** at the AWS × Riot Games Rift Rewind hackathon.

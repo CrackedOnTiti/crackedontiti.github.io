@@ -98,17 +98,18 @@ export const specs = {
     id: 'rift-rewind-diagram',
     title: 'Rift Rewind coach architecture',
     desc:
-      'The web app (Coach and Roast modes, interactive map, shareable player cards) talks to a Python Flask backend ' +
-      'on AWS Elastic Beanstalk. A LangChain agent with tool calling uses Claude through Amazon Bedrock and keeps a ' +
-      'per-player profile and memory in DynamoDB.',
+      'The web app (Coach and Roast modes, interactive map, player cards) talks to a Python Flask backend ' +
+      'on AWS Elastic Beanstalk. Only the coach chat goes through the LangChain agent: its tool calls read game data ' +
+      'and the player\'s stored matches, it uses Claude through Amazon Bedrock and keeps per-player conversation ' +
+      'memory in DynamoDB. The map stories and the player card call Bedrock directly.',
     steps: [
       { box: { title: 'Web app', sub: 'Coach and Roast modes, map, player cards' } },
       { box: { title: 'Flask backend', sub: 'AWS Elastic Beanstalk' } },
-      { box: { title: 'LangChain agent', sub: 'tool calling', kind: 'hot' } },
+      { box: { title: 'AI coach chat', sub: 'LangChain agent, tool calling', kind: 'hot' } },
       {
         row: [
           { title: 'Claude', sub: 'via Amazon Bedrock' },
-          { title: 'DynamoDB', sub: 'player profile and memory across sessions' },
+          { title: 'DynamoDB', sub: 'match history and conversation memory' },
         ],
       },
     ],
