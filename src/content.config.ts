@@ -79,6 +79,8 @@ const projects = defineCollection({
       cover: z.strictObject({ image: image(), alt: z.string().min(1) }).optional(),
       /** Write-up heading over the media; "Seen running" unless the media is not the product running. */
       mediaHeading: z.string().default('Seen running'),
+      /** Non-featured project with its own write-up page (the Markdown body). Featured ones always have one. */
+      writeup: z.boolean().optional(),
       /** One line shown under the media, wherever it appears (e.g. a rights note). */
       mediaNote: z.string().optional(),
     })

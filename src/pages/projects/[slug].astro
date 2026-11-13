@@ -7,14 +7,14 @@ import Base from '../../layouts/Base.astro';
 import Stack from '../../components/Stack.astro';
 import ProjectLinks from '../../components/ProjectLinks.astro';
 import ProjectMedia from '../../components/ProjectMedia.astro';
-import { teamLabel } from '../../lib/format';
+import { teamLabel, writeupHref } from '../../lib/format';
 
-// Detail pages exist for featured projects only.
-// Body (Markdown): Problem → What I built → How it works (inline SVG diagram) → Results.
+// Detail pages exist for featured projects, and for others marked `writeup: true`.
+// Featured body (Markdown): Problem → What I built → How it works (inline SVG diagram) → Results.
 // "Seen running" (frontmatter media) and Links are added here.
 export const getStaticPaths = (async () => {
-  const featured = await getCollection('projects', (p) => p.data.status === 'featured');
-  return featured.map((project) => ({ params: { slug: project.data.slug }, props: { project } }));
+  const withPage = await getCollection('projects', (p) => writeupHref(p.data) !== null);
+  return withPage.map((project) => ({ params: { slug: project.data.slug }, props: { project } }));
 }) satisfies GetStaticPaths;
 
 const { project } = Astro.props;

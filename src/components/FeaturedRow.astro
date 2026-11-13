@@ -5,6 +5,8 @@ import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import MediaSlot from './MediaSlot.astro';
 import ProjectFacts from './ProjectFacts.astro';
+import FullPageLink from './FullPageLink.astro';
+import { writeupHref } from '../lib/format';
 import { renderDiagram } from '../diagrams/render.mjs';
 import { specs } from '../diagrams/specs.mjs';
 
@@ -16,12 +18,14 @@ interface Props {
 const { project, open = false } = Astro.props;
 const p = project.data;
 const panelId = `project-${p.slug}`;
+const writeup = writeupHref(p);
 const diagramSpec = p.panelDiagram ? (specs as Record<string, { title: string }>)[p.panelDiagram] : undefined;
 if (p.panelDiagram && !diagramSpec) throw new Error(`${p.slug}: unknown panelDiagram "${p.panelDiagram}"`);
 // Build-time SVG from our own spec file (real text, no inline styles): safe for set:html.
 const diagram = diagramSpec ? renderDiagram(diagramSpec) : null;
 ---
 <article class="row" data-expander data-default-open={open ? '' : undefined}>
+  <div class="row-head">
   <h3 class="row-h">
     <button type="button" class="toggle" aria-expanded="true" aria-controls={panelId} data-expander-toggle>
       <span class:list={['badge', { 'badge--logo': p.logo }]} aria-hidden="true">
@@ -35,6 +39,8 @@ const diagram = diagramSpec ? renderDiagram(diagramSpec) : null;
       <span class="arrow" aria-hidden="true">‹</span>
     </button>
   </h3>
+  {writeup && <div class="full-slot"><FullPageLink href={writeup} title={p.title} /></div>}
+  </div>
   <div class="panel" id={panelId} data-expander-panel>
     <div class="clip">
       <div class="body">
@@ -75,7 +81,9 @@ const diagram = diagramSpec ? renderDiagram(diagramSpec) : null;
 
 <style>
   .row { border-top: 1px solid var(--rule); }
-  .row-h { font: inherit; }
+  .row-head { position: relative; display: flex; align-items: center; gap: var(--space-xs); }
+  .full-slot { flex: 0 0 auto; display: flex; }
+  .row-h { font: inherit; flex: 1 1 auto; min-width: 0; }
   .toggle {
     width: 100%;
     display: flex;
@@ -180,5 +188,32 @@ const diagram = diagramSpec ? renderDiagram(diagramSpec) : null;
 
   @media (min-width: 48rem) {
     .badge { width: 4rem; height: 4rem; font-size: 1.25rem; }
+  }
+
+  /* Phones: the expand arrow and the full-page link stack in one 44px column on the right (the link
+     stays outside the button), and the tagline runs under the badge, so it fits in two lines at 360px. */
+  @media (max-width: 30rem) {
+    .row-head:has(.full-slot) .toggle {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      column-gap: var(--space-s);
+      padding-right: 3.25rem;
+      position: relative;
+    }
+    .row-head:has(.full-slot) .badge { grid-row: 1 / span 2; }
+    .row-head:has(.full-slot) .titles { display: contents; }
+    .row-head:has(.full-slot) .tag { grid-column: 2; align-self: end; }
+    .row-head:has(.full-slot) .title { grid-column: 2; align-self: start; }
+    .row-head:has(.full-slot) .tagline { grid-column: 1 / -1; }
+    .row-head:has(.full-slot) .arrow {
+      position: absolute;
+      top: 1.75rem;
+      right: 0;
+      width: 2.75rem;
+      text-align: center;
+    }
+    .full-slot { position: absolute; right: 0; top: calc(1.75rem + 2.75rem); }
+    :global(html:not(.js)) .full-slot { top: 1.75rem; }
   }
 </style>

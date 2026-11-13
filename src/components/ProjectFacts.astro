@@ -1,14 +1,14 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import ProjectLinks from './ProjectLinks.astro';
-import { teamLabel } from '../lib/format';
+import { teamLabel, writeupHref } from '../lib/format';
 
 interface Props {
   project: CollectionEntry<'projects'>;
 }
 const { project } = Astro.props;
 const p = project.data;
-const writeup = p.status === 'featured' ? `/projects/${p.slug}/` : null;
+const writeup = writeupHref(p);
 ---
 <dl class="facts">
   <dt>Role</dt><dd>{p.role}</dd>
