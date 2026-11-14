@@ -7,5 +7,6 @@ export const site = {
   links: {
     github: 'https://github.com/CrackedOnTiti',
     linkedin: 'https://www.linkedin.com/in/thierry-bungaroo',
+    munninLinkedin: 'https://www.linkedin.com/company/munnin-fr/',
   },
 } as const;

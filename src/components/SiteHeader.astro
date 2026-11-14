@@ -5,6 +5,8 @@ import { site } from '../lib/site';
 // only blue, black or white, so it does not take the link colour. GitHub: the simple-icons
 // Invertocat in white, for the same reason (GitHub asks that its logo colour not be changed).
 import inBug from '../assets/brands/linkedin-inbug-white.png';
+// Munnin link uses the raven, not a second [in] bug, so the two LinkedIn links stay distinguishable.
+import raven from '../assets/brand/munnin-raven.png';
 import Raven from './Raven.astro';
 ---
 <header class="site-header wrap">
@@ -23,6 +25,12 @@ import Raven from './Raven.astro';
       <a href={site.links.github} rel="me">
         <img class="ext-icon" src="/brands/github.svg" alt="" aria-hidden="true" width="16" height="16" decoding="async" />
         GitHub<span aria-hidden="true"> ↗</span>
+      </a>
+    </li>
+    <li>
+      <a href={site.links.munninLinkedin}>
+        <Image class="ext-icon" src={raven} alt="" aria-hidden="true" widths={[25, 50, 75]} sizes="25px" loading="eager" decoding="async" />
+        Munnin<span aria-hidden="true"> ↗</span>
       </a>
     </li>
   </ul>
@@ -51,9 +59,12 @@ import Raven from './Raven.astro';
     color: var(--text-faint);
   }
   .brand:hover .brand-name { color: var(--text); }
+  /* Phones: links get their own full-width row under the logo, spread evenly. */
   .ext {
     display: flex;
-    gap: var(--space-m);
+    flex: 1 0 100%;
+    justify-content: space-between;
+    gap: var(--space-s);
     list-style: none;
     padding: 0;
     font-family: var(--font-mono);
@@ -71,5 +82,6 @@ import Raven from './Raven.astro';
 
   @media (min-width: 48rem) {
     .site-header { padding-top: 2rem; }
+    .ext { flex: 0 1 auto; gap: var(--space-m); }
   }
 </style>
